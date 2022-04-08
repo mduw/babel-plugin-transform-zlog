@@ -45,7 +45,7 @@ export default ({ types }) => ({
     this.TemplMap = _TemplMap;
     this.currentFile = file.opts.filename;
     this.normalizedOpts = normalizeOptions(this.currentFile, this.opts);
-    if(this.normalizeOptions.log === 'on') log(prefixLog, `scanning ${file.opts.filename}`);
+    if(this.normalizedOpts.log === 'on') log(prefixLog, `scanning ${file.opts.filename}`);
   },
 
   visitor,
