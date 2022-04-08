@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.5.1](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.5.2...v1.5.1) (2022-04-08)
 
+### [1.5.1](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.5.2...v1.5.1) (2022-04-08)
+
 ## [1.5.0](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.4.4...v1.5.0) (2022-04-08)
 
 
