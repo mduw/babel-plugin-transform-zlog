@@ -34,38 +34,38 @@
     plugins: [
         "babel-plugin-transform-zlog",
         {
-            replaceSymbFunc: {
-            info: [
-              'logSymbol',
-              {
-                variants: ['self', 'R', 'C', 'F', 'RC', 'RF'],
-              },
-            ],
-            debug: [
-              'logSymbol',
-              {
-                variants: ['self', 'R', 'C', 'F', 'RC', 'RF'],
-              },
-            ],
-            warn: [
-              'logSymbol',
-              {
-                variants: ['self', 'R', 'C', 'F', 'RC', 'RF'],
-              },
-            ],
-            error: [
-              'logSymbol',
-              {
-                variants: ['self', 'R', 'C', 'F', 'RC', 'RF'],
-              },
-            ],
-
-          replaceCreateFeatFunc: ['createFeatLogs', 'createOneFeatLog'],
-          replaceCreateTemplFunc: ['l'],
-          loggerPathRegex: "(\\w+\\/)*utils\\/logger\\/(\\w+\\/)*(logger)$",
-          logDataPathRegex: "(\\w+\\/)*utils\\/logger\\/(\\w+\\/)*(templates(-\\w+)+|templates)$",
-          excludePathRegex: "(zlogger|src\\/static)",
-          outDir: "outpath/4/extracted/data",
+            "replaceSymbFunc":{
+                "info":[
+                    "logSymbol",
+                    {
+                        "variants":["self", "R", "F"]
+                    }
+                ],
+                "debug":[
+                    "logSymbol",
+                    {
+                        "variants":["self", "R", "F"]
+                    }
+                ],
+                "warn":[
+                    "logSymbol",
+                    {
+                        "variants":["self", "R", "F"]
+                    }
+                ],
+                "error":[
+                    "logSymbol",
+                    {
+                        "variants":["self", "R", "F"]
+                    }
+                ]
+            },
+            "replaceCreateFeatFunc":["createFeatLogs","createOneFeatLog"],
+            "replaceCreateTemplFunc":["l"],
+            "loggerPathRegex":"(\\w+\\/)*some\\/path\\/(\\w+\\/)*(logger)$",
+            "logDataPathRegex":"(\\w+\\/)*more\\/path\\/(\\w+\\/)*(templates(-\\w+)+|templates)$",
+            "excludePathRegex":"",
+            "outDir":"out/path",
         }
     ]
 ```
