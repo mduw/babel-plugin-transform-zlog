@@ -4,14 +4,6 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.5.1](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.5.2...v1.5.1) (2022-04-08)
 
-### [1.5.2](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.5.0...v1.5.2) (2022-04-08)
-
-
-### Bug Fixes
-
-* **syntax err:** wrong variable name ([4ac1943](https://github.com/mduw/babel-plugin-transform-zlog/commit/4ac194385719385f6233ec15a55989cb6930df49))
-* **variable name:** syntax err ([0d57e64](https://github.com/mduw/babel-plugin-transform-zlog/commit/0d57e64f6de70685a862c4c78b5674b2ec57f914))
-
 ### [1.5.1](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.5.0...v1.5.1) (2022-04-08)
 
 
