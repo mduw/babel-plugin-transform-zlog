@@ -45,6 +45,7 @@ describe('transformer-test', () => {
           logDataPathRegex: "(\\w+\\/)*more\\/path\\/(\\w+\\/)*(templates(-\\w+)+|templates)$",
           excludePathRegex: "",
           outDir: __dirname,
+          log: 'off'
         },
       ],
     ],

@@ -60,6 +60,10 @@ function normalizePathRegex(optsPathRegex) {
   return regex;
 }
 
+function normalizeShowLog(optsLog) {
+  return optsLog || 'off'; // off by default
+}
+
 export default createSelector(
   currentFile => (currentFile.includes('.') ? path.dirname(currentFile) : currentFile),
   (_, opts) => opts,
@@ -71,6 +75,7 @@ export default createSelector(
     const logDataPathRegex = normalizePathRegex(opts.logDataPathRegex);
     const excludePathRegex = normalizePathRegex(opts.excludePathRegex);
     const outPath = normalizeOutPath(opts.outDir);
+    const log = normalizeShowLog(opts.log);
 
     return {
       replaceSymbFunc,
@@ -80,6 +85,7 @@ export default createSelector(
       logDataPathRegex,
       excludePathRegex,
       outDir: outPath,
+      log
     };
   }
 );

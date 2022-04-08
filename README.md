@@ -4,7 +4,7 @@
 
 - Source map: mapping source path(posix) to its id
 
-  ```json
+  ```
       {
           <source_map_ID>: <file_path>
       }
@@ -12,7 +12,7 @@
 
 - Symbol map: mapping source map info to its symbol id
 
-  ```json
+  ```
       {
           <symbol_map_ID>: <source_map_id>:<row>:<column>
       }
@@ -20,7 +20,7 @@
 
 - Template map: mapping an actual raw template string to its template id
 
-  ```json
+  ```
       {
           <template_ID>: <string>
       }
@@ -30,7 +30,7 @@
 
 ### Usage
 
-```json
+```
     plugins: [
         "babel-plugin-transform-zlog",
         {

@@ -37,7 +37,6 @@ export default ({ types }) => ({
   },
 
   pre(file) {
-    log(prefixLog, `scanning ${file.opts.filename}`);
     this.types = types;
     this.VisitedModules = new Set();
     this.ImportMap = _ImportMap;
@@ -46,6 +45,7 @@ export default ({ types }) => ({
     this.TemplMap = _TemplMap;
     this.currentFile = file.opts.filename;
     this.normalizedOpts = normalizeOptions(this.currentFile, this.opts);
+    if(this.normalizeOptions.log === 'on') log(prefixLog, `scanning ${file.opts.filename}`);
   },
 
   visitor,
@@ -88,5 +88,6 @@ export default ({ types }) => ({
     /* CLEANUP */
     this.VisitedModules.clear();
     this.ImportMap.clear(); // per file
+    if(this.normalizeOptions.log === 'on') log(prefixLog, `complete ${this.currentFile}`);
   },
 });
