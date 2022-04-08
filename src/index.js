@@ -88,6 +88,6 @@ export default ({ types }) => ({
     /* CLEANUP */
     this.VisitedModules.clear();
     this.ImportMap.clear(); // per file
-    if(this.normalizeOptions.log === 'on') log(prefixLog, `complete ${this.currentFile}`);
+    if(this.normalizedOpts.log === 'on') log(prefixLog, `complete ${this.currentFile}`);
   },
 });
