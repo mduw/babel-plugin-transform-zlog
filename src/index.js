@@ -72,7 +72,11 @@ export default ({ types }) => ({
  */
 export function getExtractedSymbolMap(options) {
   if (isNode) {
-    return writeExtractedDataToFile([options.outDir, 'symbol-map.json'], _SourceMap, options);
+    return writeExtractedDataToFile(
+      [options.outDir || outDir, 'symbol-map.json'],
+      _SourceMap,
+      options
+    );
   }
   throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
 }
@@ -84,7 +88,14 @@ export function getExtractedSymbolMap(options) {
  */
 export function getExtractedSourceMap(options) {
   if (isNode) {
-    return writeExtractedDataToFile([options.outDir, 'source-map.json'], _SourceMap, options);
+    return writeExtractedDataToFile(
+      [options.outDir || outDir, 'source-map.json'],
+      _SourceMap,
+      options
+    );
+  }
+  if (!outDir) {
+    throw new Error('outDir found. Exec getExtractedSourceMap failed');
   }
   throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
 }
@@ -96,7 +107,14 @@ export function getExtractedSourceMap(options) {
  */
 export function getExtractedTemplMap(options) {
   if (isNode) {
-    return writeExtractedDataToFile([options.outDir, 'templ-map.json'], _TemplMap, options);
+    return writeExtractedDataToFile(
+      [options.outDir || outDir, 'templ-map.json'],
+      _TemplMap,
+      options
+    );
+  }
+  if (!outDir) {
+    throw new Error('outDir found. Exec getExtractedTemplMap failed');
   }
   throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
 }

@@ -105,40 +105,43 @@ export function prepareDir(dir) {
   };
 }
 
+function doWriteData(outPath, fData, opts) {
+  const fs = require('fs');
+  return new Promise((resolve, reject) => {
+    try {
+      const now = new Date().toLocaleString();
+      const data2write = JSON.stringify({
+        vers: opts && opts.vers ? opts.vers : null,
+        lastModifed: now,
+        data: fData,
+      });
+      fs.writeFile(outPath, data2write, werr => {
+        if (werr) {
+          reject(werr);
+          throw new Error(`fail to write ${outPath} ${werr}`);
+        }
+        fs.chmod(outPath, fs.constants.O_RDONLY, modeErr => {
+          if (modeErr) {
+            reject(modeErr);
+            throw new Error(`fail to write ${outPath} ${modeErr}`);
+          }
+          resolve(true);
+        });
+      });
+    } catch (error) {
+      reject(error);
+      throw new Error(`fail to write ${outPath} ${error}`);
+    }
+  });
+}
+
 export function writeExtractedDataToFile(pathArr, map, options) {
   /* eslint-disable global-require */
   return new Promise((resolve, reject) => {
     const fs = require('fs');
     const outDir = toPosixPath(path.join(...pathArr));
     const data = invertObjectKeyValue(Object.fromEntries(map));
-    function doWriteData(outPath, fData, opts) {
-      return new Promise((resolve, reject) => {
-        try {
-          const now = new Date().toLocaleTimeString();
-          const data2write = JSON.stringify({
-            vers: opts && opts.vers ? opts.vers : null,
-            lastModifed: now,
-            fData,
-          });
-          fs.writeFile(outPath, data2write, werr => {
-            if (werr) {
-              reject(werr);
-              throw new Error(`fail to write ${outPath} ${werr}`);
-            }
-            fs.chmod(outPath, fs.constants.O_RDONLY, modeErr => {
-              if (modeErr) {
-                reject(modeErr);
-                throw new Error(`fail to write ${outPath} ${modeErr}`);
-              }
-              resolve(true);
-            });
-          });
-        } catch (error) {
-          reject(error);
-          throw new Error(`fail to write ${outDir} ${error}`);
-        }
-      });
-    }
+    
     if (fs.existsSync(outDir)) {
       fs.unlink(outDir, err => {
         if (err) {
