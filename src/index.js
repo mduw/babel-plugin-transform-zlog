@@ -1,17 +1,20 @@
 import normalizeOptions from './utils/normalizeOptions';
 import transformCall from './transformers/call';
-import { isNode } from './utils/environment';
 import checkImports from './transformers/imports';
 import { name } from '../package.json';
 import { log } from './log';
 import { isMatchingRegex } from './utils/regex-utils';
-import { writeExtractedDataToFile } from './utils/file-utils';
-import { invertObjectKeyValue } from './utils/object-utils';
+import { OutputHandler } from './utils/output-handler';
 
 const _SourceMap = new Map();
 const _SymbolMap = new Map();
 const _TemplMap = new Map();
-let outDir;
+export const outputHandler = new OutputHandler();
+outputHandler.setMaps({
+  SourceMap: _SourceMap,
+  SymbolMap: _SymbolMap,
+  TemplMap: _TemplMap,
+});
 
 const prefixLog = `[${name}]`;
 const CallVisitors = {
@@ -51,8 +54,8 @@ export default ({ types }) => ({
     this.TemplMap = _TemplMap;
     this.currentFile = file.opts.filename;
     this.normalizedOpts = normalizeOptions(this.currentFile, this.opts);
+    outputHandler.setOutDir(this.normalizedOpts.outDir);
     if (this.normalizedOpts.log === 'on') log(prefixLog, `scanning ${file.opts.filename}`);
-    outDir = this.normalizedOpts.outDir;
   },
 
   visitor,
@@ -64,57 +67,3 @@ export default ({ types }) => ({
     if (this.normalizedOpts.log === 'on') log(prefixLog, `complete ${this.currentFile}`);
   },
 });
-
-/**
- * async
- * @param {*} param0
- * @returns
- */
-export function getExtractedSymbolMap(options) {
-  if (isNode) {
-    return writeExtractedDataToFile(
-      [options.outDir || outDir, 'symbol-map.json'],
-      _SourceMap,
-      options
-    );
-  }
-  throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
-}
-
-/**
- * async
- * @param {*} param0
- * @returns
- */
-export function getExtractedSourceMap(options) {
-  if (isNode) {
-    return writeExtractedDataToFile(
-      [options.outDir || outDir, 'source-map.json'],
-      _SourceMap,
-      options
-    );
-  }
-  if (!outDir) {
-    throw new Error('outDir found. Exec getExtractedSourceMap failed');
-  }
-  throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
-}
-
-/**
- * async
- * @param {*} param0
- * @returns
- */
-export function getExtractedTemplMap(options) {
-  if (isNode) {
-    return writeExtractedDataToFile(
-      [options.outDir || outDir, 'templ-map.json'],
-      _TemplMap,
-      options
-    );
-  }
-  if (!outDir) {
-    throw new Error('outDir found. Exec getExtractedTemplMap failed');
-  }
-  throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
-}
