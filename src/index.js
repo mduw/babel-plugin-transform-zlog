@@ -29,6 +29,7 @@ const visitor = {
       if (ignorable) {
         return;
       }
+      outputHandler.setOutputable(true);
       programPath.traverse(CallVisitors, state);
     },
     exit(programPath, state) {

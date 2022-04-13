@@ -9,6 +9,7 @@ export class OutputHandler {
     this._TemplMap = null;
     this._SymbolMap = null;
     this.outDir = '';
+    this.outputable = false;
   }
 
   setMaps(props) {
@@ -23,6 +24,10 @@ export class OutputHandler {
     }
   }
 
+  setOutputable(status) {
+    this.outputable = status;
+  } 
+
   setOutDir(outDir) {
     if (!outDir) throw new Error('OutputHandler received invalid outDir');
     this.outDir = outDir;
@@ -30,6 +35,10 @@ export class OutputHandler {
 
   getOutDir() {
     return this.outDir;
+  }
+
+  isOutputable() {
+    return this.outputable;
   }
 
   /**
