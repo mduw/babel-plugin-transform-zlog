@@ -13,46 +13,47 @@ describe('transformer-test', () => {
       [
         plugin,
         {
+          rootDir: 'test',
           replaceSymbFunc: {
             info: [
               'logSymbol',
               {
-                variants: ['self', 'R', 'F'],
+                variants: ['self', 'R', 'F', 'C', 'RF', 'RC'],
               },
             ],
             debug: [
               'logSymbol',
               {
-                variants: ['self', 'R', 'F'],
+                variants: ['self', 'R', 'F', 'C', 'RF', 'RC'],
               },
             ],
             warn: [
               'logSymbol',
               {
-                variants: ['self', 'R', 'F'],
+                variants: ['self', 'R', 'F', 'C', 'RF', 'RC'],
               },
             ],
             error: [
               'logSymbol',
               {
-                variants: ['self', 'R', 'F'],
+                variants: ['self', 'R', 'F', 'C', 'RF', 'RC'],
               },
             ],
           },
           replaceCreateFeatFunc: ['createFeatLogs', 'createOneFeatLog'],
           replaceCreateTemplFunc: ['l'],
-          loggerPathRegex: "(\\w+\\/)*some\\/path\\/(\\w+\\/)*(logger)$",
-          logDataPathRegex: "(\\w+\\/)*more\\/path\\/(\\w+\\/)*(templates(-\\w+)+|templates)$",
-          excludePathRegex: "",
+          loggerPathRegex: "((\\S*['-|'_])([a-zA-Z('-|'_)]+)\\/)*utils\\/logger\\/((\\S*['-|'_])([a-zA-Z('-|'_)]+)\\/)*(logger)$",
+          logDataPathRegex: "((\\S*['-|'_])([a-zA-Z('-|'_)]+)\\/)*utils\\/logger\\/((\\S*['-|'_])([a-zA-Z('-|'_)]+)\\/)*(templates(-\\w+)+|templates)$",
+          excludePathRegex: "(src\\/zlogger|src\\/static)",
           outDir: __dirname,
-          log: 'off'
+          log: 'on'
         },
       ],
     ],
   };
   it('sample test', () => {
-    const data = transformFileSync('./test/test-1.js', transformerOpts);
-    fs.writeFileSync('./test/actual-1.js', data.code);
+    const data = transformFileSync('./test/test-2.js', transformerOpts);
+    fs.writeFileSync('./test/actual-2.js', data.code);
     // expect(data.code).toEqual(ExpectOut1);
     expect(true).toEqual(true);
   });

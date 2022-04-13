@@ -64,6 +64,10 @@ function normalizeShowLog(optsLog) {
   return optsLog || 'off'; // off by default
 }
 
+function normalizeRootDir(optsLog) {
+  return optsLog || '';
+}
+
 export default createSelector(
   currentFile => (currentFile.includes('.') ? path.dirname(currentFile) : currentFile),
   (_, opts) => opts,
@@ -76,7 +80,7 @@ export default createSelector(
     const excludePathRegex = normalizePathRegex(opts.excludePathRegex);
     const outPath = normalizeOutPath(opts.outDir);
     const log = normalizeShowLog(opts.log);
-
+    const rootDir = normalizeRootDir(opts.rootDir);
     return {
       replaceSymbFunc,
       replaceCreateFeatFunc,
@@ -85,6 +89,7 @@ export default createSelector(
       logDataPathRegex,
       excludePathRegex,
       outDir: outPath,
+      rootDir,
       log
     };
   }

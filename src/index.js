@@ -1,16 +1,18 @@
-// import chalk from 'chalk';
-
 import normalizeOptions from './utils/normalizeOptions';
 import transformCall from './transformers/call';
 import { isNode } from './utils/environment';
 import checkImports from './transformers/imports';
 import { name } from '../package.json';
 import { log } from './log';
+import { isMatchingRegex } from './utils/regex-utils';
+import { writeExtractedDataToFile } from './utils/file-utils';
+import { invertObjectKeyValue } from './utils/object-utils';
 
 const _SourceMap = new Map();
 const _SymbolMap = new Map();
 const _TemplMap = new Map();
-const _ImportMap = new Map();
+let outDir;
+
 const prefixLog = `[${name}]`;
 const CallVisitors = {
   CallExpression: transformCall,
@@ -20,6 +22,10 @@ const CallVisitors = {
 const visitor = {
   Program: {
     enter(programPath, state) {
+      const ignorable = isMatchingRegex(this.normalizedOpts.excludePathRegex, this.currentFile);
+      if (ignorable) {
+        return;
+      }
       programPath.traverse(CallVisitors, state);
     },
     exit(programPath, state) {
@@ -29,7 +35,7 @@ const visitor = {
 };
 
 export default ({ types }) => ({
-  name: 'babel-plugin-transform-zlog',
+  name: 'babel-plugin-transform-test',
   manipulateOptions(opts) {
     if (opts.filename === undefined) {
       opts.filename = 'unknown';
@@ -39,55 +45,58 @@ export default ({ types }) => ({
   pre(file) {
     this.types = types;
     this.VisitedModules = new Set();
-    this.ImportMap = _ImportMap;
+    this.ImportMap = new Map();
     this.SymbolMap = _SymbolMap;
     this.SourceMap = _SourceMap;
     this.TemplMap = _TemplMap;
     this.currentFile = file.opts.filename;
     this.normalizedOpts = normalizeOptions(this.currentFile, this.opts);
-    if(this.normalizedOpts.log === 'on') log(prefixLog, `scanning ${file.opts.filename}`);
+    if (this.normalizedOpts.log === 'on') log(prefixLog, `scanning ${file.opts.filename}`);
+    outDir = this.normalizedOpts.outDir;
   },
 
   visitor,
 
   post() {
-    if (isNode) {
-      /* dump parsed data to files */
-      /* eslint-disable global-require */
-      const {
-        writeSourceMapSync,
-        writeSymbolMapSync,
-        // writeImports,
-      } = require('./utils/file-utils');
-      const path = require('path');
-      const fs = require('fs');
-      const fileExtension = '.json';
-      writeSymbolMapSync(
-        path.join(this.normalizedOpts.outDir, `log-symbol${fileExtension}`),
-        this.SymbolMap,
-        fs.constants.O_WRONLY
-      );
-      writeSourceMapSync(
-        path.join(this.normalizedOpts.outDir, `log-source${fileExtension}`),
-        this.SourceMap,
-        fs.constants.O_WRONLY
-      );
-      writeSourceMapSync(
-        path.join(this.normalizedOpts.outDir, `log-template${fileExtension}`),
-        this.TemplMap,
-        fs.constants.O_WRONLY
-      );
-      // for testing only
-      // writeImports(
-      //   path.join(this.normalizedOpts.outDir, `log-imports${fileExtension}`),
-      //   this.ImportMap,
-      //   fs.constants.O_WRONLY
-      // );
-    }
-
     /* CLEANUP */
     this.VisitedModules.clear();
     this.ImportMap.clear(); // per file
-    if(this.normalizedOpts.log === 'on') log(prefixLog, `complete ${this.currentFile}`);
+    if (this.normalizedOpts.log === 'on') log(prefixLog, `complete ${this.currentFile}`);
   },
 });
+
+/**
+ * async
+ * @param {*} param0
+ * @returns
+ */
+export function getExtractedSymbolMap(options) {
+  if (isNode && outDir) {
+    return writeExtractedDataToFile([outDir, 'symbol-map.json'], _SourceMap, options);
+  }
+  throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
+}
+
+/**
+ * async
+ * @param {*} param0
+ * @returns
+ */
+export function getExtractedSourceMap(options) {
+  if (isNode && outDir) {
+    return writeExtractedDataToFile([outDir, 'source-map.json'], _SourceMap, options);
+  }
+  throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
+}
+
+/**
+ * async
+ * @param {*} param0
+ * @returns
+ */
+export function getExtractedTemplMap(options) {
+  if (isNode && outDir) {
+    return writeExtractedDataToFile([outDir, 'templ-map.json'], _TemplMap, options);
+  }
+  throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
+}

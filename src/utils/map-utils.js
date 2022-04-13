@@ -1,7 +1,8 @@
-import { toPosixPath } from './file-utils';
+import { log } from '../log';
+import { shortenPath, toPosixPath } from './file-utils';
 
-export function getSouceMapID(sourcePath, SourceMap) {
-  const posixPath = toPosixPath(sourcePath);
+export function getSouceMapID(posixPath, SourceMap) {
+  // const posixPath = toPosixPath(sourcePath);
   if (SourceMap.has(posixPath)) {
     return SourceMap.get(posixPath);
   }
@@ -13,9 +14,8 @@ export function getSouceMapID(sourcePath, SourceMap) {
 export function getSymbid(loc, state) {
   const row = loc.start.line;
   const col = loc.start.column;
-  const smid = getSouceMapID(state.currentFile, state.SourceMap);
+  const smid = getSouceMapID(shortenPath(state.normalizedOpts.rootDir, state.currentFile), state.SourceMap);
   const symbidKey = `${smid}:${row}:${col}`;
-
   if (state.SymbolMap.has(symbidKey)) {
     throw new Error('ERROR: duplicate symbol id');
   }

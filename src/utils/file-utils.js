@@ -1,14 +1,5 @@
 import path from 'path';
-import resolve from 'resolve';
 import { invertObjectKeyValue } from './object-utils';
-
-export function nodeResolvePath(modulePath, basedir, extensions) {
-  try {
-    return resolve.sync(modulePath, { basedir, extensions });
-  } catch (e) {
-    return null;
-  }
-}
 
 export function isRelativePath(nodePath) {
   return nodePath.match(/^\.?\.\//);
@@ -114,31 +105,62 @@ export function prepareDir(dir) {
   };
 }
 
-export function writeDataWithMode(outDir, data, mode) {
+export function writeExtractedDataToFile(pathArr, map, options) {
   /* eslint-disable global-require */
-  const fs = require('fs');
-  if (fs.existsSync(outDir)) {
-    fs.unlinkSync(outDir);
-  }
-  fs.writeFileSync(outDir, data);
-  fs.chmodSync(outDir, mode);
+  return new Promise((resolve, reject) => {
+    const fs = require('fs');
+    const outDir = toPosixPath(path.join(...pathArr));
+    const data = invertObjectKeyValue(Object.fromEntries(map));
+    function doWriteData(outPath, fData, opts) {
+      return new Promise((resolve, reject) => {
+        try {
+          const now = new Date().toLocaleTimeString();
+          const data2write = JSON.stringify({
+            vers: opts && opts.vers ? opts.vers : null,
+            lastModifed: now,
+            fData,
+          });
+          fs.writeFile(outPath, data2write, werr => {
+            if (werr) {
+              reject(werr);
+              throw new Error(`fail to write ${outPath} ${werr}`);
+            }
+            fs.chmod(outPath, fs.constants.O_RDONLY, modeErr => {
+              if (modeErr) {
+                reject(modeErr);
+                throw new Error(`fail to write ${outPath} ${modeErr}`);
+              }
+              resolve(true);
+            });
+          });
+        } catch (error) {
+          reject(error);
+          throw new Error(`fail to write ${outDir} ${error}`);
+        }
+      });
+    }
+    if (fs.existsSync(outDir)) {
+      fs.unlink(outDir, err => {
+        if (err) {
+          reject(err);
+          throw new Error(`fail to overwrite ${outDir} ${err}`);
+        }
+        doWriteData(outDir, data, options)
+          .then(resolve)
+          .catch(reject);
+      });
+    } else {
+      doWriteData(outDir, data, options)
+        .then(resolve)
+        .catch(reject);
+    }
+  });
 }
 
-export function writeSourceMapSync(outDir, SourceMap, mode) {
-  /* eslint-disable global-require */
-  const data = JSON.stringify(invertObjectKeyValue(Object.fromEntries(SourceMap)));
-  writeDataWithMode(outDir, data, mode);
-}
-
-
-export function writeSymbolMapSync(outDir, SymbolMap, mode) {
-  /* eslint-disable global-require */
-  const data = JSON.stringify(invertObjectKeyValue(Object.fromEntries(SymbolMap)));
-  writeDataWithMode(outDir, data, mode);
-}
-
-export function writeImports(outDir, SourceMap, mode) {
-  /* eslint-disable global-require */
-  const data = JSON.stringify(Object.fromEntries(SourceMap));
-  writeDataWithMode(outDir, data, mode);
+export function shortenPath(rootDir, fPath) {
+  let posixPath = toPosixPath(fPath);
+  const posixPathArr = posixPath.split('/');
+  const rootIndex = posixPathArr.indexOf(rootDir);
+  posixPath = posixPathArr.slice(rootIndex).join('/');
+  return posixPath || fPath;
 }

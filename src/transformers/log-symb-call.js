@@ -1,4 +1,6 @@
+import { shortenPath } from '../utils/file-utils';
 import { getSouceMapID, getSymbid } from '../utils/map-utils';
+import { isMatchingRegex } from '../utils/regex-utils';
 
 function validLoggerAsCallee(nodePath, state) {
   if (nodePath.type === 'MemberExpression') {
@@ -6,12 +8,12 @@ function validLoggerAsCallee(nodePath, state) {
     return validLoggerAsCallee(ObjectNode, state);
   }
   if (nodePath.type === 'Identifier') {
-    const currentSourceMapID = getSouceMapID(state.currentFile, state.SourceMap);
+    const currentSourceMapID = getSouceMapID(shortenPath(state.normalizedOpts.rootDir, state.currentFile), state.SourceMap);
     const importedFrom = state.ImportMap.get(`${nodePath.node.name}:${currentSourceMapID}`);
     return (
       importedFrom &&
       state.normalizedOpts.loggerPathRegex &&
-      state.normalizedOpts.loggerPathRegex.test(importedFrom)
+      isMatchingRegex(state.normalizedOpts.loggerPathRegex, importedFrom)
     );
   }
   return false;
@@ -29,7 +31,7 @@ export default function transformLogSymbCall(nodePath, state) {
 
   const loc = nodePath.get('loc').node;
   const symbid = getSymbid(loc, state);
-  
+
   nodePath.node.callee = state.types.memberExpression(
     callee.object,
     state.types.identifier(targetFuncNames[funcName]),

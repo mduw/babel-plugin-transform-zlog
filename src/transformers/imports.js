@@ -1,5 +1,6 @@
 import { getSouceMapID } from '../utils/map-utils';
 import { name } from '../../package.json';
+import { shortenPath } from '../utils/file-utils';
 
 const ModuleResolveCall = ['require'];
 
@@ -14,7 +15,7 @@ function doMapID2ImportUrl(nodePath, fromUrl, state) {
     }
     case 'Identifier': {
       const importName = nodePath.node.name;
-      const SourceMapID = getSouceMapID(state.currentFile, state.SourceMap);
+      const SourceMapID = getSouceMapID(shortenPath(state.normalizedOpts.rootDir, state.currentFile), state.SourceMap);
       state.ImportMap.set(`${importName}:${SourceMapID}`, fromUrl);
 
       break;
@@ -22,7 +23,7 @@ function doMapID2ImportUrl(nodePath, fromUrl, state) {
 
     case 'ObjectProperty': {
       const value = nodePath.get('value').node.name;
-      const SourceMapID = getSouceMapID(state.currentFile, state.SourceMap);
+      const SourceMapID = getSouceMapID(shortenPath(state.normalizedOpts.rootDir, state.currentFile), state.SourceMap);
       state.ImportMap.set(`${value}:${SourceMapID}`, fromUrl);
 
       break;
@@ -32,7 +33,7 @@ function doMapID2ImportUrl(nodePath, fromUrl, state) {
       const SpecifierNode = nodePath.get('local');
       if (SpecifierNode.type === 'Identifier') {
         const value = SpecifierNode.node.name;
-        const SourceMapID = getSouceMapID(state.currentFile, state.SourceMap);
+        const SourceMapID = getSouceMapID(shortenPath(state.normalizedOpts.rootDir, state.currentFile), state.SourceMap);
         state.ImportMap.set(`${value}:${SourceMapID}`, fromUrl);
       }
       break;
@@ -87,7 +88,7 @@ function readImportDeclarator(nodePath, state) {
     const names = state.ImportMap.get(state.currentFile) || [];
     if (IDNode.type === 'Identifier' && !names.includes(IDNode.node.name)) {
       const value = IDNode.node.name;
-      const currentSourceMapID = getSouceMapID(state.currentFile, state.SourceMap);
+      const currentSourceMapID = getSouceMapID(shortenPath(state.normalizedOpts.rootDir, state.currentFile), state.SourceMap);
       state.ImportMap.set(
         `${value}:${currentSourceMapID}`,
         state.ImportMap.get(`${InitNode.node.name}:${currentSourceMapID}`)

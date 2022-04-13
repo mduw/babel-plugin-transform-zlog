@@ -9,6 +9,7 @@ module.exports = {
     'no-nested-ternary': 'off',
     'no-unused-vars': 'off',
     'no-underscore-dangle': 'off',
-    'no-useless-escape': 'off'
+    'no-useless-escape': 'off',
+    'no-shadow': 'off'
   },
 };
