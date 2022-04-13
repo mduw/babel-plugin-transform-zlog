@@ -3,10 +3,12 @@ const { writeExtractedDataToFile } = require('./file-utils');
 
 export class OutputHandler {
   constructor() {
+    if (this.instance) return this.instance;
+    this.instance = this;
     this._SourceMap = null;
     this._TemplMap = null;
     this._SymbolMap = null;
-    this.outDir = null;
+    this.outDir = '';
   }
 
   setMaps(props) {
@@ -35,7 +37,8 @@ export class OutputHandler {
    * @param {*} param0
    * @returns
    */
-  getExtractedSymbolMap(options) {
+  writeExtractedSymbolMap(options) {
+    if(!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
       return writeExtractedDataToFile([this.outDir, 'symbol-map.json'], this._SymbolMap, options);
     }
@@ -47,12 +50,10 @@ export class OutputHandler {
    * @param {*} param0
    * @returns
    */
-  getExtractedSourceMap(options) {
+  writeExtractedSourceMap(options) {
+    if(!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
       return writeExtractedDataToFile([this.outDir, 'source-map.json'], this._SourceMap, options);
-    }
-    if (!this.outDir) {
-      throw new Error('outDir found. Exec getExtractedSourceMap failed');
     }
     throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
   }
@@ -62,12 +63,10 @@ export class OutputHandler {
    * @param {*} param0
    * @returns
    */
-  getExtractedTemplMap(options) {
+  writeExtractedTemplMap(options) {
+    if(!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
       return writeExtractedDataToFile([this.outDir, 'templ-map.json'], this._TemplMap, options);
-    }
-    if (!this.outDir) {
-      throw new Error('outDir found. Exec getExtractedTemplMap failed');
     }
     throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
   }
