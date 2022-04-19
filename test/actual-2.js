@@ -3,12 +3,7 @@ const {
   zLogs
 } = require('zlogger');
 
-const TrackingProcess = {
-  mid: -1,
-  fid: 0,
-  lid: 0,
-  featName: "trackingPid"
-};
+const TrackingProcess = zLogs.createOneFeatLog('trackingPid', '[pid: {}][child: {}]');
 /* eslint-disable */
 
 const {
@@ -38,69 +33,31 @@ import CheckX, { CheckY, CheckZ } from 'utils/another-logger';
 import WhyCheck from 'utils/another-logger2';
 import Logger from 'utils/logger/renderer/core/logger';
 import BiggerLogger from 'utils/logger/db-task/logger';
-const logger = what ? Logger.logSymbol("infoRC", 1, '[e2ee] ' + txt, extObj) : Logger.logSymbol("infoR", 2, '[e2ee] ' + txt);
-const CrashNow = {
-  SUPER: {
-    mid: -1,
-    fid: 1,
-    lid: 1,
-    featName: "boring"
-  }
-};
+const logger = what ? Logger.infoRC('[e2ee] ' + txt, extObj) : Logger.infoR('[e2ee] ' + txt);
+const CrashNow = zLogs.createFeatLogs('boring', l => ({
+  SUPER: l('TOP ME')
+}));
 const MainLogs = {
-  Cmd: {
-    ARGV: {
-      mid: -1,
-      fid: 2,
-      lid: 2,
-      featName: "Cmd"
-    },
-    DO_WITH_CMD: {
-      mid: -1,
-      fid: 2,
-      lid: 3,
-      featName: "Cmd"
-    }
-  },
-  BoringTest: {
-    SUPER: {
-      mid: -1,
-      fid: 3,
-      lid: 4,
-      featName: "boring"
-    }
-  },
-  PreProcess: {
+  Cmd: zLogs.createFeatLogs('Cmd', function (l) {
+    return {
+      ARGV: l('recv {}'),
+      DO_WITH_CMD: l('doWithCmd: {} {}')
+    };
+  }),
+  BoringTest: zLogs.createFeatLogs('boring', l => ({
+    SUPER: l('very boring')
+  })),
+  PreProcess: zLogs.createFeatLogs(null, l => ({
     RESET_DB: {
       RESET_DB_NESTED: {
-        OK: {
-          mid: -1,
-          fid: 4,
-          lid: 5,
-          featName: ""
-        },
-        ERROR: {
-          mid: -1,
-          fid: 4,
-          lid: 6,
-          featName: ""
-        }
+        OK: l('[db]_preProcess reset db ok'),
+        ERROR: l('[db]_preProcess reset db error {} 2')
       }
     },
     RESET_ME: {
       RESET_DB_NESTED: {
-        OK: {
-          mid: -1,
-          fid: 4,
-          lid: 7,
-          featName: ""
-        },
-        ERROR: {
-          mid: -1,
-          fid: 4,
-          lid: 8,
-          featName: ""
-        }
+        OK: l('[db]_preProcess reset db ok 3'),
+        ERROR: l('[db]_preProcess reset db error {} 4')
       }
     },
     ANOTHER_ME: {
@@ -108,60 +65,42 @@ const MainLogs = {
         ANOTHER_ME_2: {
           ANOTHER_ME_3: {
             ANOTHER_ME_4: {
-              OK: {
-                mid: -1,
-                fid: 4,
-                lid: 9,
-                featName: ""
-              },
-              ERROR: {
-                mid: -1,
-                fid: 4,
-                lid: 10,
-                featName: ""
-              }
+              OK: l('[db]_preProcess reset db ok 5'),
+              ERROR: l('[db]_preProcess reset db error {} 6')
             }
           }
         }
       }
     },
-    ANOTHER_ME_ALONE: {
-      mid: -1,
-      fid: 4,
-      lid: 11,
-      featName: ""
-    }
-  },
-  ReadyLoadApp: {
-    mid: -1,
-    fid: 5,
-    lid: 12,
-    featName: "readyLoad"
-  }
+    ANOTHER_ME_ALONE: l('[db]_preProcess reset db ok 7')
+  })),
+  ReadyLoadApp: zLogs.createOneFeatLog('readyLoad', 'readyToLoadApp: {}')
 };
-Logger.logSymbol("info", 3, MainManagerLogs.ShowLogin.SHOW, 'current', url);
-Logger.logSymbol("infoR", 4, 'sda', 'current', url);
-Logger.logSymbol("infoRF", 5, 'asre', 'current', url);
-Logger.logSymbol("infoRC", 6, '34wq', 'current', url);
-Logger.logSymbol("infoC", 7, MainManagerLogs.ShowLogin.SHOW, 'current', url);
-Logger.logSymbol("infoF", 8, MainManagerLogs.ShowLogin.SHOW, 'current', url);
-Logger.logSymbol("debug", 9, MainManagerLogs.ShowLogin.SHOW, 'current', url);
-Logger.logSymbol("debugR", 10, '1', 'current', url);
-Logger.logSymbol("debugRF", 11, 2, 'current', url);
-Logger.logSymbol("debugRC", 12, 3, 'current', url);
-Logger.logSymbol("debugC", 13, MainManagerLogs.ShowLogin.SHOW, 'current', url);
-Logger.logSymbol("debugF", 14, MainManagerLogs.ShowLogin.SHOW, 'current', url);
-const MainManagerLogs = {
-  mid: -1,
-  fid: 6,
-  lid: 13,
-  featName: "call-mng"
-};
+Logger.info(MainManagerLogs.ShowLogin.SHOW, 'current', url);
+Logger.infoR('sda', 'current', url);
+Logger.infoRF('asre', 'current', url);
+Logger.infoRC('34wq', 'current', url);
+Logger.infoC(MainManagerLogs.ShowLogin.SHOW, 'current', url);
+Logger.infoF(MainManagerLogs.ShowLogin.SHOW, 'current', url);
+Logger.debug(MainManagerLogs.ShowLogin.SHOW, 'current', url);
+Logger.debugR('1', 'current', url);
+Logger.debugRF(2, 'current', url);
+Logger.debugRC(3, 'current', url);
+Logger.debugC(MainManagerLogs.ShowLogin.SHOW, 'current', url);
+Logger.debugF(MainManagerLogs.ShowLogin.SHOW, 'current', url);
+const MainManagerLogs = zLogs.createOneFeatLog('call-mng', '{}');
 module.exports = {
   MainLogs,
   MainManagerLogs
 };
-BiggerLogger.Loggers.Logger.logSymbol("infoF", 15, MainManagerLogs.ShowLogin.SHOW, 'current', url);
+BiggerLogger.Loggers.Logger.infoF(MainManagerLogs.ShowLogin.SHOW, 'current', url);
 Loggers.Logger.infoRF(MainManagerLogs.ShowLogin.SHOW, 'current', url);
 const url = 'abc';
+Logger.logSymbol("zlg_errorRC", 1, {
+  mid: -1,
+  fid: 0,
+  lid: 0,
+  featName: "canIUseSqlite",
+  process: "main"
+}, reason);
 Loggers.infoF(MainManagerLogs.ShowLogin.SHOW, 'current', url);

@@ -8,6 +8,7 @@ export class OutputHandler {
     this._SourceMap = null;
     this._TemplMap = null;
     this._SymbolMap = null;
+    this._FeatMap = null;
     this.outDir = '';
     this.outputable = false;
   }
@@ -15,10 +16,11 @@ export class OutputHandler {
   setMaps(props) {
     if (!props) throw new Error('OutputHandler received invalid maps');
     try {
-      const { SourceMap, TemplMap, SymbolMap } = props;
+      const { SourceMap, TemplMap, SymbolMap, FeatMap } = props;
       this._SourceMap = SourceMap;
       this._TemplMap = TemplMap;
       this._SymbolMap = SymbolMap;
+      this._FeatMap = FeatMap;
     } catch (err) {
       throw new Error(`OutputHandler received invalid maps input ${err}`);
     }
@@ -76,6 +78,19 @@ export class OutputHandler {
     if(!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
       return writeExtractedDataToFile([this.outDir, 'templ-map.json'], this._TemplMap, options);
+    }
+    throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
+  }
+
+  /**
+   * async
+   * @param {*} param0
+   * @returns
+   */
+   writeExtractedFeatMap(options) {
+    if(!this.outDir) return new Promise(resolve => resolve(true));
+    if (isNode) {
+      return writeExtractedDataToFile([this.outDir, 'feat-map.json'], this._FeatMap, options);
     }
     throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
   }

@@ -1,6 +1,5 @@
 import normalizeOptions from './utils/normalizeOptions';
 import transformCall from './transformers/call';
-import checkImports from './transformers/imports';
 import { name } from '../package.json';
 import { log } from './log';
 import { isMatchingRegex } from './utils/regex-utils';
@@ -9,17 +8,19 @@ import { OutputHandler } from './utils/output-handler';
 const _SourceMap = new Map();
 const _SymbolMap = new Map();
 const _TemplMap = new Map();
+
+const _FeatMap = new Map();
 export const outputHandler = new OutputHandler();
 outputHandler.setMaps({
   SourceMap: _SourceMap,
   SymbolMap: _SymbolMap,
   TemplMap: _TemplMap,
+  FeatMap: _FeatMap
 });
 
 const prefixLog = `[${name}]`;
 const CallVisitors = {
   CallExpression: transformCall,
-  'ImportDeclaration|VariableDeclaration': checkImports,
 };
 
 const visitor = {
@@ -49,10 +50,10 @@ export default ({ types }) => ({
   pre(file) {
     this.types = types;
     this.VisitedModules = new Set();
-    this.ImportMap = new Map();
     this.SymbolMap = _SymbolMap;
     this.SourceMap = _SourceMap;
     this.TemplMap = _TemplMap;
+    this.FeatMap = _FeatMap;
     this.currentFile = file.opts.filename;
     this.normalizedOpts = normalizeOptions(this.currentFile, this.opts);
     outputHandler.setOutDir(this.normalizedOpts.outDir);
@@ -64,7 +65,6 @@ export default ({ types }) => ({
   post() {
     /* CLEANUP */
     this.VisitedModules.clear();
-    this.ImportMap.clear(); // per file
     if (this.normalizedOpts.log === 'on') log(prefixLog, `complete ${this.currentFile}`);
   },
 });

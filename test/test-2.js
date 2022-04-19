@@ -88,4 +88,5 @@ Loggers.Logger.infoRF(MainManagerLogs.ShowLogin.SHOW, 'current', url);
 
 const url = 'abc';
 
+Logger.zlg_errorRC(ZLogTemplate.toTemplate('can not use sqlite adapter', 'canIUseSqlite'), reason);
 Loggers.infoF(MainManagerLogs.ShowLogin.SHOW, 'current', url);

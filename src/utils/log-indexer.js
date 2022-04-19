@@ -31,12 +31,13 @@ class LogIndexer {
     this._lid = id;
   }
 
-  currentLogData({ featName, lid }) {
+  currentLogData({ featName, lid, fid, process }) {
     return types.objectExpression([
       types.objectProperty(types.identifier('mid'), types.numericLiteral(this._mid)),
-      types.objectProperty(types.identifier('fid'), types.numericLiteral(this._fid)),
+      types.objectProperty(types.identifier('fid'), types.numericLiteral(fid || this._fid)),
       types.objectProperty(types.identifier('lid'), types.numericLiteral(lid || this._lid)),
       types.objectProperty(types.identifier('featName'), types.stringLiteral(featName || '')),
+      types.objectProperty(types.identifier('process'), types.stringLiteral(process || 'unknown')),
     ]);
   }
 

@@ -15,38 +15,40 @@ describe('transformer-test', () => {
         {
           rootDir: 'test',
           replaceSymbFunc: {
-            info: [
+            zlg_info: [
               'logSymbol',
               {
                 variants: ['self', 'R', 'F', 'C', 'RF', 'RC'],
               },
             ],
-            debug: [
+            zlg_debug: [
               'logSymbol',
               {
                 variants: ['self', 'R', 'F', 'C', 'RF', 'RC'],
               },
             ],
-            warn: [
+            zlg_warn: [
               'logSymbol',
               {
                 variants: ['self', 'R', 'F', 'C', 'RF', 'RC'],
               },
             ],
-            error: [
+            zlg_error: [
               'logSymbol',
               {
                 variants: ['self', 'R', 'F', 'C', 'RF', 'RC'],
               },
             ],
           },
-          replaceCreateFeatFunc: ['createFeatLogs', 'createOneFeatLog'],
-          replaceCreateTemplFunc: ['l'],
-          loggerPathRegex: "((\\S*['-|'_])([a-zA-Z('-|'_)]+)\\/)*utils\\/logger\\/((\\S*['-|'_])([a-zA-Z('-|'_)]+)\\/)*(logger)$",
-          logDataPathRegex: "((\\S*['-|'_])([a-zA-Z('-|'_)]+)\\/)*utils\\/logger\\/((\\S*['-|'_])([a-zA-Z('-|'_)]+)\\/)*(templates(-\\w+)+|templates)$",
-          excludePathRegex: "(src\\/zlogger|src\\/static)",
-          outDir: __dirname,
-          log: 'on'
+          replaceCreateTemplFunc: ['toTemplate'],
+          loggerPathRegex:
+            "((\\S*['-|'_])([a-zA-Z('-|'_)]+)\\/)*utils\\/logger\\/((\\S*['-|'_])([a-zA-Z('-|'_)]+)\\/)*(logger)$",
+          logDataPathRegex:
+            "((\\S*['-|'_])([a-zA-Z('-|'_)]+)\\/)*utils\\/logger\\/((\\S*['-|'_])([a-zA-Z('-|'_)]+)\\/)*(templates(-\\w+)+|templates)$",
+          excludePathRegex: '(src\\/zlogger|src\\/static)',
+          outDir: '.',
+          log: 'on',
+          process: 'main'
         },
       ],
     ],
