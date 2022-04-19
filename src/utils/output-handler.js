@@ -1,3 +1,4 @@
+const path = require('path');
 const { isNode } = require('./environment');
 const { writeExtractedDataToFile } = require('./file-utils');
 
@@ -11,6 +12,7 @@ export class OutputHandler {
     this._FeatMap = null;
     this.outDir = '';
     this.outputable = false;
+    this.process = new Date().getTime();
   }
 
   setMaps(props) {
@@ -28,11 +30,11 @@ export class OutputHandler {
 
   setOutputable(status) {
     this.outputable = status;
-  } 
+  }
 
   setOutDir(outDir) {
     if (!outDir) throw new Error('OutputHandler received invalid outDir');
-    this.outDir = outDir;
+    this.outDir = path.join(...outDir);
   }
 
   getOutDir() {
@@ -49,7 +51,7 @@ export class OutputHandler {
    * @returns
    */
   writeExtractedSymbolMap(options) {
-    if(!this.outDir) return new Promise(resolve => resolve(true));
+    if (!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
       return writeExtractedDataToFile([this.outDir, 'symbol-map.json'], this._SymbolMap, options);
     }
@@ -62,7 +64,7 @@ export class OutputHandler {
    * @returns
    */
   writeExtractedSourceMap(options) {
-    if(!this.outDir) return new Promise(resolve => resolve(true));
+    if (!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
       return writeExtractedDataToFile([this.outDir, 'source-map.json'], this._SourceMap, options);
     }
@@ -75,7 +77,7 @@ export class OutputHandler {
    * @returns
    */
   writeExtractedTemplMap(options) {
-    if(!this.outDir) return new Promise(resolve => resolve(true));
+    if (!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
       return writeExtractedDataToFile([this.outDir, 'templ-map.json'], this._TemplMap, options);
     }
@@ -87,8 +89,8 @@ export class OutputHandler {
    * @param {*} param0
    * @returns
    */
-   writeExtractedFeatMap(options) {
-    if(!this.outDir) return new Promise(resolve => resolve(true));
+  writeExtractedFeatMap(options) {
+    if (!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
       return writeExtractedDataToFile([this.outDir, 'feat-map.json'], this._FeatMap, options);
     }

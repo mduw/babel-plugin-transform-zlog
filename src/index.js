@@ -56,7 +56,7 @@ export default ({ types }) => ({
     this.FeatMap = _FeatMap;
     this.currentFile = file.opts.filename;
     this.normalizedOpts = normalizeOptions(this.currentFile, this.opts);
-    outputHandler.setOutDir(this.normalizedOpts.outDir);
+    outputHandler.setOutDir([this.normalizedOpts.outDir, this.normalizeOptions.process]);
     if (this.normalizedOpts.log === 'on') log(prefixLog, `scanning ${file.opts.filename}`);
   },
 
