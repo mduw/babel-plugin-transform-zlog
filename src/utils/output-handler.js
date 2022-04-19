@@ -1,6 +1,6 @@
 const path = require('path');
 const { isNode } = require('./environment');
-const { writeExtractedDataToFile } = require('./file-utils');
+const { writeExtractedDataToFile, toPosixPath } = require('./file-utils');
 
 export class OutputHandler {
   constructor() {
@@ -34,8 +34,7 @@ export class OutputHandler {
 
   setOutDir(outDir) {
     if (!outDir) throw new Error('OutputHandler received invalid outDir');
-    this.outDir = path.join(...outDir);
-    console.log('dir: ', this.outDir, ' : ', outDir)
+    this.outDir = outDir;
   }
 
   getOutDir() {
