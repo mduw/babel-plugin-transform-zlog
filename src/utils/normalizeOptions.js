@@ -43,8 +43,7 @@ function normalizeReplaceCreateTemplFunc(optsReplace) {
 }
 
 function normalizeOutPath(optsPath) {
-  const fullpath = path.join(...optsPath.filter(e=>e));
-  return toPosixPath(prepareDir(fullpath).result);
+  return toPosixPath(prepareDir(optsPath).result);
 }
 
 function normalizePathRegex(optsPathRegex) {
@@ -79,9 +78,10 @@ export default createSelector(
     const logDataPathRegex = normalizePathRegex(opts.logDataPathRegex);
     const excludePathRegex = normalizePathRegex(opts.excludePathRegex);
     const process = normalizeProcess(opts.process);
-    const outPath = normalizeOutPath([opts.outDir, process]);
     const log = normalizeShowLog(opts.log);
     const rootDir = normalizeRootDir(opts.rootDir);
+    const outPath = normalizeOutPath(opts.outDir);
+
     return {
       replaceSymbFunc,
       replaceCreateTemplFunc,

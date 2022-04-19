@@ -53,7 +53,7 @@ export class OutputHandler {
   writeExtractedSymbolMap(options) {
     if (!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
-      return writeExtractedDataToFile([this.outDir, 'symbol-map.json'], this._SymbolMap, options);
+      return writeExtractedDataToFile(path.join(this.outDir, 'symbol-map.json'), this._SymbolMap, options);
     }
     throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
   }
@@ -66,7 +66,7 @@ export class OutputHandler {
   writeExtractedSourceMap(options) {
     if (!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
-      return writeExtractedDataToFile([this.outDir, 'source-map.json'], this._SourceMap, options);
+      return writeExtractedDataToFile(path.join(this.outDir, 'source-map.json'), this._SourceMap, options);
     }
     throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
   }
@@ -79,7 +79,7 @@ export class OutputHandler {
   writeExtractedTemplMap(options) {
     if (!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
-      return writeExtractedDataToFile([this.outDir, 'templ-map.json'], this._TemplMap, options);
+      return writeExtractedDataToFile(path.join(this.outDir, 'templ-map.json'), this._TemplMap, options);
     }
     throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
   }
@@ -92,7 +92,7 @@ export class OutputHandler {
   writeExtractedFeatMap(options) {
     if (!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
-      return writeExtractedDataToFile([this.outDir, 'feat-map.json'], this._FeatMap, options);
+      return writeExtractedDataToFile(path.join(this.outDir, 'feat-map.json'), this._FeatMap, options);
     }
     throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
   }

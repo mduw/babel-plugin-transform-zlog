@@ -135,12 +135,11 @@ function doWriteData(outPath, fData, opts) {
   });
 }
 
-export function writeExtractedDataToFile(pathArr, map, options) {
+export function writeExtractedDataToFile(pathStr, map, options) {
   /* eslint-disable global-require */
   return new Promise((resolve, reject) => {
     const fs = require('fs');
-    const fullPath = path.join(...pathArr.filter(e=>e))
-    const outDir = toPosixPath(fullPath);
+    const outDir = toPosixPath(pathStr);
     const data = invertObjectKeyValue(Object.fromEntries(map));
     
     if (fs.existsSync(outDir)) {
