@@ -17,8 +17,8 @@ export function getSymbid(loc, state) {
   const smid = getSouceMapID(shortenPath(state.normalizedOpts.rootDir, state.currentFile), state.SourceMap);
   const symbidKey = `${smid}:${row}:${col}`;
   if (state.SymbolMap.has(symbidKey)) {
-    console.log('duplicate symbid', symbidKey, state.currentFile)
-    throw new Error('ERROR: duplicate symbol id');
+    console.log('check duplicate symbid', symbidKey, state.currentFile)
+    // throw new Error('ERROR: duplicate symbol id');
   }
   const autoSymbid = state.SymbolMap.size + 1;
   state.SymbolMap.set(symbidKey, autoSymbid);
