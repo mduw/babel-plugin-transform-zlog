@@ -57,6 +57,7 @@ export default ({ types }) => ({
     this.currentFile = file.opts.filename;
     this.normalizedOpts = normalizeOptions(this.currentFile, this.opts);
     outputHandler.setOutDir([this.normalizedOpts.outDir, this.normalizedOpts.process]);
+    console.log(outputHandler.getOutDir())
     if (this.normalizedOpts.log === 'on') log(prefixLog, `scanning ${file.opts.filename}`);
   },
 

@@ -81,7 +81,7 @@ export function prepareDir(dir) {
     return { or: prepareDir };
   }
 
-  const dirPath = path.join(dir, 'log');
+  const dirPath = path.join(dir);
   // jshint -W040
   if (!this || this.or !== prepareDir || !this.result) {
     if (!dirPath) {

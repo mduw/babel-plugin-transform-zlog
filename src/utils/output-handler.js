@@ -35,6 +35,7 @@ export class OutputHandler {
   setOutDir(outDir) {
     if (!outDir) throw new Error('OutputHandler received invalid outDir');
     this.outDir = path.join(...outDir);
+    console.log('dir: ', this.outDir, ' : ', outDir)
   }
 
   getOutDir() {
