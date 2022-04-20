@@ -72,7 +72,7 @@ export class OutputHandler {
   writeExtractedSymbolMap(options) {
     if (!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
-      const { map, obj } = invertObjectKeyValue(this._SymbolMap);
+      const { map, obj } = invertObjectKeyValue(Object.fromEntries(this._SymbolMap));
       this._outputSymbolMap = map;
 
       return writeExtractedDataToFile(path.join(this.outDir, 'symbol-map.json'), obj, options);
@@ -88,7 +88,7 @@ export class OutputHandler {
   writeExtractedSourceMap(options) {
     if (!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
-      const { map, obj } = invertObjectKeyValue(this._SourceMap);
+      const { map, obj } = invertObjectKeyValue(Object.fromEntries(this._SourceMap));
       this._outputSourceMap = map;
       return writeExtractedDataToFile(path.join(this.outDir, 'source-map.json'), obj, options);
     }
@@ -103,7 +103,7 @@ export class OutputHandler {
   writeExtractedTemplMap(options) {
     if (!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
-      const { obj, map } = invertObjectKeyValue(this._TemplMap);
+      const { obj, map } = invertObjectKeyValue(Object.fromEntries(this._TemplMap));
       this._outputTemplMap = map;
       return writeExtractedDataToFile(path.join(this.outDir, 'templ-map.json'), obj, options);
     }
@@ -118,7 +118,7 @@ export class OutputHandler {
   writeExtractedFeatMap(options) {
     if (!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
-      const { obj, map } = invertObjectKeyValue(this._FeatMap);
+      const { obj, map } = invertObjectKeyValue(Object.fromEntries(this._FeatMap));
       this._outputFeatMap = map;
       return writeExtractedDataToFile(path.join(this.outDir, 'feat-map.json'), obj, options);
     }
