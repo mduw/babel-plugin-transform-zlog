@@ -145,10 +145,13 @@ export function writeExtractedDataToFile(pathStr, data, options) {
 
     if (fs.existsSync(outDir)) {
       fs.readFile(outDir, (err, oldData) => {
-        const mergedData = {
-          ...JSON.parse(oldData.toString()),
-          ...data
-        }
+        const oldDataObj = JSON.parse(oldData.toString());
+        const mergedData = oldDataObj.data
+          ? {
+              ...oldDataObj.data,
+              ...data,
+            }
+          : data;
         if (err) {
           reject(err);
           throw new Error(`fail to overwrite ${outDir} ${err}`);
