@@ -31,25 +31,21 @@ class LogIndexer {
     this._lid = id;
   }
 
-  currentLogData({ tags, lid, fid, process, template }) {
+  currentLogData({ tags, lid, fid, process, template, sourcemap, row }) {
     let checkedTags;
+
+    const baseTags = [
+      types.objectProperty(types.identifier('process'), types.stringLiteral(process || 'unknown')),
+      types.objectProperty(types.identifier('template'), types.stringLiteral(template)),
+      types.objectProperty(types.identifier('sourcemap'), types.stringLiteral(sourcemap)),
+      types.objectProperty(types.identifier('row'), types.numericLiteral(row)),
+    ];
+
     if (tags) {
-      tags.node.properties.push(
-        types.objectProperty(
-          types.identifier('process'),
-          types.stringLiteral(process || 'unknown')
-        ),
-        types.objectProperty(types.identifier('template'), types.stringLiteral(template))
-      );
+      tags.node.properties.push(...baseTags);
       checkedTags = tags.node.properties;
     } else {
-      checkedTags = [
-        types.objectProperty(
-          types.identifier('process'),
-          types.stringLiteral(process || 'unknown')
-        ),
-        types.objectProperty(types.identifier('template'), types.stringLiteral(template)),
-      ];
+      checkedTags = [...baseTags];
     }
     return types.objectExpression([
       types.objectProperty(types.identifier('mid'), types.numericLiteral(this._mid)),

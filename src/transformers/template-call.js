@@ -1,4 +1,4 @@
-import { types } from 'babel-core';
+import { toPosixPath } from '../utils/file-utils';
 import { Indexer } from '../utils/log-indexer';
 
 function transformTemplLiteral(nodePath, state, template, tags) {
@@ -26,8 +26,23 @@ function transformTemplLiteral(nodePath, state, template, tags) {
     lid = Indexer.nextLID();
     state.TemplMap.set(template, lid);
   }
+  const loc = nodePath.get('loc').node;
+  const row = loc.start.line;
+  const sourcemap = toPosixPath(state.currentFile)
+    .split('/')
+    .slice(-2)
+    .join('/');
+
   nodePath.replaceWith(
-    Indexer.currentLogData({ tags, lid, fid, process: state.normalizedOpts.process, template })
+    Indexer.currentLogData({
+      tags,
+      lid,
+      fid,
+      process: state.normalizedOpts.process,
+      template,
+      sourcemap,
+      row,
+    })
   );
 }
 
