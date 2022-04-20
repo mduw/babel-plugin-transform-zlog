@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.7.0...v1.8.0) (2022-04-20)
+
+
+### Features
+
+* **expose output maps:** allow access to output maps ([ab162fc](https://github.com/mduw/babel-plugin-transform-zlog/commit/ab162fcdeaab927770a509e45bb837f5dcdf9c90))
+
 ## [1.7.0](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.6.0...v1.7.0) (2022-04-20)
 
 
