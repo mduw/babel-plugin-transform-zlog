@@ -14,11 +14,6 @@ export class OutputHandler {
     this._FeatMap = null;
     this.outDir = '';
     this.outputable = false;
-
-    this._outputSourceMap = null;
-    this._outputTemplMap = null;
-    this._outputSymbolMap = null;
-    this._outputFeatMap = null;
   }
 
   setMaps(props) {
@@ -47,19 +42,6 @@ export class OutputHandler {
     return this.outDir;
   }
 
-  getSourceMap(key) {
-    return this._outputSourceMap.get(key);
-  }
-
-  getTemplMap(key) {
-    console.log('getting  templ', key, Object.fromEntries(this._outputTemplMap))
-    return this._outputTemplMap.get(key);
-  }
-
-  getSymbolMap(key) {
-    return this._outputSymbolMap.get(key);
-  }
-
   isOutputable() {
     return this.outputable;
   }
@@ -72,9 +54,7 @@ export class OutputHandler {
   writeExtractedSymbolMap(options) {
     if (!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
-      const { map, obj } = invertObjectKeyValue(Object.fromEntries(this._SymbolMap));
-      this._outputSymbolMap = map;
-
+      const obj = invertObjectKeyValue(Object.fromEntries(this._SymbolMap));
       return writeExtractedDataToFile(path.join(this.outDir, 'symbol-map.json'), obj, options);
     }
     throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
@@ -88,8 +68,7 @@ export class OutputHandler {
   writeExtractedSourceMap(options) {
     if (!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
-      const { map, obj } = invertObjectKeyValue(Object.fromEntries(this._SourceMap));
-      this._outputSourceMap = map;
+      const obj = invertObjectKeyValue(Object.fromEntries(this._SourceMap));
       return writeExtractedDataToFile(path.join(this.outDir, 'source-map.json'), obj, options);
     }
     throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
@@ -103,8 +82,7 @@ export class OutputHandler {
   writeExtractedTemplMap(options) {
     if (!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
-      const { obj, map } = invertObjectKeyValue(Object.fromEntries(this._TemplMap));
-      this._outputTemplMap = map;
+      const obj = invertObjectKeyValue(Object.fromEntries(this._TemplMap));
       return writeExtractedDataToFile(path.join(this.outDir, 'templ-map.json'), obj, options);
     }
     throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
@@ -118,8 +96,7 @@ export class OutputHandler {
   writeExtractedFeatMap(options) {
     if (!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
-      const { obj, map } = invertObjectKeyValue(Object.fromEntries(this._FeatMap));
-      this._outputFeatMap = map;
+      const obj = invertObjectKeyValue(Object.fromEntries(this._FeatMap));
       return writeExtractedDataToFile(path.join(this.outDir, 'feat-map.json'), obj, options);
     }
     throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');

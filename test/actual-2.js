@@ -101,7 +101,8 @@ logger.logSymbol("zlg_errorRC", 1, {
   fid: 0,
   lid: 0,
   tags: {
-    process: "pc"
+    process: "pc",
+    template: "invalid process import whot"
   }
 });
 this.logger.logSymbol("zlg_errorRC", 2, {
@@ -111,7 +112,8 @@ this.logger.logSymbol("zlg_errorRC", 2, {
   tags: {
     featName: 'canIUseSqlite',
     subFeat: 'anysub',
-    process: "pc"
+    process: "pc",
+    template: "can not use sqlite adapter"
   }
 }, reason);
 Loggers.infoF(MainManagerLogs.ShowLogin.SHOW, 'current', url);

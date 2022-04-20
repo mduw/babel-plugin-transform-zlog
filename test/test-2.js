@@ -87,6 +87,6 @@ Loggers.Logger.infoRF(MainManagerLogs.ShowLogin.SHOW, 'current', url);
 
 
 const url = 'abc';
-logger.zlg_errorRC(ZLogTemplate.toTemplate('invalid process import', {}));
+logger.zlg_errorRC(ZLogTemplate.toTemplate('invalid process import whot'));
 this.logger.zlg_errorRC(ZLogTemplate.toTemplate('can not use sqlite adapter', {featName: 'canIUseSqlite', subFeat:'anysub'}), reason);
 Loggers.infoF(MainManagerLogs.ShowLogin.SHOW, 'current', url);
