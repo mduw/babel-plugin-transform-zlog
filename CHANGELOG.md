@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.7](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.8.6...v1.8.7) (2022-04-20)
+
 ### [1.8.6](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.8.5...v1.8.6) (2022-04-20)
 
 ### [1.8.5](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.8.4...v1.8.5) (2022-04-20)
