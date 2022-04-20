@@ -52,6 +52,7 @@ export class OutputHandler {
   }
 
   getTemplMap(key) {
+    console.log('getting  templ', key, Object.fromEntries(this._outputTemplMap))
     return this._outputTemplMap.get(key);
   }
 
