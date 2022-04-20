@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.4](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.8.3...v1.8.4) (2022-04-20)
+
+
+### Bug Fixes
+
+* **invalid map conversion:** convert map to object before inversion ([f255054](https://github.com/mduw/babel-plugin-transform-zlog/commit/f25505486da3df64aa00cc5196cad8b4c2636438))
+
 ### [1.8.3](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.8.2...v1.8.3) (2022-04-20)
 
 ### [1.8.2](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.8.1...v1.8.2) (2022-04-20)
