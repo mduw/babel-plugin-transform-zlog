@@ -120,13 +120,14 @@ function doWriteData(outPath, fData, opts) {
           reject(werr);
           throw new Error(`fail to write ${outPath} ${werr}`);
         }
-        fs.chmod(outPath, fs.constants.O_RDONLY, modeErr => {
-          if (modeErr) {
-            reject(modeErr);
-            throw new Error(`fail to write ${outPath} ${modeErr}`);
-          }
-          resolve(true);
-        });
+        // fs.chmod(outPath, fs.constants.O_RDONLY, modeErr => {
+        //   if (modeErr) {
+        //     reject(modeErr);
+        //     throw new Error(`fail to write ${outPath} ${modeErr}`);
+        //   }
+        //   resolve(true);
+        // });
+        resolve(true);
       });
     } catch (error) {
       reject(error);
