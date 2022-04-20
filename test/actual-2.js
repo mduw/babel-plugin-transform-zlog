@@ -100,8 +100,9 @@ logger.logSymbol("zlg_errorRC", 1, {
   mid: -1,
   fid: 0,
   lid: 0,
-  tags: {},
-  process: "pc"
+  tags: {
+    process: "pc"
+  }
 });
 this.logger.logSymbol("zlg_errorRC", 2, {
   mid: -1,
@@ -109,8 +110,8 @@ this.logger.logSymbol("zlg_errorRC", 2, {
   lid: 1,
   tags: {
     featName: 'canIUseSqlite',
-    subFeat: 'anysub'
-  },
-  process: "pc"
+    subFeat: 'anysub',
+    process: "pc"
+  }
 }, reason);
 Loggers.infoF(MainManagerLogs.ShowLogin.SHOW, 'current', url);

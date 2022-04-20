@@ -32,12 +32,14 @@ class LogIndexer {
   }
 
   currentLogData({ tags, lid, fid, process }) {
+    tags.node.properties.push(
+      types.objectProperty(types.identifier('process'), types.stringLiteral(process || 'unknown'))
+    );
     return types.objectExpression([
       types.objectProperty(types.identifier('mid'), types.numericLiteral(this._mid)),
       types.objectProperty(types.identifier('fid'), types.numericLiteral(fid || this._fid)),
       types.objectProperty(types.identifier('lid'), types.numericLiteral(lid || this._lid)),
       types.objectProperty(types.identifier('tags'), types.objectExpression(tags.node.properties)),
-      types.objectProperty(types.identifier('process'), types.stringLiteral(process || 'unknown')),
     ]);
   }
 
