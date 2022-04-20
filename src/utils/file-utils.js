@@ -141,14 +141,18 @@ export function writeExtractedDataToFile(pathStr, data, options) {
     const fs = require('fs');
     const outDir = toPosixPath(pathStr);
     // const data = invertObjectKeyValue(Object.fromEntries(map));
-    
+
     if (fs.existsSync(outDir)) {
-      fs.unlink(outDir, err => {
+      fs.readFile(outDir, (err, oldData) => {
+        const mergedData = {
+          ...JSON.parse(oldData.toString()),
+          ...data
+        }
         if (err) {
           reject(err);
           throw new Error(`fail to overwrite ${outDir} ${err}`);
         }
-        doWriteData(outDir, data, options)
+        doWriteData(outDir, mergedData, options)
           .then(resolve)
           .catch(reject);
       });
