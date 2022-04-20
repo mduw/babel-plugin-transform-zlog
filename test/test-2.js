@@ -87,6 +87,6 @@ Loggers.Logger.infoRF(MainManagerLogs.ShowLogin.SHOW, 'current', url);
 
 
 const url = 'abc';
-
-Logger.zlg_errorRC(ZLogTemplate.toTemplate('can not use sqlite adapter', 'canIUseSqlite'), reason);
+logger.zlg_errorRC(ZLogTemplate.toTemplate('invalid process import', {}));
+this.logger.zlg_errorRC(ZLogTemplate.toTemplate('can not use sqlite adapter', {featName: 'canIUseSqlite', subFeat:'anysub'}), reason);
 Loggers.infoF(MainManagerLogs.ShowLogin.SHOW, 'current', url);

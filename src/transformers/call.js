@@ -8,8 +8,6 @@ export default function transformCall(nodePath, state) {
   const funcName = callee.property && callee.property.name;
   if (!callee || !funcName) return;
 
-  // console.log('checking ', state.normalizedOpts.replaceSymbFunc)
-
   if (
     funcName &&
     ((state.types.isMemberExpression(callee) &&

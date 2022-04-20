@@ -14,11 +14,13 @@ export function getSouceMapID(posixPath, SourceMap) {
 export function getSymbid(loc, state) {
   const row = loc.start.line;
   const col = loc.start.column;
-  const smid = getSouceMapID(shortenPath(state.normalizedOpts.rootDir, state.currentFile), state.SourceMap);
+  const smid = getSouceMapID(
+    shortenPath(state.normalizedOpts.rootDir, state.currentFile),
+    state.SourceMap
+  );
   const symbidKey = `${smid}:${row}:${col}`;
   if (state.SymbolMap.has(symbidKey)) {
-    console.log('check duplicate symbid', symbidKey, state.currentFile)
-    // throw new Error('ERROR: duplicate symbol id');
+    return state.SymbolMap.get(symbidKey);
   }
   const autoSymbid = state.SymbolMap.size + 1;
   state.SymbolMap.set(symbidKey, autoSymbid);

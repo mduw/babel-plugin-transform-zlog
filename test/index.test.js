@@ -46,9 +46,9 @@ describe('transformer-test', () => {
           logDataPathRegex:
             "((\\S*['-|'_])([a-zA-Z('-|'_)]+)\\/)*utils\\/logger\\/((\\S*['-|'_])([a-zA-Z('-|'_)]+)\\/)*(templates(-\\w+)+|templates)$",
           excludePathRegex: '(src\\/zlogger|src\\/static)',
-          outDir: '.',
+          outDir: 'node_modules/zlogger-parse/pc',
           log: 'on',
-          process: 'main'
+          process: 'pc'
         },
       ],
     ],
