@@ -102,18 +102,45 @@ logger.logSymbol("zlg_errorRC", 1, {
   lid: 0,
   tags: {
     process: "pc",
-    template: "invalid process import whot"
+    template: "invalid process import whot",
+    sourcemap: "test/test-2.js",
+    row: 90
   }
 });
-this.logger.logSymbol("zlg_errorRC", 2, {
+logger.logSymbol("zlg_errorRC", 2, {
   mid: -1,
   fid: 1,
   lid: 1,
   tags: {
     featName: 'canIUseSqlite',
+    process: "pc",
+    template: "invalid process import whattt",
+    sourcemap: "test/test-2.js",
+    row: 91
+  }
+});
+logger.logSymbol("zlg_errorRC", 3, {
+  mid: -1,
+  fid: 2,
+  lid: 1,
+  tags: {
+    process: "pc",
+    template: "invalid process import whattt",
+    sourcemap: "test/test-2.js",
+    row: 92
+  }
+});
+this.logger.logSymbol("zlg_errorRC", 4, {
+  mid: -1,
+  fid: 1,
+  lid: 2,
+  tags: {
+    featName: 'canIUseSqlite',
     subFeat: 'anysub',
     process: "pc",
-    template: "can not use sqlite adapter"
+    template: "can not use sqlite adapter",
+    sourcemap: "test/test-2.js",
+    row: 94
   }
 }, reason);
 Loggers.infoF(MainManagerLogs.ShowLogin.SHOW, 'current', url);

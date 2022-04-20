@@ -6,10 +6,11 @@ function transformTemplLiteral(nodePath, state, template, tags) {
   let fid;
   let featName = '';
   if (tags && state.types.isObjectExpression(tags)) {
-    for (let i = 0; i < tags.node.properties.size; i++) {
-      const item = tags.node.properties[i];
-      if (item.node.key.node.name === 'featName') {
-        featName = item.node.value.node.vlaue;
+    for (let i = 0; i < tags.node.properties.length; i++) {
+      const item = tags.get(`properties.${i}`);
+      if (item.get('key').node.name === 'featName') {
+        featName = item.get('value').node.value;
+        break;
       }
     }
   }
@@ -19,7 +20,9 @@ function transformTemplLiteral(nodePath, state, template, tags) {
   } else {
     fid = Indexer.nextFID();
     if (featName) state.FeatMap.set(featName, fid);
+    else state.FeatMap.set(`${fid}`, fid);
   }
+
   if (state.TemplMap.has(template)) {
     lid = state.TemplMap.get(template);
   } else {
