@@ -1,3 +1,5 @@
+import { invertObjectKeyValue } from './object-utils';
+
 const path = require('path');
 const { isNode } = require('./environment');
 const { writeExtractedDataToFile, toPosixPath } = require('./file-utils');
@@ -12,7 +14,11 @@ export class OutputHandler {
     this._FeatMap = null;
     this.outDir = '';
     this.outputable = false;
-    this.process = new Date().getTime();
+
+    this._outputSourceMap = null;
+    this._outputTemplMap = null;
+    this._outputSymbolMap = null;
+    this._outputFeatMap = null;
   }
 
   setMaps(props) {
@@ -41,6 +47,18 @@ export class OutputHandler {
     return this.outDir;
   }
 
+  getSourceMap(key) {
+    return this._outputSourceMap.get(key);
+  }
+
+  getTemplMap(key) {
+    return this._outputTemplMap.get(key);
+  }
+
+  getSymbolMap(key) {
+    return this._outputSymbolMap.get(key);
+  }
+
   isOutputable() {
     return this.outputable;
   }
@@ -53,7 +71,10 @@ export class OutputHandler {
   writeExtractedSymbolMap(options) {
     if (!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
-      return writeExtractedDataToFile(path.join(this.outDir, 'symbol-map.json'), this._SymbolMap, options);
+      const { map, obj } = invertObjectKeyValue(this._SymbolMap);
+      this._outputSymbolMap = map;
+
+      return writeExtractedDataToFile(path.join(this.outDir, 'symbol-map.json'), obj, options);
     }
     throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
   }
@@ -66,7 +87,9 @@ export class OutputHandler {
   writeExtractedSourceMap(options) {
     if (!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
-      return writeExtractedDataToFile(path.join(this.outDir, 'source-map.json'), this._SourceMap, options);
+      const { map, obj } = invertObjectKeyValue(this._SourceMap);
+      this._outputSourceMap = map;
+      return writeExtractedDataToFile(path.join(this.outDir, 'source-map.json'), obj, options);
     }
     throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
   }
@@ -79,7 +102,9 @@ export class OutputHandler {
   writeExtractedTemplMap(options) {
     if (!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
-      return writeExtractedDataToFile(path.join(this.outDir, 'templ-map.json'), this._TemplMap, options);
+      const { obj, map } = invertObjectKeyValue(this._TemplMap);
+      this._outputTemplMap = map;
+      return writeExtractedDataToFile(path.join(this.outDir, 'templ-map.json'), obj, options);
     }
     throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
   }
@@ -92,7 +117,9 @@ export class OutputHandler {
   writeExtractedFeatMap(options) {
     if (!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
-      return writeExtractedDataToFile(path.join(this.outDir, 'feat-map.json'), this._FeatMap, options);
+      const { obj, map } = invertObjectKeyValue(this._FeatMap);
+      this._outputFeatMap = map;
+      return writeExtractedDataToFile(path.join(this.outDir, 'feat-map.json'), obj, options);
     }
     throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
   }
