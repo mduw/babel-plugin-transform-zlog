@@ -1,3 +1,4 @@
+import { types } from 'babel-core';
 import { toPosixPath } from '../utils/file-utils';
 import { Indexer } from '../utils/log-indexer';
 
@@ -49,6 +50,17 @@ function transformTemplLiteral(nodePath, state, template, tags) {
   );
 }
 
+function extractTemplate(nodePath) {
+  let template = '';
+  if(types.isStringLiteral(nodePath)) {
+    template = nodePath.node.value;
+  } else if(types.isTemplateLiteral(nodePath)) {
+    template = nodePath.node.value.raw;
+  }
+
+  return template;
+}
+
 export default function transformLogTemplCall(nodePath, state) {
   if (state.VisitedModules.has(nodePath)) return;
   state.VisitedModules.add(nodePath);
@@ -62,10 +74,10 @@ export default function transformLogTemplCall(nodePath, state) {
     let template = null;
     let tags;
     if (nodePath.get('arguments').length === 2) {
-      template = nodePath.get('arguments.0').node.value;
+      template = extractTemplate(nodePath.get('arguments.0'));
       tags = nodePath.get('arguments.1');
     } else {
-      template = nodePath.get('arguments.0').node.value;
+      template = extractTemplate(nodePath.get('arguments.0'));
     }
 
     transformTemplLiteral(nodePath, state, template, tags);
