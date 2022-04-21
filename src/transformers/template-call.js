@@ -70,7 +70,7 @@ export default function transformLogTemplCall(nodePath, state) {
   if (!callee || !funcName || !state.normalizedOpts.replaceCreateTemplFunc.includes(funcName))
     return;
   const parentNode = nodePath.parentPath;
-  if (state.types.isCallExpression(parentNode)) {
+  if (state.types.isCallExpression(parentNode) && parentNode.get('callee').get('property').node.name === 'toTemplate') {
     let template = null;
     let tags;
     if (nodePath.get('arguments').length === 2) {

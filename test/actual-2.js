@@ -98,49 +98,57 @@ Loggers.Logger.infoRF(MainManagerLogs.ShowLogin.SHOW, 'current', url);
 const url = 'abc';
 logger.logSymbol("zlg_errorRC", 1, {
   mid: -1,
-  fid: 0,
-  lid: 0,
+  fid: -1,
+  lid: -1,
   tags: {
     process: "pc",
-    template: "invalid process import whot quasis",
     sourcemap: "test/test-2.js",
     row: 90
   }
-});
+}, `invalid process import whot RAW`);
 logger.logSymbol("zlg_errorRC", 2, {
   mid: -1,
-  fid: 1,
-  lid: 1,
-  tags: {
-    featName: 'canIUseSqlite',
-    process: "pc",
-    template: "invalid process import whattt",
-    sourcemap: "test/test-2.js",
-    row: 91
-  }
-});
-logger.logSymbol("zlg_errorRC", 3, {
-  mid: -1,
-  fid: 2,
-  lid: 1,
+  fid: -1,
+  lid: -1,
   tags: {
     process: "pc",
-    template: "invalid process import whattt",
     sourcemap: "test/test-2.js",
     row: 92
   }
-});
-this.logger.logSymbol("zlg_errorRC", 4, {
+}, ZLogTemplate.toTemplate(`invalid process import whot quasis`));
+logger.logSymbol("zlg_errorRC", 3, {
   mid: -1,
-  fid: 1,
-  lid: 2,
+  fid: -1,
+  lid: -1,
   tags: {
-    featName: 'canIUseSqlite',
-    subFeat: 'anysub',
     process: "pc",
-    template: "can not use sqlite adapter",
+    sourcemap: "test/test-2.js",
+    row: 93
+  }
+}, ZLogTemplate.toTemplate('invalid process import whattt', {
+  featName: 'canIUseSqlite'
+}));
+logger.logSymbol("zlg_errorRC", 4, {
+  mid: -1,
+  fid: -1,
+  lid: -1,
+  tags: {
+    process: "pc",
     sourcemap: "test/test-2.js",
     row: 94
   }
-}, reason);
+}, ZLogTemplate.toTemplate('invalid process import whattt'));
+this.logger.logSymbol("zlg_errorRC", 5, {
+  mid: -1,
+  fid: -1,
+  lid: -1,
+  tags: {
+    process: "pc",
+    sourcemap: "test/test-2.js",
+    row: 96
+  }
+}, ZLogTemplate.toTemplate('can not use sqlite adapter', {
+  featName: 'canIUseSqlite',
+  subFeat: 'anysub'
+}), reason);
 Loggers.infoF(MainManagerLogs.ShowLogin.SHOW, 'current', url);
