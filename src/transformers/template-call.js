@@ -55,7 +55,7 @@ function extractTemplate(nodePath) {
   if(types.isStringLiteral(nodePath)) {
     template = nodePath.node.value;
   } else if(types.isTemplateLiteral(nodePath)) {
-    template = nodePath.node.value.raw;
+    template = nodePath.get('quasis.0').node.value.raw;
   }
 
   return template;

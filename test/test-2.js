@@ -87,7 +87,7 @@ Loggers.Logger.infoRF(MainManagerLogs.ShowLogin.SHOW, 'current', url);
 
 
 const url = 'abc';
-logger.zlg_errorRC(ZLogTemplate.toTemplate('invalid process import whot'));
+logger.zlg_errorRC(ZLogTemplate.toTemplate(`invalid process import whot quasis`));
 logger.zlg_errorRC(ZLogTemplate.toTemplate('invalid process import whattt', {featName: 'canIUseSqlite'}));
 logger.zlg_errorRC(ZLogTemplate.toTemplate('invalid process import whattt'));
 

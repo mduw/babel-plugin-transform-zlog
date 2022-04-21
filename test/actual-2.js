@@ -102,7 +102,7 @@ logger.logSymbol("zlg_errorRC", 1, {
   lid: 0,
   tags: {
     process: "pc",
-    template: "invalid process import whot",
+    template: "invalid process import whot quasis",
     sourcemap: "test/test-2.js",
     row: 90
   }
