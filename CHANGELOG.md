@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.11.0](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.10.0...v1.11.0) (2022-04-28)
+
+
+### Features
+
+* **sourcemap:** support sourcemap for raw ([b49af6f](https://github.com/mduw/babel-plugin-transform-zlog/commit/b49af6f606f7f7b284c0d59d3379aff1e8cd9bfe))
+
 ## [1.10.0](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.9.0...v1.10.0) (2022-04-28)
 
 
