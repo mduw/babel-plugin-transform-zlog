@@ -64,13 +64,12 @@ function extractTemplate(nodePath) {
 export default function transformLogTemplCall(nodePath, state) {
   if (state.VisitedModules.has(nodePath)) return;
   state.VisitedModules.add(nodePath);
-  console.log('here', nodePath.node.callee)
+
   const callee = nodePath.node.callee || undefined;
   const funcName = callee.property && callee.property.name;
   if (!callee || !funcName || !state.normalizedOpts.replaceCreateTemplFunc.includes(funcName))
     return;
   const parentNode = nodePath.parentPath;
-  console.log('correct', state.types.isCallExpression(parentNode), nodePath.get('callee').get('property').node.name )
 
   if (state.types.isCallExpression(parentNode) && nodePath.get('callee').get('property').node.name === 'toTemplate') {
     let template = null;
