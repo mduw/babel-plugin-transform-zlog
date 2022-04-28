@@ -1,6 +1,7 @@
 import { types } from 'babel-core';
 import { toPosixPath } from '../utils/file-utils';
 import { getSymbid } from '../utils/map-utils';
+import transformLogTemplCall from './template-call';
 
 export default function transformLogSymbCall(nodePath, state, funcName) {
   if (state.VisitedModules.has(nodePath)) return;
@@ -20,7 +21,10 @@ export default function transformLogSymbCall(nodePath, state, funcName) {
     false
   );
 
-  if (funcName && funcName.endsWith('R') || (funcName.length >= 2 && funcName[funcName.length - 2] === 'R')) {
+  if (
+    (funcName && funcName.endsWith('R')) ||
+    (funcName.length >= 2 && funcName[funcName.length - 2] === 'R')
+  ) {
     const loc = nodePath.get('loc').node;
     const row = loc.start.line;
     const sourcemap = toPosixPath(state.currentFile)
@@ -46,8 +50,7 @@ export default function transformLogSymbCall(nodePath, state, funcName) {
       ])
     );
   }
-
-  // convert data
   nodePath.node.arguments.unshift(state.types.numericLiteral(symbid));
   nodePath.node.arguments.unshift(state.types.stringLiteral(funcName));
+  
 }
