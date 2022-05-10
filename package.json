@@ -76,14 +76,6 @@
     ]
   },
   "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "ts",
-      "tsx",
-      "json",
-      "node"
-    ],
     "testEnvironment": "node",
     "testRegex": "/test/.*\\.test\\.js$",
     "collectCoverageFrom": [
