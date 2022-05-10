@@ -1,7 +1,7 @@
 import normalizeOptions from './utils/normalizeOptions';
 import transformCall from './transformers/call';
 import { name } from '../package.json';
-import { log } from './log';
+import { log, colorize, COLORS } from './utils/log/log';
 import { isMatchingRegex } from './utils/regex-utils';
 import { OutputHandler } from './utils/output-handler';
 
@@ -9,16 +9,18 @@ const _SourceMap = new Map();
 const _SymbolMap = new Map();
 const _TemplMap = new Map();
 
+const _ModuleMap = new Map();
 const _FeatMap = new Map();
+
 export const outputHandler = new OutputHandler();
 outputHandler.setMaps({
   SourceMap: _SourceMap,
   SymbolMap: _SymbolMap,
   TemplMap: _TemplMap,
-  FeatMap: _FeatMap
+  FeatMap: _FeatMap,
 });
 
-const prefixLog = `[${name}]`;
+const prefixLog = `[${colorize(name, COLORS.yellow)}]`;
 const CallVisitors = {
   CallExpression: transformCall,
 };
@@ -40,7 +42,7 @@ const visitor = {
 };
 
 export default ({ types }) => ({
-  name: 'babel-plugin-transform-test',
+  name: 'babel-plugin-transform-zlog',
   manipulateOptions(opts) {
     if (opts.filename === undefined) {
       opts.filename = 'unknown';
@@ -53,11 +55,22 @@ export default ({ types }) => ({
     this.SymbolMap = _SymbolMap;
     this.SourceMap = _SourceMap;
     this.TemplMap = _TemplMap;
+
+    this.ModuleMap = _ModuleMap;
     this.FeatMap = _FeatMap;
+
     this.currentFile = file.opts.filename;
     this.normalizedOpts = normalizeOptions(this.currentFile, this.opts);
     outputHandler.setOutDir(this.normalizedOpts.outDir);
-    if (this.normalizedOpts.log === 'on') log(prefixLog, `scanning ${file.opts.filename}`);
+    if (this.normalizedOpts.log === 'on') {
+      log(
+        `[${colorize(new Date().toLocaleTimeString(), COLORS.yellow)}]`,
+        prefixLog,
+        '==>',
+        colorize(this.currentFile, COLORS.grey),
+        colorize('[parsing...]', COLORS.cyan)
+      );
+    }
   },
 
   visitor,
@@ -65,6 +78,14 @@ export default ({ types }) => ({
   post() {
     /* CLEANUP */
     this.VisitedModules.clear();
-    if (this.normalizedOpts.log === 'on') log(prefixLog, `complete ${this.currentFile}`);
+    if (this.normalizedOpts.log === 'on') {
+      log(
+        `[${colorize(new Date().toLocaleTimeString(), COLORS.yellow)}]`,
+        prefixLog,
+        '==>',
+        colorize(this.currentFile, COLORS.grey),
+        colorize('[complete]', COLORS.green)
+      );
+    }
   },
 });

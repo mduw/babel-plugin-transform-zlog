@@ -10,6 +10,12 @@ module.exports = {
     'no-unused-vars': 'off',
     'no-underscore-dangle': 'off',
     'no-useless-escape': 'off',
-    'no-shadow': 'off'
+    'no-shadow': 'off',
+    'class-methods-use-this': 'off',
+    'no-lonely-if': 'off',
+    'max-classes-per-file': 'off',
+    'prefer-destructuring': 'off',
+    'no-param-reassign': 'off'
   },
+  parser: "babel-eslint",
 };

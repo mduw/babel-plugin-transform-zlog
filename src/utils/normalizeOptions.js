@@ -1,7 +1,7 @@
 import path from 'path';
 import { createSelector } from 'reselect';
 import { prepareDir, toPosixPath } from './file-utils';
-import { name } from '../../package.json';
+
 /**
  * {
  *    replaceSymbFunc: {
@@ -51,7 +51,7 @@ function normalizePathRegex(optsPathRegex) {
   try {
     regex = new RegExp(optsPathRegex);
   } catch (err) {
-    throw new Error(`${name} error: invalid regex of loggerPathRegex`);
+    throw new Error(`error: invalid regex of loggerPathRegex`);
   }
   return regex;
 }
@@ -68,14 +68,16 @@ function normalizeProcess(optsProcess) {
   return optsProcess || '';
 }
 
+function normalizeLoggerInit(optsInitFuncName) {
+  return optsInitFuncName || '';
+}
+
 export default createSelector(
   currentFile => (currentFile.includes('.') ? path.dirname(currentFile) : currentFile),
   (_, opts) => opts,
   (currentFile, opts) => {
     const replaceSymbFunc = normalizeReplaceSymbFunc(opts.replaceSymbFunc);
-    const replaceCreateTemplFunc = normalizeReplaceCreateTemplFunc(opts.replaceCreateTemplFunc);
-    const loggerPathRegex = normalizePathRegex(opts.loggerPathRegex);
-    const logDataPathRegex = normalizePathRegex(opts.logDataPathRegex);
+    const replaceLoggerInitFunc = normalizeLoggerInit(opts.replaceLoggerInitFunc);
     const excludePathRegex = normalizePathRegex(opts.excludePathRegex);
     const process = normalizeProcess(opts.process);
     const log = normalizeShowLog(opts.log);
@@ -84,9 +86,7 @@ export default createSelector(
 
     return {
       replaceSymbFunc,
-      replaceCreateTemplFunc,
-      loggerPathRegex,
-      logDataPathRegex,
+      replaceLoggerInitFunc,
       excludePathRegex,
       outDir: outPath,
       rootDir,

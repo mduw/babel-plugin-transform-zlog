@@ -1,5 +1,7 @@
+import { types } from 'babel-core';
+import { colorize, COLORS } from '../utils/log/color';
+import transformLoggerInitCall from './logger-call';
 import transformLogSymbCall from './symbol-call';
-import transformLogTemplCall from './template-call';
 
 export default function transformCall(nodePath, state) {
   if (state.VisitedModules.has(nodePath)) return;
@@ -24,11 +26,11 @@ export default function transformCall(nodePath, state) {
     transformLogSymbCall(nodePath, state, funcName);
   } else if (
     funcName &&
-    ((state.types.isMemberExpression(callee) &&
-      state.normalizedOpts.replaceCreateTemplFunc.includes(callee.property.name)) ||
-      (state.types.isIdentifier(callee) &&
-        state.normalizedOpts.replaceCreateTemplFunc.includes(callee.node.name)))
+    types.isCallExpression(nodePath) &&
+    state.normalizedOpts.replaceLoggerInitFunc &&
+    state.normalizedOpts.replaceLoggerInitFunc.includes(funcName) &&
+    types.isCallExpression(nodePath)
   ) {
-    transformLogTemplCall(nodePath, state);
+    transformLoggerInitCall(nodePath, state, funcName);
   }
 }
