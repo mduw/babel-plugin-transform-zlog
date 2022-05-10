@@ -20,7 +20,7 @@ outputHandler.setMaps({
   FeatMap: _FeatMap,
 });
 
-const prefixLog = `[${colorize(name, COLORS.yellow)}]`;
+const prefixLog = `[${name}]`;
 const CallVisitors = {
   CallExpression: transformCall,
 };
@@ -64,10 +64,10 @@ export default ({ types }) => ({
     outputHandler.setOutDir(this.normalizedOpts.outDir);
     if (this.normalizedOpts.log === 'on') {
       log(
-        `[${colorize(new Date().toLocaleTimeString(), COLORS.yellow)}]`,
+        `[${new Date().toLocaleTimeString()}]`,
         prefixLog,
         '==>',
-        colorize(this.currentFile, COLORS.grey),
+        this.currentFile,
         colorize('[parsing...]', COLORS.cyan)
       );
     }
@@ -80,11 +80,11 @@ export default ({ types }) => ({
     this.VisitedModules.clear();
     if (this.normalizedOpts.log === 'on') {
       log(
-        `[${colorize(new Date().toLocaleTimeString(), COLORS.yellow)}]`,
+        `[${new Date().toLocaleTimeString()}]`,
         prefixLog,
         '==>',
-        colorize(this.currentFile, COLORS.grey),
-        colorize('[complete]', COLORS.green)
+        this.currentFile,
+        colorize('[completed]', COLORS.green)
       );
     }
   },
