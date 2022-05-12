@@ -1,5 +1,5 @@
 import { types } from 'babel-core';
-import { TransformInitLoggerError } from '../errors/errors';
+import { TransformInitLoggerError, TransformSymbolLogError } from '../errors/errors';
 import { toPosixPath } from '../utils/file-utils';
 import { Indexer } from '../utils/log-indexer';
 import { getSymbid } from '../utils/map-utils';
@@ -48,6 +48,55 @@ function transformTemplateBinaryExpression(nodePath, state, str = '', args = [])
   return [str, args];
 }
 
+function transformStringLiteral(nodePath, state) {
+  const template = nodePath.node.value;
+  const tagsNode = types.objectProperty(
+    types.identifier('template'),
+    types.objectExpression([
+      types.objectProperty(
+        types.identifier('id'),
+        types.numericLiteral(Indexer.addOrGetMap('lid', template, state))
+      ),
+      types.objectProperty(types.identifier('value'), types.stringLiteral(template)),
+    ])
+  );
+  nodePath.parentPath.node.arguments.shift(); // remove template
+  return tagsNode;
+}
+
+function transformTemplateLiteral(nodePath, state) {
+  const expressions = nodePath.get('expressions');
+  const quasis = nodePath.get('quasis');
+
+  let templateStr = '';
+  while (quasis.length) {
+    const topQuasis = quasis[0];
+    const topExpr = expressions.length ? expressions[0] : null;
+    if (topExpr) {
+      // check pos
+      const topQuasisStart = topQuasis.node.start;
+      const topExprStart = topExpr.node.start;
+      if (topQuasisStart < topExprStart) {
+        templateStr += topQuasis.node.value.cooked;
+        quasis.shift();
+      } else {
+        templateStr += '{}';
+        expressions.shift();
+      }
+    } else {
+      templateStr += topQuasis.node.value.cooked;
+      quasis.shift();
+    }
+  }
+
+  const allExpressions = state.types.cloneNode(nodePath.parentPath.get('arguments.0').node)
+    .expressions;
+
+  return [templateStr, allExpressions];
+
+  // return tagsNode;
+}
+
 export default function transformLogSymbCall(nodePath, state, funcName) {
   if (state.VisitedModules.has(nodePath)) return;
   state.VisitedModules.add(nodePath);
@@ -81,44 +130,10 @@ export default function transformLogSymbCall(nodePath, state, funcName) {
     tagsNode = types.objectProperty(types.identifier('template'), types.identifier('undefined'));
   } else {
     const templateNode = nodePath.get('arguments.0');
-
     if (types.isStringLiteral(templateNode)) {
-      const template = templateNode.node.value;
-      tagsNode = types.objectProperty(
-        types.identifier('template'),
-        types.objectExpression([
-          types.objectProperty(
-            types.identifier('id'),
-            types.numericLiteral(Indexer.addOrGetMap('lid', template, state))
-          ),
-          types.objectProperty(types.identifier('value'), types.stringLiteral(template)),
-        ])
-      );
-      nodePath.node.arguments.shift(); // remove template
+      tagsNode = transformStringLiteral(templateNode, state);
     } else if (types.isTemplateLiteral(templateNode)) {
-      const expressions = templateNode.get('expressions');
-      const quasis = templateNode.get('quasis');
-
-      let templateStr = '';
-      while (quasis.length) {
-        const topQuasis = quasis[0];
-        const topExpr = expressions.length ? expressions[0] : null;
-        if (topExpr) {
-          // check pos
-          const topQuasisStart = topQuasis.node.start;
-          const topExprStart = topExpr.node.start;
-          if (topQuasisStart < topExprStart) {
-            templateStr += topQuasis.node.value.cooked;
-            quasis.shift();
-          } else {
-            templateStr += '{}';
-            expressions.shift();
-          }
-        } else {
-          templateStr += topQuasis.node.value.cooked;
-          quasis.shift();
-        }
-      }
+      const [templateStr, expressionsArrNode] = transformTemplateLiteral(templateNode, state);
       tagsNode = types.objectProperty(
         types.identifier('template'),
         types.objectExpression([
@@ -130,21 +145,20 @@ export default function transformLogSymbCall(nodePath, state, funcName) {
         ])
       );
 
-      const allExpressions = state.types.cloneNode(nodePath.get('arguments.0').node).expressions;
       nodePath.node.arguments.shift();
-      for (let i = allExpressions.length - 1; i >= 0; i--) {
-        nodePath.node.arguments.unshift(allExpressions[i]);
+      for (let i = expressionsArrNode.length - 1; i >= 0; i--) {
+        nodePath.node.arguments.unshift(expressionsArrNode[i]);
       }
     } else if (types.isBinaryExpression(templateNode)) {
-      const [newStr, newArgs] = transformTemplateBinaryExpression(templateNode, state);
+      const [templateStr, newArgs] = transformTemplateBinaryExpression(templateNode, state);
       tagsNode = types.objectProperty(
         types.identifier('template'),
         types.objectExpression([
           types.objectProperty(
             types.identifier('id'),
-            types.numericLiteral(Indexer.addOrGetMap('lid', newStr, state))
+            types.numericLiteral(Indexer.addOrGetMap('lid', templateStr, state))
           ),
-          types.objectProperty(types.identifier('value'), types.stringLiteral(newStr)),
+          types.objectProperty(types.identifier('value'), types.stringLiteral(templateStr)),
         ])
       );
       nodePath.node.arguments.shift();
@@ -152,7 +166,7 @@ export default function transformLogSymbCall(nodePath, state, funcName) {
         nodePath.node.arguments.unshift(state.types.cloneNode(newArgs[i].node));
       }
     } else {
-      throw new TransformInitLoggerError(`Invalid template format at ${sourcemap}:${row}`);
+      throw new TransformSymbolLogError(funcName, `Invalid template format at ${sourcemap}:${row}`);
     }
   }
 

@@ -1,5 +1,5 @@
 import { types } from 'babel-core';
-import { ParserError, TransformInitLoggerError } from '../errors/errors';
+import { TransformInitLoggerError } from '../errors/errors';
 import { toPosixPath } from '../utils/file-utils';
 import { Indexer } from '../utils/log-indexer';
 
@@ -21,7 +21,7 @@ export default function transformLoggerInitCall(nodePath, state, funcName) {
   const mid = nodePath.get('arguments.0');
   if (!types.isStringLiteral(mid))
     throw new TransformInitLoggerError('params[0] must be a type of string', sourcemap).error;
-    
+
   const fid = nodePath.get('arguments.1');
   if (!types.isArrayExpression(fid) || fid.get('elements').length === 0)
     throw new TransformInitLoggerError('params[1] must be a type of string[]', sourcemap).error;

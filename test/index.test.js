@@ -41,6 +41,7 @@ describe('transformer-test', () => {
             ],
           },
           replaceCreateTemplFunc: ['toTemplate'],
+          replaceLoggerInitFunc: ['createZLogger'],
           loggerPathRegex:
             "((\\S*['-|'_])([a-zA-Z('-|'_)]+)\\/)*utils\\/logger\\/((\\S*['-|'_])([a-zA-Z('-|'_)]+)\\/)*(logger)$",
           logDataPathRegex:

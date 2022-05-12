@@ -1,154 +1,175 @@
 /* eslint-disable */
-const {
-  zLogs
-} = require('zlogger');
+import ZCommon from 'utils/common';
+import { ZLogTemplate } from 'zlogger';
+import { CoreLoggerFactory } from 'utils/logger/renderer/core/logger';
+const Logger0 = new CoreLoggerFactory().createZLogger({
+  id: 0,
+  name: "core-mngr",
+  process: "pc"
+}, {
+  id: 0,
+  names: ['hello'],
+  process: "pc"
+});
+const Logger3 = new CoreLoggerFactory().createZLogger({
+  id: 0,
+  name: "core-mngr",
+  process: "pc"
+}, {
+  id: 1,
+  names: ['feat-funny'],
+  process: "pc"
+});
+const Logger2 = ModuleContainer.resolve(ZLoggerFactory).createZLogger({
+  id: 0,
+  name: "core-mngr",
+  process: "pc"
+}, {
+  id: 2,
+  names: ['feat-bording'],
+  process: "pc"
+});
+const Logger = new CoreLoggerFactory().createZLogger({
+  id: 1,
+  name: "ui",
+  process: "pc"
+}, {
+  id: 3,
+  names: ['sidebar', 'conv-list'],
+  process: "pc"
+});
+const Logger4 = new CoreLoggerFactory().createZLogger({
+  id: 0,
+  name: "core-mngr",
+  process: "pc"
+}, {
+  id: 4,
+  names: ['feat-funny2'],
+  process: "pc"
+});
+const Logger5 = new CoreLoggerFactory().createZLogger({
+  id: 1,
+  name: "ui",
+  process: "pc"
+}, {
+  id: 3,
+  names: ['sidebar', 'conv-list2'],
+  process: "pc"
+});
+const LoggerX = new CoreLoggerFactory().createZLogger({
+  id: 1,
+  name: "ui",
+  process: "pc"
+}, {
+  id: 3,
+  names: ['sidebar', 'conv-list'],
+  process: "pc"
+});
 
-const TrackingProcess = zLogs.createOneFeatLog('trackingPid', '[pid: {}][child: {}]');
-/* eslint-disable */
+class TimeStart {
+  constructor() {
+    this._startTime = Date.now();
+  }
 
-const {
-  zLogs: a,
-  xp
-} = require('zlogger');
-
-const PPP = a;
-
-const x = require('zlogger').C;
-
-const {
-  mm,
-  nn
-} = a;
-
-const {
-  Y
-} = require('zlogger'),
-      {
-  K,
-  L
-} = require('zlogger');
-
-import { Loggers as t, LoggerDev } from 'utils/logger';
-import CheckX, { CheckY, CheckZ } from 'utils/another-logger';
-import WhyCheck from 'utils/another-logger2';
-import Logger from 'utils/logger/renderer/core/logger';
-import BiggerLogger from 'utils/logger/db-task/logger';
-const logger = what ? Logger.infoRC('[e2ee] ' + txt, extObj) : Logger.infoR('[e2ee] ' + txt);
-const CrashNow = zLogs.createFeatLogs('boring', l => ({
-  SUPER: l('TOP ME')
-}));
-const MainLogs = {
-  Cmd: zLogs.createFeatLogs('Cmd', function (l) {
-    return {
-      ARGV: l('recv {}'),
-      DO_WITH_CMD: l('doWithCmd: {} {}')
-    };
-  }),
-  BoringTest: zLogs.createFeatLogs('boring', l => ({
-    SUPER: l('very boring')
-  })),
-  PreProcess: zLogs.createFeatLogs(null, l => ({
-    RESET_DB: {
-      RESET_DB_NESTED: {
-        OK: l('[db]_preProcess reset db ok'),
-        ERROR: l('[db]_preProcess reset db error {} 2')
-      }
-    },
-    RESET_ME: {
-      RESET_DB_NESTED: {
-        OK: l('[db]_preProcess reset db ok 3'),
-        ERROR: l('[db]_preProcess reset db error {} 4')
-      }
-    },
-    ANOTHER_ME: {
-      ANOTHER_ME_1: {
-        ANOTHER_ME_2: {
-          ANOTHER_ME_3: {
-            ANOTHER_ME_4: {
-              OK: l('[db]_preProcess reset db ok 5'),
-              ERROR: l('[db]_preProcess reset db error {} 6')
-            }
-          }
+  _showLog(content) {
+    Logger.logSymbol("zlg_info", 1, {
+      tags: {
+        process: "pc",
+        sourcemap: "test/test-2.js",
+        row: 22,
+        template: {
+          id: 0,
+          value: "tracking start {}"
         }
       }
-    },
-    ANOTHER_ME_ALONE: l('[db]_preProcess reset db ok 7')
-  })),
-  ReadyLoadApp: zLogs.createOneFeatLog('readyLoad', 'readyToLoadApp: {}')
-};
-Logger.info(MainManagerLogs.ShowLogin.SHOW, 'current', url);
-Logger.infoR('sda', 'current', url);
-Logger.infoRF('asre', 'current', url);
-Logger.infoRC('34wq', 'current', url);
-Logger.infoC(MainManagerLogs.ShowLogin.SHOW, 'current', url);
-Logger.infoF(MainManagerLogs.ShowLogin.SHOW, 'current', url);
-Logger.debug(MainManagerLogs.ShowLogin.SHOW, 'current', url);
-Logger.debugR('1', 'current', url);
-Logger.debugRF(2, 'current', url);
-Logger.debugRC(3, 'current', url);
-Logger.debugC(MainManagerLogs.ShowLogin.SHOW, 'current', url);
-Logger.debugF(MainManagerLogs.ShowLogin.SHOW, 'current', url);
-const MainManagerLogs = zLogs.createOneFeatLog('call-mng', '{}');
-module.exports = {
-  MainLogs,
-  MainManagerLogs
-};
-BiggerLogger.Loggers.Logger.infoF(MainManagerLogs.ShowLogin.SHOW, 'current', url);
-Loggers.Logger.infoRF(MainManagerLogs.ShowLogin.SHOW, 'current', url);
-const url = 'abc';
-logger.logSymbol("zlg_errorRC", 1, {
-  mid: -1,
-  fid: -1,
-  lid: -1,
-  tags: {
-    process: "pc",
-    sourcemap: "test/test-2.js",
-    row: 90
+    }, content);
+    Logger.logSymbol("zlg_infoR", 2, {
+      tags: {
+        process: "pc",
+        sourcemap: "test/test-2.js",
+        row: 23,
+        template: undefined
+      }
+    }, 'whottt', content); // Logger.zlg_info(`whottt ${templ} yeah`, content);
+
+    Logger.logSymbol("zlg_info", 3, {
+      tags: {
+        process: "pc",
+        sourcemap: "test/test-2.js",
+        row: 25,
+        template: {
+          id: 1,
+          value: "tracking start {} {} whot {} really"
+        }
+      }
+    }, () => x + y, p2, p3, content);
+    Logger.logSymbol("zlg_info", 4, {
+      tags: {
+        process: "pc",
+        sourcemap: "test/test-2.js",
+        row: 26,
+        template: {
+          id: 2,
+          value: "{} tracking start {} {} whot {} really{}"
+        }
+      }
+    }, ha, () => x + y, p2, p3, know, content);
+    Logger.logSymbol("zlg_info", 5, {
+      tags: {
+        process: "pc",
+        sourcemap: "test/test-2.js",
+        row: 27,
+        template: {
+          id: 3,
+          value: "tracking start whot really{}"
+        }
+      }
+    }, kk, content);
+    Logger.logSymbol("zlg_info", 6, {
+      tags: {
+        process: "pc",
+        sourcemap: "test/test-2.js",
+        row: 28,
+        template: {
+          id: 4,
+          value: "tracking start{}really{}{}who knows{}"
+        }
+      }
+    }, whot, kk, really, () => 5, content);
   }
-}, `invalid process import whot RAW`);
-logger.logSymbol("zlg_errorRC", 2, {
-  mid: -1,
-  fid: -1,
-  lid: -1,
-  tags: {
-    process: "pc",
-    sourcemap: "test/test-2.js",
-    row: 92
+
+  addLog(des, time = Date.now()) {
+    this._showLog(des + ": " + (time - this._startTime));
+
+    Logger.logSymbol("zlg_info", 7, {
+      tags: {
+        process: "pc",
+        sourcemap: "test/test-2.js",
+        row: 33,
+        template: {
+          id: 5,
+          value: "HELLOJames {}. My name is {} Tracking start whot really{}"
+        }
+      }
+    }, y, name, kk, content);
+    Logger.logSymbol("zlg_info", 8, {
+      tags: {
+        process: "pc",
+        sourcemap: "test/test-2.js",
+        row: 34,
+        template: {
+          id: 6,
+          value: "HELLO James . My name is Tracking start whot really"
+        }
+      }
+    });
   }
-}, ZLogTemplate.toTemplate(`invalid process import whot quasis`));
-logger.logSymbol("zlg_errorRC", 3, {
-  mid: -1,
-  fid: -1,
-  lid: -1,
-  tags: {
-    process: "pc",
-    sourcemap: "test/test-2.js",
-    row: 93
+
+  initStartTime() {
+    this._startTime = Date.now();
   }
-}, ZLogTemplate.toTemplate('invalid process import whattt', {
-  featName: 'canIUseSqlite'
-}));
-logger.logSymbol("zlg_errorRC", 4, {
-  mid: -1,
-  fid: -1,
-  lid: -1,
-  tags: {
-    process: "pc",
-    sourcemap: "test/test-2.js",
-    row: 94
-  }
-}, ZLogTemplate.toTemplate('invalid process import whattt'));
-this.logger.logSymbol("zlg_errorRC", 5, {
-  mid: -1,
-  fid: -1,
-  lid: -1,
-  tags: {
-    process: "pc",
-    sourcemap: "test/test-2.js",
-    row: 96
-  }
-}, ZLogTemplate.toTemplate('can not use sqlite adapter', {
-  featName: 'canIUseSqlite',
-  subFeat: 'anysub'
-}), reason);
-Loggers.infoF(MainManagerLogs.ShowLogin.SHOW, 'current', url);
+
+}
+
+const timeStart = new TimeStart();
+export default timeStart;

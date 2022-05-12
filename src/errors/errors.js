@@ -6,32 +6,33 @@ export class ParserError {
   }
 
   get error() {
-    const prefix = `\n[${colorize(new Date().toLocaleTimeString(), COLORS.yellow)}][${colorize(
-      'babel-plugin-transform-zlog',
-      COLORS.yellow
-    )}]`;
-    return new Error(`${prefix}: ${this.msg}`);
+    const prefix = `\n[${new Date().toLocaleTimeString()}][babel-plugin-transform-zlog]`;
+    return new Error(colorize(`${prefix}: ${this.msg}`, COLORS.red));
   }
 }
 
 export class TransformInitLoggerError extends ParserError {
-  details = `\n\n\t=> ${colorize('!IMPORTANT', COLORS.BGred, COLORS.white)}: ${colorize(
-    'expect createZLogger(<template>, ...args)\n\t\t<template> must be a string | template string | string/template-string concatenation',
-    COLORS.yellow
-  )}`;
-
   constructor(...args) {
     super(...args);
-    this.msg = colorize(
-      'SYNTAX ERR: '.concat(args.join(' ')),
-      COLORS.red
-    ).concat(this.details);
+    this.msg = 'SYNTAX ERR: '.concat(args.join(' ')).concat(this.details());
   }
+
+  details = () =>
+    `\n\n\t${colorize(
+      '=> EXPECTED: createZLogger(module:string, feature: string[], mode?: "bin|"txt")\n',
+      COLORS.magenta
+    )}`;
 }
 
 export class TransformSymbolLogError extends ParserError {
-  constructor(...args) {
+  constructor(funcName, ...args) {
     super(args);
-    this.msg = colorize('logSymbol Syntax ERR: '.concat(args.join(' ')), COLORS.red);
+    this.msg = 'logSymbol Syntax ERR: '.concat(args.join(' ')).concat(this.details(funcName));
   }
+
+  details = funcName =>
+    `\n\n\t${colorize(
+      `=> EXPECTED: ${funcName}(<template>, ...args)\n\t\t<template>: string | template string | string/template-string concatenation`,
+      COLORS.magenta
+    )}`;
 }
