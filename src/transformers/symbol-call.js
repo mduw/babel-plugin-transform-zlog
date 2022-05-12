@@ -1,7 +1,7 @@
 import { types } from 'babel-core';
-import { TransformInitLoggerError, TransformSymbolLogError } from '../errors/errors';
-import { toPosixPath } from '../utils/file-utils';
+import { ImportsHelper } from '../utils/import-helper';
 import { Indexer } from '../utils/log-indexer';
+import { EnumeratedLevels } from '../utils/log-levels/enumerator';
 import { getSymbid } from '../utils/map-utils';
 
 function transformTemplateBinaryExpression(nodePath, state, str = '', args = []) {
@@ -31,6 +31,7 @@ function transformTemplateBinaryExpression(nodePath, state, str = '', args = [])
           quasis.shift();
         } else {
           tempStr += '{}';
+          // tempArgs.push(state.types.cloneNode(topExpr.node));
           tempArgs.push(topExpr);
           expressions.shift();
         }
@@ -50,24 +51,13 @@ function transformTemplateBinaryExpression(nodePath, state, str = '', args = [])
 
 function transformStringLiteral(nodePath, state) {
   const template = nodePath.node.value;
-  const tagsNode = types.objectProperty(
-    types.identifier('template'),
-    types.objectExpression([
-      types.objectProperty(
-        types.identifier('id'),
-        types.numericLiteral(Indexer.addOrGetMap('lid', template, state))
-      ),
-      types.objectProperty(types.identifier('value'), types.stringLiteral(template)),
-    ])
-  );
-  nodePath.parentPath.node.arguments.shift(); // remove template
-  return tagsNode;
+  return [template, []];
 }
 
 function transformTemplateLiteral(nodePath, state) {
   const expressions = nodePath.get('expressions');
   const quasis = nodePath.get('quasis');
-
+  const NewExp = [];
   let templateStr = '';
   while (quasis.length) {
     const topQuasis = quasis[0];
@@ -81,6 +71,7 @@ function transformTemplateLiteral(nodePath, state) {
         quasis.shift();
       } else {
         templateStr += '{}';
+        NewExp.push(expressions[0]);
         expressions.shift();
       }
     } else {
@@ -89,10 +80,7 @@ function transformTemplateLiteral(nodePath, state) {
     }
   }
 
-  const allExpressions = state.types.cloneNode(nodePath.parentPath.get('arguments.0').node)
-    .expressions;
-
-  return [templateStr, allExpressions];
+  return [templateStr, NewExp];
 
   // return tagsNode;
 }
@@ -106,12 +94,6 @@ export default function transformLogSymbCall(nodePath, state, funcName) {
   if (!callee || !funcName || !targetFuncNames) return;
 
   const loc = nodePath.get('loc').node;
-  const row = loc.start.line;
-  const sourcemap = toPosixPath(state.currentFile)
-    .split('/')
-    .slice(-2)
-    .join('/');
-
   const symbid = getSymbid(loc, state);
 
   // convert call func to logSymbol
@@ -120,73 +102,74 @@ export default function transformLogSymbCall(nodePath, state, funcName) {
     state.types.identifier(targetFuncNames[funcName]),
     false
   );
-  let tagsNode;
 
-  // parse raw
-  if (
-    (funcName && funcName.endsWith('R')) ||
-    (funcName.length >= 2 && funcName[funcName.length - 2] === 'R')
-  ) {
-    tagsNode = types.objectProperty(types.identifier('template'), types.identifier('undefined'));
-  } else {
-    const templateNode = nodePath.get('arguments.0');
-    if (types.isStringLiteral(templateNode)) {
-      tagsNode = transformStringLiteral(templateNode, state);
-    } else if (types.isTemplateLiteral(templateNode)) {
-      const [templateStr, expressionsArrNode] = transformTemplateLiteral(templateNode, state);
-      tagsNode = types.objectProperty(
-        types.identifier('template'),
-        types.objectExpression([
-          types.objectProperty(
-            types.identifier('id'),
-            types.numericLiteral(Indexer.addOrGetMap('lid', templateStr, state))
-          ),
-          types.objectProperty(types.identifier('value'), types.stringLiteral(templateStr)),
-        ])
+  const CallExpArgs = nodePath.get('arguments');
+  let ParsedTempl = '';
+  const PlaceholderSign = '{}';
+  const Blankspace = ' ';
+  const NewCallExpArgs = [];
+  let lastTemplateIndex = -1;
+  for (let i = 0; i < CallExpArgs.length; i++) {
+    if (ParsedTempl !== '') {
+      ParsedTempl = ParsedTempl.concat(Blankspace);
+    }
+    const currentNode = CallExpArgs[i];
+    if (types.isBinaryExpression(currentNode)) {
+      const [templateStr, expressionsArrNode] = transformTemplateBinaryExpression(
+        currentNode,
+        state
       );
-
-      nodePath.node.arguments.shift();
-      for (let i = expressionsArrNode.length - 1; i >= 0; i--) {
-        nodePath.node.arguments.unshift(expressionsArrNode[i]);
+      ParsedTempl = ParsedTempl.concat(templateStr);
+      expressionsArrNode.forEach(expr => {
+        NewCallExpArgs.push(expr);
+      });
+      lastTemplateIndex = ParsedTempl.length;
+    } else if (types.isStringLiteral(currentNode)) {
+      const [templateStr] = transformStringLiteral(currentNode, state);
+      ParsedTempl = ParsedTempl.concat(templateStr);
+      lastTemplateIndex = ParsedTempl.length;
+    } else if (types.isTemplateLiteral(currentNode)) {
+      const [templateStr, expressionsArrNode] = transformTemplateLiteral(currentNode, state);
+      ParsedTempl = ParsedTempl.concat(templateStr);
+      expressionsArrNode.forEach(expr => {
+        NewCallExpArgs.push(expr);
+      });
+      lastTemplateIndex = ParsedTempl.length;
+    } else if (types.isTaggedTemplateExpression(currentNode)) {
+      const currentTag = currentNode.get('tag');
+      const currentQuasi = currentNode.get('quasi');
+      if (currentTag.node.name === '__raw' && types.isTemplateLiteral(currentQuasi)) {
+        ParsedTempl += {};
+        NewCallExpArgs.push(currentQuasi);
       }
-    } else if (types.isBinaryExpression(templateNode)) {
-      const [templateStr, newArgs] = transformTemplateBinaryExpression(templateNode, state);
-      tagsNode = types.objectProperty(
-        types.identifier('template'),
-        types.objectExpression([
-          types.objectProperty(
-            types.identifier('id'),
-            types.numericLiteral(Indexer.addOrGetMap('lid', templateStr, state))
-          ),
-          types.objectProperty(types.identifier('value'), types.stringLiteral(templateStr)),
-        ])
-      );
-      nodePath.node.arguments.shift();
-      for (let i = newArgs.length - 1; i >= 0; i--) {
-        nodePath.node.arguments.unshift(state.types.cloneNode(newArgs[i].node));
-      }
+      //
     } else {
-      throw new TransformSymbolLogError(funcName, `Invalid template format at ${sourcemap}:${row}`);
+      ParsedTempl = ParsedTempl.concat(PlaceholderSign);
+      NewCallExpArgs.push(currentNode);
     }
   }
+  const NodeArgs = [];
+  ImportsHelper.insertImports(state.programPath, ImportsHelper.insertKeys.zLogFn);
+  NodeArgs.push(types.memberExpression(types.identifier(ImportsHelper.insertKeys.zLogFn), state.types.numericLiteral(EnumeratedLevels[funcName]), true));
 
-  nodePath.node.arguments.unshift(
-    types.objectExpression([
-      types.objectProperty(
-        types.identifier('tags'),
-        types.objectExpression([
-          types.objectProperty(
-            types.identifier('process'),
-            types.stringLiteral(state.normalizedOpts.process)
-          ),
-          types.objectProperty(types.identifier('sourcemap'), types.stringLiteral(sourcemap)),
-          types.objectProperty(types.identifier('row'), types.numericLiteral(row)),
-          tagsNode,
-        ])
-      ),
-    ])
-  );
+  ImportsHelper.insertImports(state.programPath, ImportsHelper.insertKeys.zsymbs);
+  NodeArgs.push(types.memberExpression(types.identifier(ImportsHelper.insertKeys.zsymbs), state.types.numericLiteral(symbid), true));
+  ParsedTempl = ParsedTempl.slice(0, lastTemplateIndex);
+  if (ParsedTempl.length) {
+    ImportsHelper.insertImports(state.programPath, ImportsHelper.insertKeys.ztempls);
+    const lid = Indexer.addOrGetMap('lid', ParsedTempl, state);
+    NodeArgs.push(
+      types.memberExpression(
+        state.types.identifier(ImportsHelper.insertKeys.ztempls),
+        types.numericLiteral(lid),
+        true
+      )
+    );
+  }
 
-  nodePath.node.arguments.unshift(state.types.numericLiteral(symbid));
-  nodePath.node.arguments.unshift(state.types.stringLiteral(funcName));
+  for (let i = 0; i < NewCallExpArgs.length; i++) {
+    NodeArgs.push(state.types.cloneNode(NewCallExpArgs[i].node));
+  }
+
+  nodePath.node.arguments = NodeArgs;
 }

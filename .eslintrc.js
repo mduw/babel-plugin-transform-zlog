@@ -15,7 +15,8 @@ module.exports = {
     'no-lonely-if': 'off',
     'max-classes-per-file': 'off',
     'prefer-destructuring': 'off',
-    'no-param-reassign': 'off'
+    'no-param-reassign': 'off',
+    "no-extend-native": "off"
   },
   parser: "babel-eslint",
 };

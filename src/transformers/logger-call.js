@@ -1,6 +1,7 @@
 import { types } from 'babel-core';
 import { TransformInitLoggerError } from '../errors/errors';
 import { toPosixPath } from '../utils/file-utils';
+import { ImportsHelper } from '../utils/import-helper';
 import { Indexer } from '../utils/log-indexer';
 
 export default function transformLoggerInitCall(nodePath, state, funcName) {
@@ -26,29 +27,19 @@ export default function transformLoggerInitCall(nodePath, state, funcName) {
   if (!types.isArrayExpression(fid) || fid.get('elements').length === 0)
     throw new TransformInitLoggerError('params[1] must be a type of string[]', sourcemap).error;
 
-  const midNode = types.objectExpression([
-    types.objectProperty(
-      types.identifier('id'),
-      types.numericLiteral(Indexer.addOrGetMap('mid', mid.node.value, state))
-    ),
-    types.objectProperty(types.identifier('name'), types.stringLiteral(mid.node.value)),
-    types.objectProperty(
-      types.identifier('process'),
-      types.stringLiteral(state.normalizedOpts.process)
-    ),
-  ]);
-  const fidNode = types.objectExpression([
-    types.objectProperty(
-      types.identifier('id'),
-      types.numericLiteral(Indexer.addOrGetMap('fid', fid.get('elements.0').node.value, state))
-    ),
-    types.objectProperty(types.identifier('names'), types.arrayExpression(fid.node.elements)),
-    types.objectProperty(
-      types.identifier('process'),
-      types.stringLiteral(state.normalizedOpts.process)
-    ),
-  ]);
+  ImportsHelper.insertImports(state.programPath, ImportsHelper.insertKeys.zmid);
+  nodePath.node.arguments[0] = types.memberExpression(
+    types.identifier(ImportsHelper.insertKeys.zmid),
+    types.numericLiteral(Indexer.addOrGetMap('mid', mid.node.value, state)),
+    true
+  );
 
-  nodePath.node.arguments[0] = midNode;
-  nodePath.node.arguments[1] = fidNode;
+  ImportsHelper.insertImports(state.programPath, ImportsHelper.insertKeys.zfid);
+  for (let i = 0; i < fid.get('elements').length; i++) {
+    fid.node.elements[i] = types.memberExpression(
+      types.identifier(ImportsHelper.insertKeys.zfid),
+      types.numericLiteral(Indexer.addOrGetMap('fid', fid.get(`elements.${i}`).node.value, state)),
+      true
+    );
+  }
 }

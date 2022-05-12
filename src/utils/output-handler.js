@@ -2,7 +2,7 @@ import { invertObjectKeyValue } from './object-utils';
 
 const path = require('path');
 const { isNode } = require('./environment');
-const { writeExtractedDataToFile, toPosixPath } = require('./file-utils');
+const { writeExtractedDataToFile } = require('./file-utils');
 
 export class OutputHandler {
   constructor() {
@@ -11,7 +11,10 @@ export class OutputHandler {
     this._SourceMap = null;
     this._TemplMap = null;
     this._SymbolMap = null;
+
+    this._ModuleMap = null;
     this._FeatMap = null;
+    this._EnumeratedLevels = null;
     this.outDir = '';
     this.outputable = false;
   }
@@ -19,14 +22,41 @@ export class OutputHandler {
   setMaps(props) {
     if (!props) throw new Error('OutputHandler received invalid maps');
     try {
-      const { SourceMap, TemplMap, SymbolMap, FeatMap } = props;
+      const { SourceMap, SymbolMap, TemplMap, ModuleMap, FeatMap, EnumeratedLevels } = props;
       this._SourceMap = SourceMap;
-      this._TemplMap = TemplMap;
       this._SymbolMap = SymbolMap;
+      this._TemplMap = TemplMap;
+
+      this._ModuleMap = ModuleMap;
       this._FeatMap = FeatMap;
+      this._EnumeratedLevels = EnumeratedLevels;
     } catch (err) {
       throw new Error(`OutputHandler received invalid maps input ${err}`);
     }
+  }
+
+  get SourceMap() {
+    return invertObjectKeyValue(Object.fromEntries(this._SymbolMap));
+  }
+
+  get SymbolMap() {
+    return invertObjectKeyValue(Object.fromEntries(this._SymbolMap));
+  }
+
+  get TemplMap() {
+    return invertObjectKeyValue(Object.fromEntries(this._TemplMap));
+  }
+
+  get ModuleMap() {
+    return invertObjectKeyValue(Object.fromEntries(this._ModuleMap));
+  }
+
+  get FeatMap() {
+    return invertObjectKeyValue(Object.fromEntries(this._FeatMap));
+  }
+
+  get EnumeratedLevels() {
+    return invertObjectKeyValue(this._EnumeratedLevels);
   }
 
   setOutputable(status) {

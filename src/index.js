@@ -4,11 +4,12 @@ import { name } from '../package.json';
 import { log, colorize, COLORS } from './utils/log/log';
 import { isMatchingRegex } from './utils/regex-utils';
 import { OutputHandler } from './utils/output-handler';
+import { ImportsHelper } from './utils/import-helper';
+import { EnumeratedLevels } from './utils/log-levels/enumerator';
 
 const _SourceMap = new Map();
 const _SymbolMap = new Map();
 const _TemplMap = new Map();
-
 const _ModuleMap = new Map();
 const _FeatMap = new Map();
 
@@ -17,7 +18,9 @@ outputHandler.setMaps({
   SourceMap: _SourceMap,
   SymbolMap: _SymbolMap,
   TemplMap: _TemplMap,
+  ModuleMap: _ModuleMap,
   FeatMap: _FeatMap,
+  EnumeratedLevels,
 });
 
 const prefixLog = `[${name}]`;
@@ -28,6 +31,7 @@ const CallVisitors = {
 const visitor = {
   Program: {
     enter(programPath, state) {
+      this.programPath = programPath;
       const ignorable = isMatchingRegex(this.normalizedOpts.excludePathRegex, this.currentFile);
       if (ignorable) {
         return;
@@ -58,7 +62,6 @@ export default ({ types }) => ({
 
     this.ModuleMap = _ModuleMap;
     this.FeatMap = _FeatMap;
-
     this.currentFile = file.opts.filename;
     this.normalizedOpts = normalizeOptions(this.currentFile, this.opts);
     outputHandler.setOutDir(this.normalizedOpts.outDir);
@@ -77,6 +80,7 @@ export default ({ types }) => ({
 
   post() {
     /* CLEANUP */
+    ImportsHelper.reset();
     this.VisitedModules.clear();
     if (this.normalizedOpts.log === 'on') {
       log(
