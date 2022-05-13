@@ -64,8 +64,11 @@ function normalizeRootDir(optsLog) {
   return optsLog || '';
 }
 
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 function normalizeProcess(optsProcess) {
-  return optsProcess || '';
+  return optsProcess ? capitalizeFirstLetter(optsProcess) : '';
 }
 
 function normalizeLoggerInit(optsInitFuncName) {

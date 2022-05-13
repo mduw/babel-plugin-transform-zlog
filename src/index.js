@@ -3,7 +3,7 @@ import transformCall from './transformers/call';
 import { name } from '../package.json';
 import { log, colorize, COLORS } from './utils/log/log';
 import { isMatchingRegex } from './utils/regex-utils';
-import { outputHandler } from './utils/output-handler';
+import { OutputHandler } from './utils/output-handler';
 import { ImportsHelper } from './utils/import-helper';
 import { EnumeratedLevels } from './utils/log-levels/enumerator';
 import { transformGlobalTagExpression } from './transformers/global-tag-expression';
@@ -14,6 +14,7 @@ const _TemplMap = new Map();
 const _ModuleMap = new Map();
 const _FeatMap = new Map();
 
+export const outputHandler = new OutputHandler();
 outputHandler.setMaps({
   SourceMap: _SourceMap,
   SymbolMap: _SymbolMap,
@@ -66,8 +67,8 @@ export default ({ types }) => ({
     this.currentFile = file.opts.filename;
     this.normalizedOpts = normalizeOptions(this.currentFile, this.opts);
     outputHandler.setOutDir(this.normalizedOpts.outDir);
-    outputHandler.process = this.normalizedOpts.process;
-    ImportsHelper.initImportData();
+    outputHandler.updateProcess(this.normalizedOpts.process);
+    ImportsHelper.initImportData(this.normalizedOpts.process);
     if (this.normalizedOpts.log === 'on') {
       log(
         `[${new Date().toLocaleTimeString()}]`,
@@ -96,5 +97,3 @@ export default ({ types }) => ({
     }
   },
 });
-
-export {outputHandler};

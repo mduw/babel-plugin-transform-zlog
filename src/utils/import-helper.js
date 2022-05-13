@@ -1,7 +1,5 @@
 import { types } from 'babel-core';
 import { ParserError } from '../errors/errors';
-import { outputHandler } from './output-handler';
-
 
 class ImportHelper {
   defaultKeys = {
@@ -17,24 +15,21 @@ class ImportHelper {
 
   insertedState = {};
 
-  initImportData() {
+  initImportData(process) {
+    this.process = process;
     Object.keys(this.defaultKeys).forEach(key => {
-      this.insertKeys[
-        `${key}${outputHandler.process}`
-      ] = `${key}${outputHandler.process}`;
-      this.insertKeys[key] = `${key}${outputHandler.process}`;
+      this.insertKeys[`${key}${this.process}`] = `${key}${this.process}`;
+      this.insertKeys[key] = `${key}${this.process}`;
     });
     Object.keys(this.defaultKeys).forEach(key => {
-      this.insertedState[`${key}${outputHandler.process}`] = false;
+      this.insertedState[`${key}${this.process}`] = false;
       this.insertedState[key] = false;
     });
   }
 
   reset() {
-    Object.keys(this.defaultKeys).forEach(key => {
-      this.insertedState[`${key}${outputHandler.process}`] = false;
-      this.insertedState[key] = false;
-    });
+    this.insertKeys = {};
+    this.insertedState = {};
   }
 
   insertImports(programPath, key) {

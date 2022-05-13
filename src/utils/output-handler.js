@@ -4,10 +4,6 @@ const path = require('path');
 const { isNode } = require('./environment');
 const { writeExtractedDataToFile } = require('./file-utils');
 
-
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
 export class OutputHandler {
   constructor() {
     if (this.instance) return this.instance;
@@ -24,10 +20,8 @@ export class OutputHandler {
     this._process = 'Main';
   }
 
-  set process(process) {
-    if (process !== '') {
-      this._process = capitalizeFirstLetter(process);
-    }
+  updateProcess(process) {
+    this._process = process;
   }
 
   get process() {
@@ -147,6 +141,3 @@ export class OutputHandler {
     throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
   }
 }
-
-
-export const outputHandler = new OutputHandler();
