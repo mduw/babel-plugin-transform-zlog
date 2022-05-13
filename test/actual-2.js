@@ -1,20 +1,20 @@
-import ztempls from "log-buckets/ztempls";
-import zsymbs from "log-buckets/zsymbs";
-import zLogFn from "log-buckets/zLogFn";
-import zfid from "log-buckets/zfid";
-import zmid from "log-buckets/zmid";
+import ztemplsPc from "log-buckets/ztemplsPc";
+import zsymbsPc from "log-buckets/zsymbsPc";
+import zLogFnPc from "log-buckets/zLogFnPc";
+import zfidPc from "log-buckets/zfidPc";
+import zmidPc from "log-buckets/zmidPc";
 
 /* eslint-disable */
 import ZCommon from 'utils/common';
 import { ZLogTemplate } from 'zlogger';
 import { CoreLoggerFactory } from 'utils/logger/renderer/core/logger';
-const Logger0 = new CoreLoggerFactory().createZLogger(zmid[0], [zfid[0]]);
-const Logger3 = new CoreLoggerFactory().createZLogger(zmid[0], [zfid[1]]);
-const Logger2 = ModuleContainer.resolve(ZLoggerFactory).createZLogger(zmid[0], [zfid[2]]);
-const Logger = new CoreLoggerFactory().createZLogger(zmid[1], [zfid[3], zfid[4]]);
-const Logger4 = new CoreLoggerFactory().createZLogger(zmid[0], [zfid[5]]);
-const Logger5 = new CoreLoggerFactory().createZLogger(zmid[1], [zfid[3], zfid[6]]);
-const LoggerX = new CoreLoggerFactory().createZLogger(zmid[1], [zfid[3], zfid[4]]);
+const Logger0 = new CoreLoggerFactory().createZLogger(zmidPc[0], [zfidPc[0]]);
+const Logger3 = new CoreLoggerFactory().createZLogger(zmidPc[0], [zfidPc[1]]);
+const Logger2 = ModuleContainer.resolve(ZLoggerFactory).createZLogger(zmidPc[0], [zfidPc[2]]);
+const Logger = new CoreLoggerFactory().createZLogger(zmidPc[1], [zfidPc[3], zfidPc[4]]);
+const Logger4 = new CoreLoggerFactory().createZLogger(zmidPc[0], [zfidPc[5]]);
+const Logger5 = new CoreLoggerFactory().createZLogger(zmidPc[1], [zfidPc[3], zfidPc[6]]);
+const LoggerX = new CoreLoggerFactory().createZLogger(zmidPc[1], [zfidPc[3], zfidPc[4]]);
 
 class TimeStart {
   constructor() {
@@ -25,11 +25,11 @@ class TimeStart {
     const vers = '1.2.3';
     const x = 1;
     const e = 5;
-    Logger.logSymbol(zLogFn[0], zsymbs[1], ztempls[0], x, () => 'style old', () => vers);
-    Logger.logSymbol(zLogFn[0], zsymbs[2], ztempls[1], x, () => 'style 2', () => vers);
-    Logger.logSymbol(zLogFn[0], zsymbs[3], ztempls[1], x, () => 'style 3', vers);
-    Logger.logSymbol(zLogFn[16], zsymbs[4], ztempls[2], `error keep me the same`, ztempls._$entity(ztempls[3]), ztempls._$entity(ztempls[4], 7));
-    Logger.logSymbol(zLogFn[0], zsymbs[5], ztempls[5], vers, 6, vers, 7, `dont parse this string`); // Logger.zlg_info('hello', 2, 'tracking start', content);
+    Logger.logSymbol(zLogFnPc[0], zsymbsPc[1], ztemplsPc[0], x, () => 'style old', () => vers);
+    Logger.logSymbol(zLogFnPc[0], zsymbsPc[2], ztemplsPc[1], x, () => 'style 2', () => vers);
+    Logger.logSymbol(zLogFnPc[0], zsymbsPc[3], ztemplsPc[1], x, () => 'style 3', vers);
+    Logger.logSymbol(zLogFnPc[16], zsymbsPc[4], ztemplsPc[2], __raw`error keep me the same`, __t`but parse me`, __t`parser more ${7}`);
+    Logger.logSymbol(zLogFnPc[0], zsymbsPc[5], ztemplsPc[3], vers, 6, vers, 7, __raw`dont parse this string`); // Logger.zlg_info('hello', 2, 'tracking start', content);
     // Logger.zlg_infoR(99,12,'whottt', content);
     // Logger.zlg_infoR(99, 12, 'whottt', content, x, __t`hello ${name}`);
     // // Logger.zlg_info(`whottt ${templ} yeah`, content);

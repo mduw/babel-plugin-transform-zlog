@@ -17,6 +17,17 @@ export class OutputHandler {
     this._EnumeratedLevels = null;
     this.outDir = '';
     this.outputable = false;
+    this._process = 'main';
+  }
+
+  set process(process) {
+    if (process !== '') {
+      this._process = process;
+    }
+  }
+
+  get process() {
+    return this._process;
   }
 
   setMaps(props) {
@@ -132,3 +143,6 @@ export class OutputHandler {
     throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
   }
 }
+
+
+export const outputHandler = new OutputHandler();

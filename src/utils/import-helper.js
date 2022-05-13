@@ -1,8 +1,12 @@
 import { types } from 'babel-core';
 import { ParserError } from '../errors/errors';
+import { outputHandler } from './output-handler';
 
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 class ImportHelper {
-  insertKeys = {
+  defaultKeys = {
     ztempls: 'ztempls',
     zsrcmaps: 'zsrcmaps',
     zsymbs: 'zsymbs',
@@ -11,24 +15,28 @@ class ImportHelper {
     zLogFn: 'zLogFn',
   };
 
-  insertedState = {
-    ztempls: false,
-    zsrcmaps: false,
-    zsymbs: false,
-    zmid: false,
-    zfid: false,
-    zLogFn: false,
-  };
+  insertKeys = {};
+
+  insertedState = {};
+
+  initImportData() {
+    Object.keys(this.defaultKeys).forEach(key => {
+      this.insertKeys[
+        `${key}${capitalizeFirstLetter(outputHandler.process)}`
+      ] = `${key}${capitalizeFirstLetter(outputHandler.process)}`;
+      this.insertKeys[key] = `${key}${capitalizeFirstLetter(outputHandler.process)}`;
+    });
+    Object.keys(this.defaultKeys).forEach(key => {
+      this.insertedState[`${key}${capitalizeFirstLetter(outputHandler.process)}`] = false;
+      this.insertedState[key] = false;
+    });
+  }
 
   reset() {
-    this.insertedState = {
-      ztempls: false,
-      zsrcmaps: false,
-      zsymbs: false,
-      zmid: false,
-      zfid: false,
-      zLogFn: false,
-    };
+    Object.keys(this.defaultKeys).forEach(key => {
+      this.insertedState[`${key}${capitalizeFirstLetter(outputHandler.process)}`] = false;
+      this.insertedState[key] = false;
+    });
   }
 
   insertImports(programPath, key) {
