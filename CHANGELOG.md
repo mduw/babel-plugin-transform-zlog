@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.12.0](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.11.4...v1.12.0) (2022-05-13)
+
+
+### Features
+
+* **support global __t:** parse __t to a func in ztempl ([98b3b88](https://github.com/mduw/babel-plugin-transform-zlog/commit/98b3b885651c85a36cd0daac30419f4c15ddf936))
+
 ### [1.11.4](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.11.3...v1.11.4) (2022-05-12)
 
 ### [1.11.3](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.11.2...v1.11.3) (2022-05-10)
