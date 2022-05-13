@@ -45,27 +45,27 @@ export class OutputHandler {
   }
 
   get SourceMap() {
-    return invertObjectKeyValueAsArray(Object.fromEntries(this._SymbolMap));
+    return invertObjectKeyValue(Object.fromEntries(this._SymbolMap));
   }
 
   get SymbolMap() {
-    return invertObjectKeyValueAsArray(Object.fromEntries(this._SymbolMap));
+    return invertObjectKeyValue(Object.fromEntries(this._SymbolMap));
   }
 
   get TemplMap() {
-    return invertObjectKeyValueAsArray(Object.fromEntries(this._TemplMap));
+    return invertObjectKeyValue(Object.fromEntries(this._TemplMap));
   }
 
   get ModuleMap() {
-    return invertObjectKeyValueAsArray(Object.fromEntries(this._ModuleMap));
+    return invertObjectKeyValue(Object.fromEntries(this._ModuleMap));
   }
 
   get FeatMap() {
-    return invertObjectKeyValueAsArray(Object.fromEntries(this._FeatMap));
+    return invertObjectKeyValue(Object.fromEntries(this._FeatMap));
   }
 
   get EnumeratedLevels() {
-    return invertObjectKeyValueAsArray(this._EnumeratedLevels);
+    return invertObjectKeyValue(this._EnumeratedLevels);
   }
 
   setOutputable(status) {
