@@ -16,7 +16,9 @@ module.exports = {
     'max-classes-per-file': 'off',
     'prefer-destructuring': 'off',
     'no-param-reassign': 'off',
-    "no-extend-native": "off"
+    "no-extend-native": "off",
+    'dot-notation': 'off',
+    
   },
   parser: "babel-eslint",
 };
