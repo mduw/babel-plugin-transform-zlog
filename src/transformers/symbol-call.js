@@ -48,6 +48,7 @@ function transformTemplateBinaryExpression(nodePath, state, str = '', args = [])
   } else {
     return [PlaceholderSign, [nodePath]];
   }
+  console.log('igot: ', str)
   return [str, args];
 }
 
@@ -81,6 +82,8 @@ export function transformTemplateLiteral(nodePath, state) {
       quasis.shift();
     }
   }
+  console.log('igot: ', templateStr)
+
   return [templateStr, NewExp];
 }
 

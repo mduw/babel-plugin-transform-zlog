@@ -18,7 +18,8 @@ module.exports = {
     'no-param-reassign': 'off',
     "no-extend-native": "off",
     'dot-notation': 'off',
-    
+    'radix': 'off',
+
   },
   parser: "babel-eslint",
 };

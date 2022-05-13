@@ -1,4 +1,4 @@
-import { invertObjectKeyValue } from './object-utils';
+import { invertObjectKeyValue, invertObjectKeyValueAsArray } from './object-utils';
 
 const path = require('path');
 const { isNode } = require('./environment');
@@ -36,27 +36,27 @@ export class OutputHandler {
   }
 
   get SourceMap() {
-    return invertObjectKeyValue(Object.fromEntries(this._SymbolMap));
+    return invertObjectKeyValueAsArray(Object.fromEntries(this._SymbolMap));
   }
 
   get SymbolMap() {
-    return invertObjectKeyValue(Object.fromEntries(this._SymbolMap));
+    return invertObjectKeyValueAsArray(Object.fromEntries(this._SymbolMap));
   }
 
   get TemplMap() {
-    return invertObjectKeyValue(Object.fromEntries(this._TemplMap));
+    return invertObjectKeyValueAsArray(Object.fromEntries(this._TemplMap));
   }
 
   get ModuleMap() {
-    return invertObjectKeyValue(Object.fromEntries(this._ModuleMap));
+    return invertObjectKeyValueAsArray(Object.fromEntries(this._ModuleMap));
   }
 
   get FeatMap() {
-    return invertObjectKeyValue(Object.fromEntries(this._FeatMap));
+    return invertObjectKeyValueAsArray(Object.fromEntries(this._FeatMap));
   }
 
   get EnumeratedLevels() {
-    return invertObjectKeyValue(this._EnumeratedLevels);
+    return invertObjectKeyValueAsArray(this._EnumeratedLevels);
   }
 
   setOutputable(status) {

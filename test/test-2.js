@@ -21,23 +21,46 @@ class TimeStart {
   }
 
   _showLog(content) {
+    const vers = '1.2.3';
+    const x = 1;
+    const e = 5;
+    Logger.zlg_info(
+      '{} test log template {} v {} from convlist diffrent',
+      x,
+      () => 'style old',
+      () => vers
+    );
+    Logger.zlg_info(`${x} test log template ${() => 'style 2'} v ${() => vers}` + ' from convlist');
+    Logger.zlg_info(
+      x + ' test log template ' + (() => 'style 3') + ' v ' + vers + ' from convlist'
+    );
+
+    Logger.zlg_errorR(
+      'this is error',
+      __raw`error keep me the same`,
+      __t`but parse me`,
+      __t`parser more ${7}`
+    );
+
+    Logger.zlg_info('hello world', vers, 6, `template ${vers}`, 7, __raw`dont parse this string`);
+
     // Logger.zlg_info('hello', 2, 'tracking start', content);
     // Logger.zlg_infoR(99,12,'whottt', content);
-    Logger.zlg_infoR(99, 12, 'whottt', content, x, __t`hello ${name}`);
+    // Logger.zlg_infoR(99, 12, 'whottt', content, x, __t`hello ${name}`);
 
-    // Logger.zlg_info(`whottt ${templ} yeah`, content);
-    Logger.zlg_info(
-      { h: 95 },
-      `tracking start ${() => x + y} ${p21} whot ${p31} really${990}`,
-      content1,
-      __raw`dont parse this`
-    );
-    // Logger.zlg_info(`${ha2} tracking start ${() => x2 + y2} ${p22} whot ${p32} really${know2}`, content2);
-    Logger.zlg_info(`tracking start whot really${kk3}`, content3);
-    Logger.zlg_info(
-      `tracking start` + whot4 + `really${kk4}` + really4 + 'who knows' + (() => 54),
-      content
-    );
+    // // Logger.zlg_info(`whottt ${templ} yeah`, content);
+    // Logger.zlg_info(
+    //   { h: 95 },
+    //   `tracking start ${() => x + y} ${p21} whot ${p31} really${990}`,
+    //   content1,
+    //   __raw`dont parse this`
+    // );
+    // // Logger.zlg_info(`${ha2} tracking start ${() => x2 + y2} ${p22} whot ${p32} really${know2}`, content2);
+    // Logger.zlg_info(`tracking start whot really${kk3}`, content3);
+    // Logger.zlg_info(
+    //   `tracking start` + whot4 + `really${kk4}` + really4 + 'who knows' + (() => 54),
+    //   content
+    // );
     // Logger.zlg_info(
     //   `tracking start` + whot + `really${kk}` + really + 'who knows' + (() => x + 2),
     //   content
