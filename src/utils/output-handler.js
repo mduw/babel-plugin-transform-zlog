@@ -4,6 +4,10 @@ const path = require('path');
 const { isNode } = require('./environment');
 const { writeExtractedDataToFile } = require('./file-utils');
 
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 export class OutputHandler {
   constructor() {
     if (this.instance) return this.instance;
@@ -17,12 +21,12 @@ export class OutputHandler {
     this._EnumeratedLevels = null;
     this.outDir = '';
     this.outputable = false;
-    this._process = 'main';
+    this._process = 'Main';
   }
 
   set process(process) {
     if (process !== '') {
-      this._process = process;
+      this._process = capitalizeFirstLetter(process);
     }
   }
 

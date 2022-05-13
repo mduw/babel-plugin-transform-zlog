@@ -2,9 +2,7 @@ import { types } from 'babel-core';
 import { ParserError } from '../errors/errors';
 import { outputHandler } from './output-handler';
 
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
+
 class ImportHelper {
   defaultKeys = {
     ztempls: 'ztempls',
@@ -22,19 +20,19 @@ class ImportHelper {
   initImportData() {
     Object.keys(this.defaultKeys).forEach(key => {
       this.insertKeys[
-        `${key}${capitalizeFirstLetter(outputHandler.process)}`
-      ] = `${key}${capitalizeFirstLetter(outputHandler.process)}`;
-      this.insertKeys[key] = `${key}${capitalizeFirstLetter(outputHandler.process)}`;
+        `${key}${outputHandler.process}`
+      ] = `${key}${outputHandler.process}`;
+      this.insertKeys[key] = `${key}${outputHandler.process}`;
     });
     Object.keys(this.defaultKeys).forEach(key => {
-      this.insertedState[`${key}${capitalizeFirstLetter(outputHandler.process)}`] = false;
+      this.insertedState[`${key}${outputHandler.process}`] = false;
       this.insertedState[key] = false;
     });
   }
 
   reset() {
     Object.keys(this.defaultKeys).forEach(key => {
-      this.insertedState[`${key}${capitalizeFirstLetter(outputHandler.process)}`] = false;
+      this.insertedState[`${key}${outputHandler.process}`] = false;
       this.insertedState[key] = false;
     });
   }
