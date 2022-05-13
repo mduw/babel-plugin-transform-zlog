@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.4](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.13.3...v1.13.4) (2022-05-13)
+
+
+### Bug Fixes
+
+* **overrite files:** differentiate by process name ([2b23479](https://github.com/mduw/babel-plugin-transform-zlog/commit/2b23479d166037f39d386c5c3a717e6f11b26b6a))
+* **overrite files:** differentiate by process name ([eb651a2](https://github.com/mduw/babel-plugin-transform-zlog/commit/eb651a21d06554d790ea56f73aeedf86ab1b2ca1))
+
 ### [1.13.3](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.13.2...v1.13.3) (2022-05-13)
 
 
