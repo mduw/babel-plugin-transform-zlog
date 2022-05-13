@@ -19,14 +19,14 @@ export function transformGlobalTagExpression(nodePath, state) {
   const currentQuasi = nodePath.get('quasi');
   if (
     currentTag.node.name === GLOBAL_IDENTIFIERS.__raw &&
-    types.isTemplateLiteral(currentQuasi)
-    // && isGlobalIdentifier(nodePath, GLOBAL_IDENTIFIERS.__raw)
+    types.isTemplateLiteral(currentQuasi) &&
+    isGlobalIdentifier(nodePath, GLOBAL_IDENTIFIERS.__raw)
   ) {
     nodePath.replaceWith(currentQuasi);
   } else if (
     currentTag.node.name === GLOBAL_IDENTIFIERS.__t &&
-    types.isTemplateLiteral(currentQuasi)
-    // && isGlobalIdentifier(GLOBAL_IDENTIFIERS.__t)
+    types.isTemplateLiteral(currentQuasi) &&
+    isGlobalIdentifier(GLOBAL_IDENTIFIERS.__t)
   ) {
     const [templateStr, expressionArrNode] = transformTemplateLiteral(currentQuasi, state);
     const lid = Indexer.addOrGetMap(Indexer.keys.templ, templateStr, state);
