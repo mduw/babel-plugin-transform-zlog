@@ -96,3 +96,5 @@ export default ({ types }) => ({
     }
   },
 });
+
+export {outputHandler};
