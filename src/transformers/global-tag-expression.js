@@ -9,7 +9,7 @@ function isGlobalIdentifier(nodePath, identifier) {
   if (Object.prototype.hasOwnProperty.call(globals, identifier)) {
     return true;
   }
-  return true;
+  return false;
 }
 
 export function transformGlobalTagExpression(nodePath, state) {
