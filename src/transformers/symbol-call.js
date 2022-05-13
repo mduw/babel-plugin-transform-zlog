@@ -4,6 +4,9 @@ import { Indexer } from '../utils/log-indexer';
 import { EnumeratedLevels } from '../utils/log-levels/enumerator';
 import { getSymbid } from '../utils/map-utils';
 
+const PlaceholderSign = '{}';
+const Blankspace = ' ';
+
 function transformTemplateBinaryExpression(nodePath, state, str = '', args = []) {
   if (types.isBinaryExpression(nodePath)) {
     const left = nodePath.get('left');
@@ -24,14 +27,13 @@ function transformTemplateBinaryExpression(nodePath, state, str = '', args = [])
       const topExpr = expressions.length ? expressions[0] : null;
       if (topExpr) {
         // check pos
-        const topQuasisStart = topQuasis.node.start;
-        const topExprStart = topExpr.node.start;
+        const topQuasisStart = topQuasis.get('loc').node.start.index;
+        const topExprStart = topExpr.get('loc').node.start.index;
         if (topQuasisStart < topExprStart) {
           tempStr += topQuasis.node.value.cooked;
           quasis.shift();
         } else {
-          tempStr += '{}';
-          // tempArgs.push(state.types.cloneNode(topExpr.node));
+          tempStr += PlaceholderSign;
           tempArgs.push(topExpr);
           expressions.shift();
         }
@@ -44,7 +46,7 @@ function transformTemplateBinaryExpression(nodePath, state, str = '', args = [])
   } else if (types.isStringLiteral(nodePath)) {
     return [nodePath.node.value, []];
   } else {
-    return ['{}', [nodePath]];
+    return [PlaceholderSign, [nodePath]];
   }
   return [str, args];
 }
@@ -54,7 +56,7 @@ function transformStringLiteral(nodePath, state) {
   return [template, []];
 }
 
-function transformTemplateLiteral(nodePath, state) {
+export function transformTemplateLiteral(nodePath, state) {
   const expressions = nodePath.get('expressions');
   const quasis = nodePath.get('quasis');
   const NewExp = [];
@@ -64,13 +66,13 @@ function transformTemplateLiteral(nodePath, state) {
     const topExpr = expressions.length ? expressions[0] : null;
     if (topExpr) {
       // check pos
-      const topQuasisStart = topQuasis.node.start;
-      const topExprStart = topExpr.node.start;
+      const topQuasisStart = topQuasis.get('loc').node.start.index;
+      const topExprStart = topExpr.get('loc').node.start.index;
       if (topQuasisStart < topExprStart) {
         templateStr += topQuasis.node.value.cooked;
         quasis.shift();
       } else {
-        templateStr += '{}';
+        templateStr += PlaceholderSign;
         NewExp.push(expressions[0]);
         expressions.shift();
       }
@@ -79,10 +81,7 @@ function transformTemplateLiteral(nodePath, state) {
       quasis.shift();
     }
   }
-
   return [templateStr, NewExp];
-
-  // return tagsNode;
 }
 
 export default function transformLogSymbCall(nodePath, state, funcName) {
@@ -105,8 +104,6 @@ export default function transformLogSymbCall(nodePath, state, funcName) {
 
   const CallExpArgs = nodePath.get('arguments');
   let ParsedTempl = '';
-  const PlaceholderSign = '{}';
-  const Blankspace = ' ';
   const NewCallExpArgs = [];
   let lastTemplateIndex = -1;
   for (let i = 0; i < CallExpArgs.length; i++) {
@@ -135,14 +132,6 @@ export default function transformLogSymbCall(nodePath, state, funcName) {
         NewCallExpArgs.push(expr);
       });
       lastTemplateIndex = ParsedTempl.length;
-    } else if (types.isTaggedTemplateExpression(currentNode)) {
-      const currentTag = currentNode.get('tag');
-      const currentQuasi = currentNode.get('quasi');
-      if (currentTag.node.name === '__raw' && types.isTemplateLiteral(currentQuasi)) {
-        ParsedTempl += {};
-        NewCallExpArgs.push(currentQuasi);
-      }
-      //
     } else {
       ParsedTempl = ParsedTempl.concat(PlaceholderSign);
       NewCallExpArgs.push(currentNode);
@@ -150,14 +139,26 @@ export default function transformLogSymbCall(nodePath, state, funcName) {
   }
   const NodeArgs = [];
   ImportsHelper.insertImports(state.programPath, ImportsHelper.insertKeys.zLogFn);
-  NodeArgs.push(types.memberExpression(types.identifier(ImportsHelper.insertKeys.zLogFn), state.types.numericLiteral(EnumeratedLevels[funcName]), true));
+  NodeArgs.push(
+    types.memberExpression(
+      types.identifier(ImportsHelper.insertKeys.zLogFn),
+      state.types.numericLiteral(EnumeratedLevels[funcName]),
+      true
+    )
+  );
 
   ImportsHelper.insertImports(state.programPath, ImportsHelper.insertKeys.zsymbs);
-  NodeArgs.push(types.memberExpression(types.identifier(ImportsHelper.insertKeys.zsymbs), state.types.numericLiteral(symbid), true));
+  NodeArgs.push(
+    types.memberExpression(
+      types.identifier(ImportsHelper.insertKeys.zsymbs),
+      state.types.numericLiteral(symbid),
+      true
+    )
+  );
   ParsedTempl = ParsedTempl.slice(0, lastTemplateIndex);
   if (ParsedTempl.length) {
     ImportsHelper.insertImports(state.programPath, ImportsHelper.insertKeys.ztempls);
-    const lid = Indexer.addOrGetMap('lid', ParsedTempl, state);
+    const lid = Indexer.addOrGetMap(Indexer.keys.templ, ParsedTempl, state);
     NodeArgs.push(
       types.memberExpression(
         state.types.identifier(ImportsHelper.insertKeys.ztempls),

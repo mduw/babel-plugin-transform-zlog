@@ -30,7 +30,7 @@ export default function transformLoggerInitCall(nodePath, state, funcName) {
   ImportsHelper.insertImports(state.programPath, ImportsHelper.insertKeys.zmid);
   nodePath.node.arguments[0] = types.memberExpression(
     types.identifier(ImportsHelper.insertKeys.zmid),
-    types.numericLiteral(Indexer.addOrGetMap('mid', mid.node.value, state)),
+    types.numericLiteral(Indexer.addOrGetMap(Indexer.keys.module, mid.node.value, state)),
     true
   );
 
@@ -38,7 +38,7 @@ export default function transformLoggerInitCall(nodePath, state, funcName) {
   for (let i = 0; i < fid.get('elements').length; i++) {
     fid.node.elements[i] = types.memberExpression(
       types.identifier(ImportsHelper.insertKeys.zfid),
-      types.numericLiteral(Indexer.addOrGetMap('fid', fid.get(`elements.${i}`).node.value, state)),
+      types.numericLiteral(Indexer.addOrGetMap(Indexer.keys.feat, fid.get(`elements.${i}`).node.value, state)),
       true
     );
   }

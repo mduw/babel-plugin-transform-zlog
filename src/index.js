@@ -6,6 +6,7 @@ import { isMatchingRegex } from './utils/regex-utils';
 import { OutputHandler } from './utils/output-handler';
 import { ImportsHelper } from './utils/import-helper';
 import { EnumeratedLevels } from './utils/log-levels/enumerator';
+import { transformGlobalTagExpression } from './transformers/global-tag-expression';
 
 const _SourceMap = new Map();
 const _SymbolMap = new Map();
@@ -25,7 +26,9 @@ outputHandler.setMaps({
 
 const prefixLog = `[${name}]`;
 const CallVisitors = {
+  TaggedTemplateExpression: transformGlobalTagExpression,
   CallExpression: transformCall,
+
 };
 
 const visitor = {

@@ -22,19 +22,16 @@ class TimeStart {
   }
 
   _showLog(content) {
-    Logger.logSymbol(zLogFn[0], zsymbs[1], ztempls[0], 2, content);
-    Logger.logSymbol(zLogFn[1], zsymbs[2], ztempls[1], 99, 12, content);
-    Logger.logSymbol(zLogFn[1], zsymbs[3], ztempls[1], 99, 12, content, x); // Logger.zlg_info(`whottt ${templ} yeah`, content);
+    // Logger.zlg_info('hello', 2, 'tracking start', content);
+    // Logger.zlg_infoR(99,12,'whottt', content);
+    Logger.logSymbol(zLogFn[1], zsymbs[1], ztempls[0], 99, 12, content, x, ztempls._$entity(ztempls[1], name)); // Logger.zlg_info(`whottt ${templ} yeah`, content);
 
-    Logger.logSymbol(zLogFn[0], zsymbs[4], ztempls[2], {
+    Logger.logSymbol(zLogFn[0], zsymbs[2], ztempls[2], {
       h: 95
     }, () => x + y, p21, p31, 990, content1, `dont parse this`); // Logger.zlg_info(`${ha2} tracking start ${() => x2 + y2} ${p22} whot ${p32} really${know2}`, content2);
-    // Logger.zlg_info(`tracking start whot really${kk3}`, content3);
-    // Logger.zlg_info(
-    //   `tracking start` + whot4 + `really${kk4}` + really4 + 'who knows' + (() => 54),
-    //   content
-    // );
-    // Logger.zlg_info(
+
+    Logger.logSymbol(zLogFn[0], zsymbs[3], ztempls[3], kk3, content3);
+    Logger.logSymbol(zLogFn[0], zsymbs[4], ztempls[4], whot4, kk4, really4, () => 54, content); // Logger.zlg_info(
     //   `tracking start` + whot + `really${kk}` + really + 'who knows' + (() => x + 2),
     //   content
     // );

@@ -21,18 +21,23 @@ class TimeStart {
   }
 
   _showLog(content) {
-    Logger.zlg_info('hello', 2, 'tracking start', content);
-    Logger.zlg_infoR(99,12,'whottt', content);
-    Logger.zlg_infoR(99,12,'whottt', content, x);
+    // Logger.zlg_info('hello', 2, 'tracking start', content);
+    // Logger.zlg_infoR(99,12,'whottt', content);
+    Logger.zlg_infoR(99, 12, 'whottt', content, x, __t`hello ${name}`);
 
     // Logger.zlg_info(`whottt ${templ} yeah`, content);
-    Logger.zlg_info({h: 95},`tracking start ${() => x + y} ${p21} whot ${p31} really${990}`, content1, __raw`dont parse this`);
+    Logger.zlg_info(
+      { h: 95 },
+      `tracking start ${() => x + y} ${p21} whot ${p31} really${990}`,
+      content1,
+      __raw`dont parse this`
+    );
     // Logger.zlg_info(`${ha2} tracking start ${() => x2 + y2} ${p22} whot ${p32} really${know2}`, content2);
-    // Logger.zlg_info(`tracking start whot really${kk3}`, content3);
-    // Logger.zlg_info(
-    //   `tracking start` + whot4 + `really${kk4}` + really4 + 'who knows' + (() => 54),
-    //   content
-    // );
+    Logger.zlg_info(`tracking start whot really${kk3}`, content3);
+    Logger.zlg_info(
+      `tracking start` + whot4 + `really${kk4}` + really4 + 'who knows' + (() => 54),
+      content
+    );
     // Logger.zlg_info(
     //   `tracking start` + whot + `really${kk}` + really + 'who knows' + (() => x + 2),
     //   content
