@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.2](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.13.1...v1.13.2) (2022-05-13)
+
+
+### Bug Fixes
+
+* **output format:** fix format, expect arr but actually object ([ee5796e](https://github.com/mduw/babel-plugin-transform-zlog/commit/ee5796ee53364948f0215cc658c86f77e487b27e))
+
 ### [1.13.1](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.13.0...v1.13.1) (2022-05-13)
 
 
