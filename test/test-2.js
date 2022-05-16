@@ -10,7 +10,7 @@ const Logger3 = new CoreLoggerFactory().createZLogger('core-mngr', ['feat-funny'
 const Logger2 = ModuleContainer.resolve(ZLoggerFactory).createZLogger('core-mngr', [
   'feat-bording',
 ]);
-const Logger = new CoreLoggerFactory().createZLogger('ui', ['sidebar', 'conv-list']);
+const Logger = new CoreLoggerFactory().createZLogger('ui', ['sidebar', 'conv-list'], 'txt');
 const Logger4 = new CoreLoggerFactory().createZLogger('core-mngr', ['feat-funny2']);
 const Logger5 = new CoreLoggerFactory().createZLogger('ui', ['sidebar', 'conv-list2']);
 const LoggerX = new CoreLoggerFactory().createZLogger('ui', ['sidebar', 'conv-list']);
@@ -24,25 +24,26 @@ class TimeStart {
     const vers = '1.2.3';
     const x = 1;
     const e = 5;
-    Logger.zlg_info(
-      '{} test log template {} v {} from convlist diffrent',
-      x,
-      () => 'style old',
-      () => vers
-    );
-    Logger.zlg_info(`${x} test log template ${() => 'style 2'} v ${() => vers}` + ' from convlist');
-    Logger.zlg_info(
-      x + ' test log template ' + (() => 'style 3') + ' v ' + vers + ' from convlist'
-    );
+    // Logger.zlg_info(
+    //   '{} test log template {} v {} from convlist diffrent',
+    //   x,
+    //   () => 'style old',
+    //   () => vers
+    // );
+    // Logger.zlg_info(`${x} test log template ${() => 'style 2'} v ${() => vers}` + ' from convlist');
+    // Logger.zlg_info(
+    //   x + ' test log template ' + (() => 'style 3') + ' v ' + vers + ' from convlist'
+    // );
 
-    Logger.zlg_errorR(
-      'this is error',
-      __raw`error keep me the same`,
-      __t`but parse me`,
-      __t`parser more ${7}`
-    );
+    // Logger.zlg_errorR(
+    //   'this is error',
+    //   __raw`error keep me the same`,
+    //   __t`but parse me`,
+    //   __t`parser more ${7}`
+    // );
 
-    Logger.zlg_info('hello world', vers, 6, `template ${vers}`, 7, __raw`dont parse this string`);
+    Logger.zlg_info(__t`hello ${name} from world {}`, vers, 6, `template ${vers}`, 7, __raw`dont parse this ${name} string`);
+    Logger.zlg_info(5, __t`hello ${name} from world {}`, vers, 6, `template ${vers}`, 7, __raw`dont parse this string`);
 
     // Logger.zlg_info('hello', 2, 'tracking start', content);
     // Logger.zlg_infoR(99,12,'whottt', content);

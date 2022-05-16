@@ -1,8 +1,9 @@
 import { types } from 'babel-core';
 import { TransformInitLoggerError } from '../errors/errors';
-import { toPosixPath } from '../utils/file-utils';
+import { shortenPath2, toPosixPath } from '../utils/file-utils';
 import { ImportsHelper } from '../utils/import-helper';
 import { Indexer } from '../utils/log-indexer';
+import { getSymbid } from '../utils/map-utils';
 
 export default function transformLoggerInitCall(nodePath, state, funcName) {
   if (state.VisitedModules.has(nodePath)) return;
@@ -26,20 +27,34 @@ export default function transformLoggerInitCall(nodePath, state, funcName) {
   const fid = nodePath.get('arguments.1');
   if (!types.isArrayExpression(fid) || fid.get('elements').length === 0)
     throw new TransformInitLoggerError('params[1] must be a type of string[]', sourcemap).error;
-
-  ImportsHelper.insertImports(state.programPath, ImportsHelper.insertKeys.zmid);
-  nodePath.node.arguments[0] = types.memberExpression(
-    types.identifier(ImportsHelper.insertKeys.zmid),
-    types.numericLiteral(Indexer.addOrGetMap(Indexer.keys.module, mid.node.value, state)),
-    true
-  );
-
-  ImportsHelper.insertImports(state.programPath, ImportsHelper.insertKeys.zfid);
-  for (let i = 0; i < fid.get('elements').length; i++) {
-    fid.node.elements[i] = types.memberExpression(
-      types.identifier(ImportsHelper.insertKeys.zfid),
-      types.numericLiteral(Indexer.addOrGetMap(Indexer.keys.feat, fid.get(`elements.${i}`).node.value, state)),
-      true
+  console.log('checking mode', state.normalizedOpts.forceMode);
+  if (
+    state.normalizedOpts.forceMode === 'txt' &&
+    (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test')
+  ) {
+    if (nodePath.node.arguments.length === 2) {
+      nodePath.node.arguments.push(types.nullLiteral());
+    }
+    nodePath.node.arguments.push(types.stringLiteral(shortenPath2(state.currentFile)));
+  } else if (state.normalizedOpts.forceMode === 'bin') {
+    ImportsHelper.insertImports(state.programPath, ImportsHelper.insertKeys.zmid);
+    nodePath.node.arguments[0] = types.numericLiteral(
+      Indexer.addOrGetMap(Indexer.keys.module, mid.node.value, state)
     );
+
+    ImportsHelper.insertImports(state.programPath, ImportsHelper.insertKeys.zfid);
+    for (let i = 0; i < fid.get('elements').length; i++) {
+      fid.node.elements[i] = types.numericLiteral(
+        Indexer.addOrGetMap(Indexer.keys.feat, fid.get(`elements.${i}`).node.value, state)
+      );
+    }
+    if (nodePath.node.arguments.length >= 3) {
+      nodePath.node.arguments.push(types.numericLiteral(getSymbid(loc, state)));
+    } else {
+      if (nodePath.node.arguments.length === 2) {
+        nodePath.node.arguments.push(types.nullLiteral());
+      }
+      nodePath.node.arguments.push(types.numericLiteral(getSymbid(loc, state)));
+    }
   }
 }

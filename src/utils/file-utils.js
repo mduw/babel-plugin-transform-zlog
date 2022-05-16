@@ -175,3 +175,9 @@ export function shortenPath(rootDir, fPath) {
   posixPath = posixPathArr.slice(rootIndex).join('/');
   return posixPath || fPath;
 }
+
+export function shortenPath2(fPath) {
+  if (!fPath) return fPath;
+  const posixPathArr = toPosixPath(fPath).split('/');
+  return posixPathArr.slice(posixPathArr.length - 2).join('/');
+}

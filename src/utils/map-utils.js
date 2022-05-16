@@ -10,16 +10,17 @@ export function getSouceMapID(posixPath, SourceMap) {
 }
 
 export function getSymbid(loc, state) {
-  const row = loc.start.line;
+  // const row = loc.start.line;
   const smid = getSouceMapID(
     shortenPath(state.normalizedOpts.rootDir, state.currentFile),
     state.SourceMap
   );
-  const symbidKey = `${smid}:${row}`;
+  // const symbidKey = `${smid}:${row}`;
+  const symbidKey = `${smid}`;
   if (state.SymbolMap.has(symbidKey)) {
     return state.SymbolMap.get(symbidKey);
   }
-  const autoSymbid = state.SymbolMap.size + 1;
+  const autoSymbid = state.SymbolMap.size;
   state.SymbolMap.set(symbidKey, autoSymbid);
   return autoSymbid;
 }

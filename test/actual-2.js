@@ -1,20 +1,14 @@
-import ztemplsPc from "log-buckets/ztemplsPc";
-import zsymbsPc from "log-buckets/zsymbsPc";
-import zLogFnPc from "log-buckets/zLogFnPc";
-import zfidPc from "log-buckets/zfidPc";
-import zmidPc from "log-buckets/zmidPc";
-
 /* eslint-disable */
 import ZCommon from 'utils/common';
 import { ZLogTemplate } from 'zlogger';
 import { CoreLoggerFactory } from 'utils/logger/renderer/core/logger';
-const Logger0 = new CoreLoggerFactory().createZLogger(zmidPc[0], [zfidPc[0]]);
-const Logger3 = new CoreLoggerFactory().createZLogger(zmidPc[0], [zfidPc[1]]);
-const Logger2 = ModuleContainer.resolve(ZLoggerFactory).createZLogger(zmidPc[0], [zfidPc[2]]);
-const Logger = new CoreLoggerFactory().createZLogger(zmidPc[1], [zfidPc[3], zfidPc[4]]);
-const Logger4 = new CoreLoggerFactory().createZLogger(zmidPc[0], [zfidPc[5]]);
-const Logger5 = new CoreLoggerFactory().createZLogger(zmidPc[1], [zfidPc[3], zfidPc[6]]);
-const LoggerX = new CoreLoggerFactory().createZLogger(zmidPc[1], [zfidPc[3], zfidPc[4]]);
+const Logger0 = new CoreLoggerFactory().createZLogger('core-mngr', ['hello'], null, "test/test-2.js");
+const Logger3 = new CoreLoggerFactory().createZLogger('core-mngr', ['feat-funny'], null, "test/test-2.js");
+const Logger2 = ModuleContainer.resolve(ZLoggerFactory).createZLogger('core-mngr', ['feat-bording'], null, "test/test-2.js");
+const Logger = new CoreLoggerFactory().createZLogger('ui', ['sidebar', 'conv-list'], 'txt', "test/test-2.js");
+const Logger4 = new CoreLoggerFactory().createZLogger('core-mngr', ['feat-funny2'], null, "test/test-2.js");
+const Logger5 = new CoreLoggerFactory().createZLogger('ui', ['sidebar', 'conv-list2'], null, "test/test-2.js");
+const LoggerX = new CoreLoggerFactory().createZLogger('ui', ['sidebar', 'conv-list'], null, "test/test-2.js");
 
 class TimeStart {
   constructor() {
@@ -24,12 +18,25 @@ class TimeStart {
   _showLog(content) {
     const vers = '1.2.3';
     const x = 1;
-    const e = 5;
-    Logger.logSymbol(zLogFnPc[0], zsymbsPc[1], ztemplsPc[0], x, () => 'style old', () => vers);
-    Logger.logSymbol(zLogFnPc[0], zsymbsPc[2], ztemplsPc[1], x, () => 'style 2', () => vers);
-    Logger.logSymbol(zLogFnPc[0], zsymbsPc[3], ztemplsPc[1], x, () => 'style 3', vers);
-    Logger.logSymbol(zLogFnPc[16], zsymbsPc[4], ztemplsPc[2], __raw`error keep me the same`, __t`but parse me`, __t`parser more ${7}`);
-    Logger.logSymbol(zLogFnPc[0], zsymbsPc[5], ztemplsPc[3], vers, 6, vers, 7, __raw`dont parse this string`); // Logger.zlg_info('hello', 2, 'tracking start', content);
+    const e = 5; // Logger.zlg_info(
+    //   '{} test log template {} v {} from convlist diffrent',
+    //   x,
+    //   () => 'style old',
+    //   () => vers
+    // );
+    // Logger.zlg_info(`${x} test log template ${() => 'style 2'} v ${() => vers}` + ' from convlist');
+    // Logger.zlg_info(
+    //   x + ' test log template ' + (() => 'style 3') + ' v ' + vers + ' from convlist'
+    // );
+    // Logger.zlg_errorR(
+    //   'this is error',
+    //   __raw`error keep me the same`,
+    //   __t`but parse me`,
+    //   __t`parser more ${7}`
+    // );
+
+    Logger.logSymbol(__t`hello ${name} from world {}`, vers, 6, `template ${vers}`, 7, __raw`dont parse this ${name} string`);
+    Logger.logSymbol(5, __t`hello ${name} from world {}`, vers, 6, `template ${vers}`, 7, __raw`dont parse this string`); // Logger.zlg_info('hello', 2, 'tracking start', content);
     // Logger.zlg_infoR(99,12,'whottt', content);
     // Logger.zlg_infoR(99, 12, 'whottt', content, x, __t`hello ${name}`);
     // // Logger.zlg_info(`whottt ${templ} yeah`, content);

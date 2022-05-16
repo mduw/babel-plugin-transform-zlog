@@ -86,6 +86,7 @@ export default createSelector(
     const log = normalizeShowLog(opts.log);
     const rootDir = normalizeRootDir(opts.rootDir);
     const outPath = normalizeOutPath(opts.outDir);
+    const forceMode = opts.forceMode?.toLowerCase() === 'bin' ? opts.forceMode : 'txt' 
 
     return {
       replaceSymbFunc,
@@ -95,6 +96,7 @@ export default createSelector(
       rootDir,
       log,
       process,
+      forceMode
     };
   }
 );

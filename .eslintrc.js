@@ -19,6 +19,7 @@ module.exports = {
     "no-extend-native": "off",
     'dot-notation': 'off',
     'radix': 'off',
+    'consistent-return': 'off'
 
   },
   parser: "babel-eslint",

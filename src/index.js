@@ -26,7 +26,6 @@ outputHandler.setMaps({
 
 const prefixLog = `[${name}]`;
 const CallVisitors = {
-  TaggedTemplateExpression: transformGlobalTagExpression,
   CallExpression: transformCall,
 };
 
