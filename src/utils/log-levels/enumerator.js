@@ -1,4 +1,4 @@
-const prefix = 'zlg_';
+const prefix = 'z';
 const loglevels = ['info', 'warn', 'debug', 'error'];
 const variants = ['','F', 'C', 'T', 'FT', 'CT'];
 
@@ -11,8 +11,6 @@ function enumerateLevels() {
       counter += 1;
     });
   });
-  console.log('checking loglev', enumlvl)
-
   return enumlvl;
 }
 

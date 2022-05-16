@@ -27,8 +27,7 @@ export default function transformLoggerInitCall(nodePath, state, funcName) {
   const fid = nodePath.get('arguments.1');
   if (!types.isArrayExpression(fid) || fid.get('elements').length === 0)
     throw new TransformInitLoggerError('params[1] must be a type of string[]', sourcemap).error;
-  console.log('checking mode', state.normalizedOpts.forceMode);
-  if (
+    if (
     state.normalizedOpts.forceMode === 'txt' &&
     (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test')
   ) {
