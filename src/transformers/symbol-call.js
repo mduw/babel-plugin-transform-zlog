@@ -48,7 +48,7 @@ function transformTemplTagExpression(nodePath, state) {
   const params = [];
   if (
     currentTag.node.name === GLOBAL_IDENTIFIERS.__t &&
-    types.isTemplateLiteral(currentQuasi) 
+    types.isTemplateLiteral(currentQuasi)
     // && isGlobalIdentifier(nodePath, GLOBAL_IDENTIFIERS.__t)
   ) {
     const [templateStr, expressionArrNode] = transformTemplateLiteral(currentQuasi, state);
@@ -93,12 +93,12 @@ export default function transformLogSymbCall(nodePath, state, funcName) {
   if (types.isTaggedTemplateExpression(FirstExpArg)) {
     const params = transformTemplTagExpression(FirstExpArg, state);
     if (params.length) {
-      params.unshift(types.numericLiteral(row));
-      params.unshift(types.numericLiteral(EnumeratedLevels[funcName.concat('T')]));
       nodePath.node.arguments.shift();
       for (let i = params.length - 1; i >= 0; i--) {
         nodePath.node.arguments.unshift(params[i]);
       }
     }
   }
+  nodePath.node.arguments.unshift(types.numericLiteral(row));
+  nodePath.node.arguments.unshift(types.numericLiteral(EnumeratedLevels[funcName.concat('T')]));
 }
