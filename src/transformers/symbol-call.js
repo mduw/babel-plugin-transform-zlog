@@ -16,8 +16,8 @@ export function transformTemplateLiteral(nodePath, state) {
     const topExpr = expressions.length ? expressions[0] : null;
     if (topExpr) {
       // check pos
-      const topQuasisStart = topQuasis.get('loc').node.start.index;
-      const topExprStart = topExpr.get('loc').node.start.index;
+      const topQuasisStart = topQuasis.node.start;
+      const topExprStart = topExpr.node.start; // dev: get('loc').node.start.index
       if (topQuasisStart < topExprStart) {
         templateStr += topQuasis.node.value.cooked;
         quasis.shift();
@@ -48,8 +48,8 @@ function transformTemplTagExpression(nodePath, state) {
   const params = [];
   if (
     currentTag.node.name === GLOBAL_IDENTIFIERS.__t &&
-    types.isTemplateLiteral(currentQuasi) &&
-    isGlobalIdentifier(nodePath, GLOBAL_IDENTIFIERS.__t)
+    types.isTemplateLiteral(currentQuasi) 
+    // && isGlobalIdentifier(nodePath, GLOBAL_IDENTIFIERS.__t)
   ) {
     const [templateStr, expressionArrNode] = transformTemplateLiteral(currentQuasi, state);
     if (
