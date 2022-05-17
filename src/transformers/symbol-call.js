@@ -2,7 +2,7 @@ import { types } from 'babel-core';
 import { GLOBAL_IDENTIFIERS } from '../constant';
 import { Indexer } from '../utils/log-indexer';
 import { EnumeratedLevels } from '../utils/log-levels/enumerator';
-import { getSymbid } from '../utils/map-utils';
+import { isGlobalIdentifier } from '../utils/verify-identifier';
 
 const PlaceholderSign = '{}';
 
@@ -33,13 +33,7 @@ export function transformTemplateLiteral(nodePath, state) {
   }
   return [templateStr, NewExp];
 }
-function isGlobalIdentifier(nodePath, identifier) {
-  const { globals } = nodePath.scope;
-  if (Object.prototype.hasOwnProperty.call(globals, identifier)) {
-    return true;
-  }
-  return false;
-}
+
 function transformTemplTagExpression(nodePath, state) {
   if (state.VisitedModules.has(nodePath)) return;
   state.VisitedModules.add(nodePath);
@@ -79,7 +73,6 @@ export default function transformLogSymbCall(nodePath, state, funcName) {
 
   const loc = nodePath.get('loc').node;
   const row = loc.start.line;
-  // const symbid = getSymbid(loc, state);
 
   // convert call func to logSymbol
   nodePath.node.callee = state.types.memberExpression(
@@ -98,7 +91,12 @@ export default function transformLogSymbCall(nodePath, state, funcName) {
         nodePath.node.arguments.unshift(params[i]);
       }
     }
+    nodePath.node.arguments.unshift(types.numericLiteral(row));
+    nodePath.node.arguments.unshift(types.numericLiteral(EnumeratedLevels[funcName.concat('T')]));
+    // nodePath.node.arguments.unshift(types.stringLiteral(funcName.concat('T')));
+  } else {
+    nodePath.node.arguments.unshift(types.numericLiteral(row));
+    nodePath.node.arguments.unshift(types.numericLiteral(EnumeratedLevels[funcName]));
+    // nodePath.node.arguments.unshift(types.stringLiteral(funcName));
   }
-  nodePath.node.arguments.unshift(types.numericLiteral(row));
-  nodePath.node.arguments.unshift(types.numericLiteral(EnumeratedLevels[funcName.concat('T')]));
 }

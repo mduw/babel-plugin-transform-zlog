@@ -4,7 +4,6 @@ import { name } from '../package.json';
 import { log, colorize, COLORS } from './utils/log/log';
 import { isMatchingRegex } from './utils/regex-utils';
 import { OutputHandler } from './utils/output-handler';
-import { ImportsHelper } from './utils/import-helper';
 import { EnumeratedLevels } from './utils/log-levels/enumerator';
 import { transformGlobalTagExpression } from './transformers/global-tag-expression';
 
@@ -27,6 +26,7 @@ outputHandler.setMaps({
 const prefixLog = `[${name}]`;
 const CallVisitors = {
   CallExpression: transformCall,
+  TaggedTemplateExpression: transformGlobalTagExpression
 };
 
 const visitor = {
@@ -67,7 +67,6 @@ export default ({ types }) => ({
     this.normalizedOpts = normalizeOptions(this.currentFile, this.opts);
     outputHandler.setOutDir(this.normalizedOpts.outDir);
     outputHandler.updateProcess(this.normalizedOpts.process);
-    ImportsHelper.initImportData(this.normalizedOpts.process);
     if (this.normalizedOpts.log === 'on') {
       log(
         `[${new Date().toLocaleTimeString()}]`,
@@ -83,7 +82,6 @@ export default ({ types }) => ({
 
   post() {
     /* CLEANUP */
-    ImportsHelper.reset();
     this.VisitedModules.clear();
     if (this.normalizedOpts.log === 'on') {
       log(

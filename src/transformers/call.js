@@ -1,5 +1,6 @@
 import { types } from 'babel-core';
-import { colorize, COLORS } from '../utils/log/color';
+import { GLOBAL_IDENTIFIERS } from '../constant';
+import { isGlobalIdentifier } from '../utils/verify-identifier';
 import transformLoggerInitCall from './logger-call';
 import transformLogSymbCall from './symbol-call';
 
@@ -7,21 +8,14 @@ export default function transformCall(nodePath, state) {
   if (state.VisitedModules.has(nodePath)) return;
 
   const callee = nodePath.node.callee || undefined;
-  const funcName = callee.property && callee.property.name;
+  let funcName;
+  if (types.isMemberExpression(callee)) funcName = callee.property && callee.property.name;
+  else if (types.isIdentifier(callee)) funcName = callee.name;
   if (!callee || !funcName) return;
 
   if (
     funcName &&
-    ((state.types.isMemberExpression(callee) &&
-      Object.prototype.hasOwnProperty.call(
-        state.normalizedOpts.replaceSymbFunc,
-        callee.property.name
-      )) ||
-      (state.types.isIdentifier(callee) &&
-        Object.prototype.hasOwnProperty.call(
-          state.normalizedOpts.replaceSymbFunc,
-          callee.node.name
-        )))
+    Object.prototype.hasOwnProperty.call(state.normalizedOpts.replaceSymbFunc, funcName)
   ) {
     transformLogSymbCall(nodePath, state, funcName);
   } else if (
@@ -32,5 +26,12 @@ export default function transformCall(nodePath, state) {
     types.isCallExpression(nodePath)
   ) {
     transformLoggerInitCall(nodePath, state, funcName);
+  } else if (
+    funcName &&
+    types.isCallExpression(nodePath) &&
+    funcName === GLOBAL_IDENTIFIERS.__t
+    && isGlobalIdentifier(funcName)
+  ) {
+    nodePath.replaceWith(state.types.cloneNode(nodePath.get('arguments.0').node));
   }
 }

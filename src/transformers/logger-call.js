@@ -1,7 +1,6 @@
 import { types } from 'babel-core';
 import { TransformInitLoggerError } from '../errors/errors';
 import { shortenPath2, toPosixPath } from '../utils/file-utils';
-import { ImportsHelper } from '../utils/import-helper';
 import { Indexer } from '../utils/log-indexer';
 import { getSymbid } from '../utils/map-utils';
 
@@ -36,15 +35,13 @@ export default function transformLoggerInitCall(nodePath, state, funcName) {
     }
     nodePath.node.arguments.push(types.stringLiteral(shortenPath2(state.currentFile)));
   } else if (state.normalizedOpts.forceMode === 'bin') {
-    ImportsHelper.insertImports(state.programPath, ImportsHelper.insertKeys.zmid);
     nodePath.node.arguments[0] = types.numericLiteral(
-      Indexer.addOrGetMap(Indexer.keys.module, mid.node.value, state)
+      Indexer.addOrGetMap(Indexer.keys.templ, mid.node.value, state)
     );
 
-    ImportsHelper.insertImports(state.programPath, ImportsHelper.insertKeys.zfid);
     for (let i = 0; i < fid.get('elements').length; i++) {
       fid.node.elements[i] = types.numericLiteral(
-        Indexer.addOrGetMap(Indexer.keys.feat, fid.get(`elements.${i}`).node.value, state)
+        Indexer.addOrGetMap(Indexer.keys.templ, fid.get(`elements.${i}`).node.value, state)
       );
     }
     if (nodePath.node.arguments.length >= 3) {
