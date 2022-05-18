@@ -43,7 +43,7 @@ function transformTemplTagExpression(nodePath, state) {
   if (
     currentTag.node.name === GLOBAL_IDENTIFIERS.__t &&
     types.isTemplateLiteral(currentQuasi)
-    // && isGlobalIdentifier(nodePath, GLOBAL_IDENTIFIERS.__t)
+    && isGlobalIdentifier(nodePath, GLOBAL_IDENTIFIERS.__t)
   ) {
     const [templateStr, expressionArrNode] = transformTemplateLiteral(currentQuasi, state);
     if (
