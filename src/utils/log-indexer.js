@@ -6,6 +6,7 @@ class LogIndexer {
     this._fid = -1;
     this._lid = -1;
     this._ntid = -1; // nametag id
+    this._sourcemapid = -1;
   }
 
   keys = {
@@ -13,6 +14,7 @@ class LogIndexer {
     module: 'module',
     feat: 'feat',
     nametag: 'nametag',
+    sourcemap: 'sourcemap',
   };
 
   get mid() {
@@ -47,6 +49,10 @@ class LogIndexer {
     this._ntid = id;
   }
 
+  set sourcemapid(id) {
+    this._sourcemapid = id;
+  }
+
   nextMID() {
     this._mid += 1;
     return this._mid;
@@ -65,6 +71,11 @@ class LogIndexer {
   nextNTID() {
     this._ntid += 1;
     return this._ntid;
+  }
+
+  nextSourceMapID() {
+    this._sourcemapid += 1;
+    return this._sourcemapid;
   }
 
   addOrGetMap(key, value, state) {
@@ -104,6 +115,16 @@ class LogIndexer {
         } else {
           id = this.nextNTID();
           state.NameTagMap.set(value, id);
+        }
+        break;
+      }
+
+      case this.keys.sourcemap: {
+        if (state.SourceMap.has(value)) {
+          id = state.SourceMap.get(value);
+        } else {
+          id = this.nextSourceMapID();
+          state.SourceMap.set(value, id);
         }
         break;
       }
