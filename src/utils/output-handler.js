@@ -10,7 +10,7 @@ export class OutputHandler {
     this.instance = this;
     this._SourceMap = null;
     this._TemplMap = null;
-    this._NameTagsMap = null;
+    this._NameTagMap = null;
 
     this._ModuleMap = null;
     this._FeatMap = null;
@@ -31,9 +31,9 @@ export class OutputHandler {
   setMaps(props) {
     if (!props) throw new Error('OutputHandler received invalid maps');
     try {
-      const { SourceMap, NameTagsMap, TemplMap, ModuleMap, FeatMap, EnumeratedLevels } = props;
+      const { SourceMap, NameTagMap, TemplMap, ModuleMap, FeatMap, EnumeratedLevels } = props;
       this._SourceMap = SourceMap;
-      this._NameTagsMap = NameTagsMap;
+      this._NameTagMap = NameTagMap;
       this._TemplMap = TemplMap;
 
       this._ModuleMap = ModuleMap;
@@ -45,11 +45,11 @@ export class OutputHandler {
   }
 
   get SourceMap() {
-    return invertObjectKeyValueAsArray(Object.fromEntries(this._NameTagsMap));
+    return invertObjectKeyValueAsArray(Object.fromEntries(this._NameTagMap));
   }
 
-  get NameTagsMap() {
-    return invertObjectKeyValueAsArray(Object.fromEntries(this._NameTagsMap));
+  get NameTagMap() {
+    return invertObjectKeyValueAsArray(Object.fromEntries(this._NameTagMap));
   }
 
   get TemplMap() {
@@ -90,10 +90,10 @@ export class OutputHandler {
    * @param {*} param0
    * @returns
    */
-  writeExtractedNameTagsMap(options) {
+  writeExtractedNameTagMap(options) {
     if (!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
-      const obj = invertObjectKeyValue(Object.fromEntries(this._NameTagsMap));
+      const obj = invertObjectKeyValue(Object.fromEntries(this._NameTagMap));
       return writeExtractedDataToFile(path.join(this.outDir, 'symbol-map.json'), obj, options);
     }
     throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
