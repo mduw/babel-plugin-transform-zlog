@@ -8,7 +8,7 @@ import { EnumeratedLevels } from './utils/log-levels/enumerator';
 import { transformGlobalTagExpression } from './transformers/global-tag-expression';
 
 const _SourceMap = new Map();
-const _SymbolMap = new Map();
+const _NameTagsMap = new Map();
 const _TemplMap = new Map();
 const _ModuleMap = new Map();
 const _FeatMap = new Map();
@@ -16,7 +16,7 @@ const _FeatMap = new Map();
 export const outputHandler = new OutputHandler();
 outputHandler.setMaps({
   SourceMap: _SourceMap,
-  SymbolMap: _SymbolMap,
+  NameTagsMap: _NameTagsMap,
   TemplMap: _TemplMap,
   ModuleMap: _ModuleMap,
   FeatMap: _FeatMap,
@@ -57,7 +57,7 @@ export default ({ types }) => ({
   pre(file) {
     this.types = types;
     this.VisitedModules = new Set();
-    this.SymbolMap = _SymbolMap;
+    this.NameTagsMap = _NameTagsMap;
     this.SourceMap = _SourceMap;
     this.TemplMap = _TemplMap;
 

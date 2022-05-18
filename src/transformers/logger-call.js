@@ -2,7 +2,7 @@ import { types } from 'babel-core';
 import { TransformInitLoggerError } from '../errors/errors';
 import { shortenPath2, toPosixPath } from '../utils/file-utils';
 import { Indexer } from '../utils/log-indexer';
-import { getSymbid } from '../utils/map-utils';
+import { getSouceMapID } from '../utils/map-utils';
 
 export default function transformLoggerInitCall(nodePath, state, funcName) {
   if (state.VisitedModules.has(nodePath)) return;
@@ -26,13 +26,14 @@ export default function transformLoggerInitCall(nodePath, state, funcName) {
   const fid = nodePath.get('arguments.1');
   if (!types.isArrayExpression(fid) || fid.get('elements').length === 0)
     throw new TransformInitLoggerError('params[1] must be a type of string[]', sourcemap).error;
-    if (
+  if (
     state.normalizedOpts.forceMode === 'txt' &&
     (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test')
   ) {
     if (nodePath.node.arguments.length === 2) {
       nodePath.node.arguments.push(types.nullLiteral());
     }
+    Indexer.addOrGetMap(Indexer.keys.templ, mid.node.value, state);
     nodePath.node.arguments.push(types.stringLiteral(shortenPath2(state.currentFile)));
   } else if (state.normalizedOpts.forceMode === 'bin') {
     nodePath.node.arguments[0] = types.numericLiteral(
@@ -45,12 +46,20 @@ export default function transformLoggerInitCall(nodePath, state, funcName) {
       );
     }
     if (nodePath.node.arguments.length >= 3) {
-      nodePath.node.arguments.push(types.numericLiteral(getSymbid(loc, state)));
+      nodePath.node.arguments.push(
+        types.numericLiteral(getSouceMapID(this.currentFile, state.SourceMap))
+      );
     } else {
       if (nodePath.node.arguments.length === 2) {
         nodePath.node.arguments.push(types.nullLiteral());
       }
-      nodePath.node.arguments.push(types.numericLiteral(getSymbid(loc, state)));
+      nodePath.node.arguments.push(
+        types.numericLiteral(
+          nodePath.node.arguments.push(
+            types.numericLiteral(getSouceMapID(this.currentFile, state.SourceMap))
+          )
+        )
+      );
     }
   }
 }
