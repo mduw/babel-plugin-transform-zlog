@@ -23,7 +23,7 @@ export function transformGlobalTagExpression(nodePath, state) {
   if (
     currentTag.node.name === GLOBAL_IDENTIFIERS.__t &&
     types.isTemplateLiteral(currentQuasi)
-    && isGlobalIdentifier(nodePath, GLOBAL_IDENTIFIERS.__t)
+    // && isGlobalIdentifier(nodePath, GLOBAL_IDENTIFIERS.__t)
   ) {
     nodePath.replaceWith(transformTagTemplLiteral2TemplLiteral(currentQuasi, state))
   }

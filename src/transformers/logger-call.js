@@ -33,16 +33,16 @@ export default function transformLoggerInitCall(nodePath, state, funcName) {
     if (nodePath.node.arguments.length === 2) {
       nodePath.node.arguments.push(types.nullLiteral());
     }
-    Indexer.addOrGetMap(Indexer.keys.templ, mid.node.value, state);
+    Indexer.addOrGetMap(Indexer.keys.nametag, mid.node.value, state);
     nodePath.node.arguments.push(types.stringLiteral(shortenPath2(state.currentFile)));
   } else if (state.normalizedOpts.forceMode === 'bin') {
     nodePath.node.arguments[0] = types.numericLiteral(
-      Indexer.addOrGetMap(Indexer.keys.templ, mid.node.value, state)
+      Indexer.addOrGetMap(Indexer.keys.nametag, mid.node.value, state)
     );
 
     for (let i = 0; i < fid.get('elements').length; i++) {
       fid.node.elements[i] = types.numericLiteral(
-        Indexer.addOrGetMap(Indexer.keys.templ, fid.get(`elements.${i}`).node.value, state)
+        Indexer.addOrGetMap(Indexer.keys.nametag, fid.get(`elements.${i}`).node.value, state)
       );
     }
     if (nodePath.node.arguments.length >= 3) {

@@ -1,5 +1,6 @@
 import { types } from 'babel-core';
 import { GLOBAL_IDENTIFIERS } from '../constant';
+import { colorize, COLORS } from '../utils/log/color';
 import { isGlobalIdentifier } from '../utils/verify-identifier';
 import transformLoggerInitCall from './logger-call';
 import transformLogSymbCall from './symbol-call';
@@ -30,7 +31,7 @@ export default function transformCall(nodePath, state) {
     funcName &&
     types.isCallExpression(nodePath) &&
     funcName === GLOBAL_IDENTIFIERS.__t
-    && isGlobalIdentifier(funcName)
+    // && isGlobalIdentifier(nodePath, funcName)
   ) {
     nodePath.replaceWith(state.types.cloneNode(nodePath.get('arguments.0').node));
   }

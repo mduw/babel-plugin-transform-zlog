@@ -5,12 +5,14 @@ class LogIndexer {
     this._mid = -1;
     this._fid = -1;
     this._lid = -1;
+    this._ntid = -1; // nametag id
   }
 
   keys = {
     templ: 'templ',
     module: 'module',
     feat: 'feat',
+    nametag: 'nametag',
   };
 
   get mid() {
@@ -25,6 +27,10 @@ class LogIndexer {
     return this._lid;
   }
 
+  get ntid() {
+    return this._ntid;
+  }
+
   set mid(id) {
     this._mid = id;
   }
@@ -35,6 +41,10 @@ class LogIndexer {
 
   set lid(id) {
     this._lid = id;
+  }
+
+  set ntid(id) {
+    this._ntid = id;
   }
 
   nextMID() {
@@ -50,6 +60,11 @@ class LogIndexer {
   nextLID() {
     this._lid += 1;
     return this._lid;
+  }
+
+  nextNTID() {
+    this._ntid += 1;
+    return this._ntid;
   }
 
   addOrGetMap(key, value, state) {
@@ -82,6 +97,17 @@ class LogIndexer {
         }
         break;
       }
+
+      case this.keys.nametag: {
+        if (state.NameTagMap.has(value)) {
+          id = state.NameTagMap.get(value);
+        } else {
+          id = this.nextNTID();
+          state.NameTagMap.set(value, id);
+        }
+        break;
+      }
+
       default: {
         id = -1;
       }
