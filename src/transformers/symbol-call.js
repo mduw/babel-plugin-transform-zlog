@@ -50,6 +50,7 @@ function transformTemplTagExpression(nodePath, state) {
       state.normalizedOpts.forceMode === 'txt' &&
       (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test')
     ) {
+      Indexer.addOrGetMap(Indexer.keys.templ, templateStr, state);
       params.push(types.stringLiteral(templateStr));
     } else if (state.normalizedOpts.forceMode === 'bin') {
       const lid = Indexer.addOrGetMap(Indexer.keys.templ, templateStr, state);

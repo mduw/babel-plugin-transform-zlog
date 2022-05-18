@@ -94,7 +94,7 @@ export class OutputHandler {
     if (!this.outDir) return new Promise(resolve => resolve(true));
     if (isNode) {
       const obj = invertObjectKeyValue(Object.fromEntries(this._NameTagMap));
-      return writeExtractedDataToFile(path.join(this.outDir, 'symbol-map.json'), obj, options);
+      return writeExtractedDataToFile(path.join(this.outDir, 'tagname-map.json'), obj, options);
     }
     throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
   }
