@@ -29,3 +29,9 @@ export function isTextMode(forceMode = 'unknown') {
     }
   }
 }
+
+export function isUsrReleaseMode() {
+  const BUILD_ENV = process.env.BUILD_ENV || 'production';
+  const BUILD_TYPE = process.node.BUILD_TYPE || 'unknown';
+  return BUILD_ENV === 'production' && BUILD_TYPE === 'release';
+}

@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import { findLogPath } from './file-helper';
 import { hashStringShake256, toPosixPath } from './file-utils';
+import { isUsrReleaseMode } from './parse-mode';
 
 function normalizeReplaceSymbFunc(optsReplace) {
   const matchedOptsReplace = {};
@@ -26,9 +27,7 @@ function normalizeReplaceSymbFunc(optsReplace) {
 }
 
 function normalizeOutPath(dirname, rawFilePath) {
-  const BUILD_ENV = process.env.BUILD_ENV || 'production';
-  const BUILD_TYPE = process.node.BUILD_TYPE || 'unknown';
-  const isReleasable = BUILD_ENV === 'production' && BUILD_TYPE === 'release';
+  const isReleasable = isUsrReleaseMode();
   const hashedFileName = isReleasable
     ? hashStringShake256(rawFilePath).concat('.json')
     : rawFilePath;
