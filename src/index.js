@@ -63,8 +63,8 @@ export default ({ types }) => ({
           // handle archive
           const newFilePath = filename.concat(`[${(build && build.hash) || ''}].${ext}`);
           log(
-            colorize('duplicate '.concat(outFilePath), COLORS.red),
-            'copying',
+            colorize('Found other ver of '.concat(outFilePath), COLORS.red),
+            'archiving',
             outFilePath,
             newFilePath
           );
