@@ -1,19 +1,6 @@
-import path from 'path';
 import { createSelector } from 'reselect';
-import { prepareDir, toPosixPath } from './file-utils';
-
-/**
- * {
- *    replaceSymbFunc: {
- *      <level_func_name_A>: [<new_func_name_A>, {variants: ['R', 'C', 'RC', 'RF']}],
- *      <level_func_name_B>: [<new_func_name_B>, {variants: ['R', 'C', 'RC', 'RF']}]
- *    }
- * }
- * For example:
- * {
- *    info: ['NewInfo', {variants: ['R', 'C']}] // equivalent to (info => NewInfo, infoR => NewInfo, infoC => NewInfo)
- * }
- */
+import { findLogPath } from './file-helper';
+import { hashStringShake256, toPosixPath } from './file-utils';
 
 function normalizeReplaceSymbFunc(optsReplace) {
   const matchedOptsReplace = {};
@@ -38,12 +25,9 @@ function normalizeReplaceSymbFunc(optsReplace) {
   return matchedOptsReplace || {};
 }
 
-function normalizeReplaceCreateTemplFunc(optsReplace) {
-  return optsReplace || [];
-}
-
-function normalizeOutPath(optsPath) {
-  return toPosixPath(prepareDir(optsPath).result);
+function normalizeOutPath(dirname, rawFilePath) {
+  const hashedFileName = hashStringShake256(rawFilePath).concat('.json');
+  return toPosixPath(findLogPath(dirname, hashedFileName));
 }
 
 function normalizePathRegex(optsPathRegex) {
@@ -60,10 +44,6 @@ function normalizeShowLog(optsLog) {
   return optsLog || 'off'; // off by default
 }
 
-function normalizeRootDir(optsLog) {
-  return optsLog || '';
-}
-
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -76,27 +56,24 @@ function normalizeLoggerInit(optsInitFuncName) {
 }
 
 export default createSelector(
-  currentFile => (currentFile.includes('.') ? path.dirname(currentFile) : currentFile),
+  // The currentFile should have an extension; otherwise it's considered a special value
+  currentFile => currentFile,
   (_, opts) => opts,
   (currentFile, opts) => {
     const replaceSymbFunc = normalizeReplaceSymbFunc(opts.replaceSymbFunc);
     const replaceLoggerInitFunc = normalizeLoggerInit(opts.replaceLoggerInitFunc);
     const excludePathRegex = normalizePathRegex(opts.excludePathRegex);
-    const process = normalizeProcess(opts.process);
-    const log = normalizeShowLog(opts.log);
-    const rootDir = normalizeRootDir(opts.rootDir);
-    const outPath = normalizeOutPath(opts.outDir);
-    const forceMode = opts.forceMode?.toLowerCase() === 'bin' ? opts.forceMode : 'txt' 
+    const outPath = normalizeOutPath(opts.outDir, currentFile);
+    const forceMode = opts.forceMode?.toLowerCase() === 'bin' ? opts.forceMode : 'txt';
 
+    const log = normalizeShowLog(opts.log);
     return {
       replaceSymbFunc,
       replaceLoggerInitFunc,
       excludePathRegex,
       outDir: outPath,
-      rootDir,
       log,
-      process,
-      forceMode
+      forceMode,
     };
   }
 );

@@ -19,8 +19,11 @@ module.exports = {
     "no-extend-native": "off",
     'dot-notation': 'off',
     'radix': 'off',
-    'consistent-return': 'off'
-
+    'consistent-return': 'off',
+    'no-new': 'off',
+    'prefer-spread': 'off',
+    'prefer-rest-params': 'off',
+    'default-case': 'off',
   },
   parser: "babel-eslint",
 };

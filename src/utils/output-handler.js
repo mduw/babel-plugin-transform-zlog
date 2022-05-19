@@ -1,31 +1,24 @@
 import { invertObjectKeyValue, invertObjectKeyValueAsArray } from './object-utils';
 
-const path = require('path');
+const fs = require('fs');
 const { isNode } = require('./environment');
-const { writeExtractedDataToFile } = require('./file-utils');
 
 export class OutputHandler {
-  constructor() {
-    if (this.instance) return this.instance;
-    this.instance = this;
-    this._SourceMap = null;
-    this._TemplMap = null;
-    this._NameTagMap = null;
+  static instance;
 
-    this._ModuleMap = null;
-    this._FeatMap = null;
-    this._EnumeratedLevels = null;
+  constructor(props) {
+    if (OutputHandler.instance) return OutputHandler.instance;
+    OutputHandler.instance = this;
+    this.instance = this;
+
+    this._SourceMap = (props && props.SourceMap) || null;
+    this._TemplMap = (props && props.TemplMap) || null;
+    this._NameTagMap = (props && props.NameTagMap) || null;
+
     this.outDir = '';
     this.outputable = false;
-    this._process = 'Main';
-  }
 
-  updateProcess(process) {
-    this._process = process;
-  }
-
-  get process() {
-    return this._process;
+    return this;
   }
 
   setMaps(props) {
@@ -35,10 +28,6 @@ export class OutputHandler {
       this._SourceMap = SourceMap;
       this._NameTagMap = NameTagMap;
       this._TemplMap = TemplMap;
-
-      this._ModuleMap = ModuleMap;
-      this._FeatMap = FeatMap;
-      this._EnumeratedLevels = EnumeratedLevels;
     } catch (err) {
       throw new Error(`OutputHandler received invalid maps input ${err}`);
     }
@@ -56,22 +45,6 @@ export class OutputHandler {
     return invertObjectKeyValueAsArray(Object.fromEntries(this._TemplMap));
   }
 
-  get ModuleMap() {
-    return invertObjectKeyValueAsArray(Object.fromEntries(this._ModuleMap));
-  }
-
-  get FeatMap() {
-    return invertObjectKeyValueAsArray(Object.fromEntries(this._FeatMap));
-  }
-
-  get EnumeratedLevels() {
-    return invertObjectKeyValueAsArray(this._EnumeratedLevels);
-  }
-
-  setOutputable(status) {
-    this.outputable = status;
-  }
-
   setOutDir(outDir) {
     if (!outDir) throw new Error('OutputHandler received invalid outDir');
     this.outDir = outDir;
@@ -81,62 +54,20 @@ export class OutputHandler {
     return this.outDir;
   }
 
-  isOutputable() {
-    return this.outputable;
-  }
-
-  /**
-   * async
-   * @param {*} param0
-   * @returns
-   */
-  writeExtractedNameTagMap(options) {
-    if (!this.outDir) return new Promise(resolve => resolve(true));
+  exportData(extraData = {}) {
+    if (!this.outDir) return;
     if (isNode) {
-      const obj = invertObjectKeyValue(Object.fromEntries(this._NameTagMap));
-      return writeExtractedDataToFile(path.join(this.outDir, 'tagname-map.json'), obj, options);
-    }
-    throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
-  }
-
-  /**
-   * async
-   * @param {*} param0
-   * @returns
-   */
-  writeExtractedSourceMap(options) {
-    if (!this.outDir) return new Promise(resolve => resolve(true));
-    if (isNode) {
-      const obj = invertObjectKeyValue(Object.fromEntries(this._SourceMap));
-      return writeExtractedDataToFile(path.join(this.outDir, 'source-map.json'), obj, options);
-    }
-    throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
-  }
-
-  /**
-   * async
-   * @param {*} param0
-   * @returns
-   */
-  writeExtractedTemplMap(options) {
-    if (!this.outDir) return new Promise(resolve => resolve(true));
-    if (isNode) {
-      const obj = invertObjectKeyValue(Object.fromEntries(this._TemplMap));
-      return writeExtractedDataToFile(path.join(this.outDir, 'templ-map.json'), obj, options);
-    }
-    throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
-  }
-
-  /**
-   * async
-   * @param {*} param0
-   * @returns
-   */
-  writeExtractedFeatMap(options) {
-    if (!this.outDir) return new Promise(resolve => resolve(true));
-    if (isNode) {
-      const obj = invertObjectKeyValue(Object.fromEntries(this._FeatMap));
-      return writeExtractedDataToFile(path.join(this.outDir, 'feat-map.json'), obj, options);
+      const nametags = invertObjectKeyValue(Object.fromEntries(this._NameTagMap));
+      const templates = invertObjectKeyValue(Object.fromEntries(this._TemplMap));
+      const sourcemaps = invertObjectKeyValue(Object.fromEntries(this._SourceMap));
+      const exportData = {
+        nametags,
+        templates,
+        sourcemaps,
+        ...extraData,
+      };
+      fs.writeFileSync(this.outDir, JSON.stringify(exportData));
+      return;
     }
     throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');
   }

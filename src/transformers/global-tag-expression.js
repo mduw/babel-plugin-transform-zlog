@@ -6,14 +6,11 @@ function transformTagTemplLiteral2TemplLiteral(nodePath, state) {
   if (state.VisitedModules.has(nodePath)) return;
   state.VisitedModules.add(nodePath);
   const currentQuasi = nodePath.get('quasi');
-  if (
-    types.isTemplateLiteral(currentQuasi)
-  ) {
+  if (types.isTemplateLiteral(currentQuasi)) {
     return state.types.cloneNode(currentQuasi.node);
   }
   return nodePath;
 }
-
 
 export function transformGlobalTagExpression(nodePath, state) {
   if (state.VisitedModules.has(nodePath)) return;
@@ -22,9 +19,9 @@ export function transformGlobalTagExpression(nodePath, state) {
   const currentQuasi = nodePath.get('quasi');
   if (
     currentTag.node.name === GLOBAL_IDENTIFIERS.__t &&
-    types.isTemplateLiteral(currentQuasi)
-    // && isGlobalIdentifier(nodePath, GLOBAL_IDENTIFIERS.__t)
+    types.isTemplateLiteral(currentQuasi) &&
+    isGlobalIdentifier(nodePath, GLOBAL_IDENTIFIERS.__t)
   ) {
-    nodePath.replaceWith(transformTagTemplLiteral2TemplLiteral(currentQuasi, state))
+    nodePath.replaceWith(transformTagTemplLiteral2TemplLiteral(currentQuasi, state));
   }
 }

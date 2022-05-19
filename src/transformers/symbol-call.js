@@ -1,7 +1,9 @@
 import { types } from 'babel-core';
 import { GLOBAL_IDENTIFIERS } from '../constant';
+import { UIDManager } from '../utils/id-gen';
 import { Indexer } from '../utils/log-indexer';
 import { EnumeratedLevels } from '../utils/log-levels/enumerator';
+import { isBinaryMode, isTextMode } from '../utils/parse-mode';
 import { isGlobalIdentifier } from '../utils/verify-identifier';
 
 const PlaceholderSign = '{}';
@@ -42,19 +44,16 @@ function transformTemplTagExpression(nodePath, state) {
   const params = [];
   if (
     currentTag.node.name === GLOBAL_IDENTIFIERS.__t &&
-    types.isTemplateLiteral(currentQuasi)
-    // && isGlobalIdentifier(nodePath, GLOBAL_IDENTIFIERS.__t)
+    types.isTemplateLiteral(currentQuasi) &&
+    isGlobalIdentifier(nodePath, GLOBAL_IDENTIFIERS.__t)
   ) {
     const [templateStr, expressionArrNode] = transformTemplateLiteral(currentQuasi, state);
-    if (
-      state.normalizedOpts.forceMode === 'txt' &&
-      (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test')
-    ) {
+    if (isTextMode(state.normalizedOpts.forceMode)) {
       Indexer.addOrGetMap(Indexer.keys.templ, templateStr, state);
       params.push(types.stringLiteral(templateStr));
-    } else if (state.normalizedOpts.forceMode === 'bin') {
+    } else if (isBinaryMode(state.normalizedOpts.forceMode)) {
       const lid = Indexer.addOrGetMap(Indexer.keys.templ, templateStr, state);
-      params.push(types.numericLiteral(lid));
+      params.push(types.stringLiteral(lid));
     }
 
     for (let i = 0; i < expressionArrNode.length; i++) {
@@ -67,7 +66,7 @@ function transformTemplTagExpression(nodePath, state) {
 export default function transformLogSymbCall(nodePath, state, funcName) {
   if (state.VisitedModules.has(nodePath)) return;
   state.VisitedModules.add(nodePath);
-
+  const x = new UIDManager(12);
   const targetFuncNames = state.normalizedOpts.replaceSymbFunc;
   const callee = nodePath.node.callee || undefined;
   if (!callee || !funcName || !targetFuncNames) return;

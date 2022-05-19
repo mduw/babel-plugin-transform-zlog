@@ -1,5 +1,4 @@
 import path from 'path';
-import { invertObjectKeyValue } from './object-utils';
 
 export function isRelativePath(nodePath) {
   return nodePath.match(/^\.?\.\//);
@@ -120,13 +119,6 @@ function doWriteData(outPath, fData, opts) {
           reject(werr);
           throw new Error(`fail to write ${outPath} ${werr}`);
         }
-        // fs.chmod(outPath, fs.constants.O_RDONLY, modeErr => {
-        //   if (modeErr) {
-        //     reject(modeErr);
-        //     throw new Error(`fail to write ${outPath} ${modeErr}`);
-        //   }
-        //   resolve(true);
-        // });
         resolve(true);
       });
     } catch (error) {
@@ -141,7 +133,6 @@ export function writeExtractedDataToFile(pathStr, data, options) {
   return new Promise((resolve, reject) => {
     const fs = require('fs');
     const outDir = toPosixPath(pathStr);
-    // const data = invertObjectKeyValue(Object.fromEntries(map));
 
     if (fs.existsSync(outDir)) {
       fs.readFile(outDir, (err, oldData) => {
@@ -180,4 +171,19 @@ export function shortenPath2(fPath) {
   if (!fPath) return fPath;
   const posixPathArr = toPosixPath(fPath).split('/');
   return posixPathArr.slice(posixPathArr.length - 2).join('/');
+}
+
+export function getAbsPathFromRoot(root, str) {
+  const cutIndex = toPosixPath(root).split('/').length;
+  return toPosixPath(str)
+    .split('/')
+    .slice(cutIndex)
+    .join('/');
+}
+
+export function hashStringShake256(str, outputLenInBytes = 16) {
+  return require('crypto')
+    .createHash('shake256', { outputLength: outputLenInBytes })
+    .update(str)
+    .digest('hex');
 }
