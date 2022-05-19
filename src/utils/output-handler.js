@@ -64,7 +64,7 @@ export class OutputHandler {
         nametags,
         templates,
         sourcemaps,
-        build: process.env.BUILD_DETAILS || {
+        build: process.env.ZLOG_BUILD_DETAILS || {
           branch: '',
           hash: '',
         },
