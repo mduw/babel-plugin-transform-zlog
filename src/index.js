@@ -58,7 +58,7 @@ export default ({ types }) => ({
       const data = fs.readFileSync(outFilePath);
       const { nametags, templates, sourcemaps, build } = JSON.parse(data.toString());
       try {
-        const {hash: incomingHash} = JSON.parse(process.env.ZLOG_BUILD_DETAILS);
+        const { hash: incomingHash } = JSON.parse(process.env.ZLOG_BUILD_DETAILS);
         if (build && build.hash !== '' && build.hash !== incomingHash) {
           const [filename, ext] = outFilePath.split('.');
           // handle archive
@@ -99,7 +99,7 @@ export default ({ types }) => ({
 
   post() {
     /* CLEANUP */
-    if (this.SourceMap.size || this.NameTagMap.size || this.TemplMap.size) {
+    if (Indexer.isUpdateRequied) {
       outputHandler.setMaps({
         SourceMap: Indexer.SourceMap,
         NameTagMap: Indexer.NameTagMap,
@@ -107,7 +107,12 @@ export default ({ types }) => ({
       });
       outputHandler.exportData();
     }
+
     this.VisitedModules.clear();
+    this.SourceMap.clear();
+    this.TemplMap.clear();
+    this.NameTagMap.clear();
+    Indexer.reset();
 
     if (this.normalizedOpts.log === 'on') {
       log(

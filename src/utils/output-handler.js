@@ -24,7 +24,7 @@ export class OutputHandler {
   setMaps(props) {
     if (!props) throw new Error('OutputHandler received invalid maps');
     try {
-      const { SourceMap, NameTagMap, TemplMap, ModuleMap, FeatMap, EnumeratedLevels } = props;
+      const { SourceMap, NameTagMap, TemplMap} = props;
       this._SourceMap = SourceMap;
       this._NameTagMap = NameTagMap;
       this._TemplMap = TemplMap;

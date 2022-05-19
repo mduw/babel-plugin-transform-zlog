@@ -12,7 +12,7 @@ class LogIndexer {
     this._NewSourceMap = new Map();
     this._NewNameTagMap = new Map();
     this._NewTemplMap = new Map();
-
+    this._updateFlag = false;
     return this;
   }
 
@@ -28,6 +28,10 @@ class LogIndexer {
     return this._NewTemplMap;
   }
 
+  get isUpdateRequied() {
+    return this._updateFlag === true;
+  }
+
   keys = {
     templ: 'templ',
     module: 'module',
@@ -35,6 +39,13 @@ class LogIndexer {
     nametag: 'nametag',
     sourcemap: 'sourcemap',
   };
+
+  reset() {
+    this._NewNameTagMap.clear();
+    this._NewSourceMap.clear();
+    this._NewTemplMap.clear();
+    this._updateFlag = false;
+  }
 
   addOrGetMap(key, value, state) {
     let id;
@@ -48,6 +59,7 @@ class LogIndexer {
         } else {
           id = this._uidManager.ID;
           this._NewTemplMap.set(value, id);
+          this._updateFlag = true;
         }
         break;
       }
@@ -61,6 +73,7 @@ class LogIndexer {
         } else {
           id = this._uidManager.ID;
           this._NewNameTagMap.set(value, id);
+          this._updateFlag = true;
         }
         break;
       }
@@ -74,6 +87,7 @@ class LogIndexer {
         } else {
           id = this._uidManager.ID;
           this._NewSourceMap.set(value, id);
+          this._updateFlag = true;
         }
         break;
       }
