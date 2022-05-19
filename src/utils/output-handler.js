@@ -64,7 +64,10 @@ export class OutputHandler {
         nametags,
         templates,
         sourcemaps,
-        build: process.env.BUILD_DETAILS || '',
+        build: process.env.BUILD_DETAILS || {
+          branch: '',
+          hash: '',
+        },
       };
       fs.writeFileSync(this.outDir, JSON.stringify(exportData));
       return;

@@ -1,3 +1,4 @@
+import fs from 'fs';
 import normalizeOptions from './utils/normalizeOptions';
 import transformCall from './transformers/call';
 import { name } from '../package.json';
@@ -7,20 +8,9 @@ import { OutputHandler } from './utils/output-handler';
 import { transformGlobalTagExpression } from './transformers/global-tag-expression';
 import { getAbsPathFromRoot } from './utils/file-utils';
 import { UIDManager } from './utils/id-gen';
-
-const _SourceMap = new Map();
-const _NameTagMap = new Map();
-const _TemplMap = new Map();
+import { invertObjectKeyValue } from './utils/object-utils';
 
 export const outputHandler = new OutputHandler();
-// outputHandler.setMaps({
-//   SourceMap: _SourceMap,
-//   NameTagMap: _NameTagMap,
-//   TemplMap: _TemplMap,
-//   ModuleMap: _ModuleMap,
-//   FeatMap: _FeatMap,
-//   EnumeratedLevels,
-// });
 
 const prefixLog = `[${name}]`;
 const CallVisitors = {
@@ -36,7 +26,6 @@ const visitor = {
       if (ignorable) {
         return;
       }
-      outputHandler.setOutputable(true);
       programPath.traverse(CallVisitors, state);
     },
     exit(programPath, state) {
@@ -56,15 +45,41 @@ export default ({ types }) => ({
   pre(file) {
     this.types = types;
     this.VisitedModules = new Set();
-    this.NameTagMap = _NameTagMap;
-    this.SourceMap = _SourceMap;
-    this.TemplMap = _TemplMap;
+    this.NameTagMap = new Map();
+    this.SourceMap = new Map();
+    this.TemplMap = new Map();
 
     this.ROOT = 'C:/Users/LAP14763/Documents/work/zalosrc/babel-plugin-transform-log-template'; // process.pwd();
     this.currentFile = getAbsPathFromRoot(this.ROOT, file.opts.filename);
     this.normalizedOpts = normalizeOptions(this.currentFile, this.opts);
-
-    outputHandler.setOutDir(this.normalizedOpts.outDir);
+    const outFilePath = this.normalizedOpts.outDir;
+    if (fs.existsSync(outFilePath)) {
+      const data = fs.readFileSync(outFilePath);
+      const { nametags, templates, sourcemaps, build } = JSON.parse(data.toString());
+      try {
+        if (build && build.hash !== '' && build.hash !== JSON.parse(process.env.BUILD_DETAILS)) {
+          const [filename, ext] = outFilePath.split('.');
+          // handle archive
+          const newFilePath = filename.concat(`[${(build && build.hash) || ''}].${ext}`);
+          log(
+            colorize('duplicate '.concat(outFilePath), COLORS.red),
+            'copying',
+            outFilePath,
+            newFilePath
+          );
+          fs.copyFileSync(outFilePath, newFilePath);
+        } else {
+          this.NameTagMap = new Map(Object.entries(invertObjectKeyValue(nametags)));
+          this.SourceMap = new Map(Object.entries(invertObjectKeyValue(sourcemaps)));
+          this.TemplMap = new Map(Object.entries(invertObjectKeyValue(templates)));
+        }
+      } catch {
+        const [filename, ext] = outFilePath.split('.');
+        const newFilePath = filename.concat(`[invalid_${new Date().getTime()}].${ext}`);
+        fs.copyFileSync(outFilePath, newFilePath);
+      }
+    }
+    outputHandler.setOutDir(outFilePath);
     new UIDManager(8);
 
     if (this.normalizedOpts.log === 'on') {
@@ -83,10 +98,10 @@ export default ({ types }) => ({
   post() {
     /* CLEANUP */
     outputHandler.setMaps({
-      SourceMap: _SourceMap,
-      NameTagMap: _NameTagMap,
-      TemplMap: _TemplMap,
-    })
+      SourceMap: this.SourceMap,
+      NameTagMap: this.NameTagMap,
+      TemplMap: this.TemplMap,
+    });
     outputHandler.exportData();
 
     this.VisitedModules.clear();
