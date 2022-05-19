@@ -27,10 +27,7 @@ function normalizeReplaceSymbFunc(optsReplace) {
 }
 
 function normalizeOutPath(dirname, rawFilePath) {
-  const isReleasable = isUsrReleaseMode();
-  const hashedFileName = isReleasable
-    ? hashStringShake256(rawFilePath).concat('.json')
-    : rawFilePath;
+  const hashedFileName = hashStringShake256(rawFilePath).concat('.json')
   return toPosixPath(findLogPath(dirname, hashedFileName));
 }
 

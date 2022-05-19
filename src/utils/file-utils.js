@@ -174,7 +174,7 @@ export function shortenPath2(fPath) {
 }
 
 export function getAbsPathFromRoot(root, str) {
-  const cutIndex = toPosixPath(root).split('/').length-1;
+  const cutIndex = toPosixPath(root).split('/').length;
   return toPosixPath(str)
     .split('/')
     .slice(cutIndex)
