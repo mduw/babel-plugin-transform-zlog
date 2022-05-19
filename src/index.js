@@ -49,7 +49,7 @@ export default ({ types }) => ({
     this.SourceMap = new Map();
     this.TemplMap = new Map();
 
-    this.ROOT = process.pwd();
+    this.ROOT = process.env.PWD;
     this.currentFile = getAbsPathFromRoot(this.ROOT, file.opts.filename);
     this.normalizedOpts = normalizeOptions(this.currentFile, this.opts);
     const outFilePath = this.normalizedOpts.outDir;
