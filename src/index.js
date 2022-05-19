@@ -49,7 +49,7 @@ export default ({ types }) => ({
     this.SourceMap = new Map();
     this.TemplMap = new Map();
 
-    this.ROOT = 'C:/Users/LAP14763/Documents/work/zalosrc/babel-plugin-transform-log-template'; // process.pwd();
+    this.ROOT = process.pwd();
     this.currentFile = getAbsPathFromRoot(this.ROOT, file.opts.filename);
     this.normalizedOpts = normalizeOptions(this.currentFile, this.opts);
     const outFilePath = this.normalizedOpts.outDir;
