@@ -9,6 +9,7 @@ import { transformGlobalTagExpression } from './transformers/global-tag-expressi
 import { getAbsPathFromRoot } from './utils/file-utils';
 import { UIDManager } from './utils/id-gen';
 import { invertObjectKeyValue } from './utils/object-utils';
+import { Indexer } from './utils/log-indexer';
 
 export const outputHandler = new OutputHandler();
 
@@ -100,9 +101,9 @@ export default ({ types }) => ({
     /* CLEANUP */
     if (this.SourceMap.size || this.NameTagMap.size || this.TemplMap.size) {
       outputHandler.setMaps({
-        SourceMap: this.SourceMap,
-        NameTagMap: this.NameTagMap,
-        TemplMap: this.TemplMap,
+        SourceMap: Indexer.SourceMap,
+        NameTagMap: Indexer.NameTagMap,
+        TemplMap: Indexer.TemplMap,
       });
       outputHandler.exportData();
     }
