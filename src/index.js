@@ -97,13 +97,14 @@ export default ({ types }) => ({
 
   post() {
     /* CLEANUP */
-    outputHandler.setMaps({
-      SourceMap: this.SourceMap,
-      NameTagMap: this.NameTagMap,
-      TemplMap: this.TemplMap,
-    });
-    outputHandler.exportData();
-
+    if (this.SourceMap.size || this.NameTagMap.size || this.TemplMap.size) {
+      outputHandler.setMaps({
+        SourceMap: this.SourceMap,
+        NameTagMap: this.NameTagMap,
+        TemplMap: this.TemplMap,
+      });
+      outputHandler.exportData();
+    }
     this.VisitedModules.clear();
 
     if (this.normalizedOpts.log === 'on') {
