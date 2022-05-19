@@ -54,7 +54,7 @@ export class OutputHandler {
     return this.outDir;
   }
 
-  exportData(extraData = {}) {
+  exportData() {
     if (!this.outDir) return;
     if (isNode) {
       const nametags = invertObjectKeyValue(Object.fromEntries(this._NameTagMap));
@@ -64,7 +64,7 @@ export class OutputHandler {
         nametags,
         templates,
         sourcemaps,
-        ...extraData,
+        build: process.env.BUILD_DETAILS || '',
       };
       fs.writeFileSync(this.outDir, JSON.stringify(exportData));
       return;
