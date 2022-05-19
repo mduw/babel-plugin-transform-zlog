@@ -60,14 +60,20 @@ export class OutputHandler {
       const nametags = invertObjectKeyValue(Object.fromEntries(this._NameTagMap));
       const templates = invertObjectKeyValue(Object.fromEntries(this._TemplMap));
       const sourcemaps = invertObjectKeyValue(Object.fromEntries(this._SourceMap));
+      let buildDetails;
+      try {
+        buildDetails = JSON.parse(process.env.ZLOG_BUILD_DETAILS);
+      } catch (e) {
+        buildDetails = {
+          branch: '',
+          hash: '',
+        };
+      }
       const exportData = {
         nametags,
         templates,
         sourcemaps,
-        build: process.env.ZLOG_BUILD_DETAILS || {
-          branch: '',
-          hash: '',
-        },
+        build: buildDetails,
       };
       fs.writeFileSync(this.outDir, JSON.stringify(exportData));
       return;
