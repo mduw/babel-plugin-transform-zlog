@@ -57,7 +57,8 @@ export default ({ types }) => ({
       const data = fs.readFileSync(outFilePath);
       const { nametags, templates, sourcemaps, build } = JSON.parse(data.toString());
       try {
-        if (build && build.hash !== '' && build.hash !== JSON.parse(process.env.ZLOG_BUILD_DETAILS)) {
+        const {hash: incomingHash} = JSON.parse(process.env.ZLOG_BUILD_DETAILS);
+        if (build && build.hash !== '' && build.hash !== incomingHash) {
           const [filename, ext] = outFilePath.split('.');
           // handle archive
           const newFilePath = filename.concat(`[${(build && build.hash) || ''}].${ext}`);
