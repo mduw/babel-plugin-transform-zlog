@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.11](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.14.10...v1.14.11) (2022-05-19)
+
+
+### Bug Fixes
+
+* **root:** correctify root env var ([5577aeb](https://github.com/mduw/babel-plugin-transform-zlog/commit/5577aeb269c09a9fa74b12c0d7145451a777b1ee))
+
 ### [1.14.10](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.14.9...v1.14.10) (2022-05-19)
 
 ### [1.14.9](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.14.8...v1.14.9) (2022-05-19)
