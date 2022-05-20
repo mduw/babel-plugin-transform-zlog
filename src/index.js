@@ -63,7 +63,7 @@ export default ({ types }) => ({
           const [filename, ext] = outFilePath.split('.');
           // handle archive
           const newFilePath = filename.concat(`[${(build && build.hash) || ''}].${ext}`);
-          log(colorize('Diff version detected. Archiving '.concat(outFilePath), COLORS.red));
+          log(colorize('Diff version detected. Archiving '.concat(outFilePath), COLORS.yellow));
           fs.copyFileSync(outFilePath, newFilePath);
         } else {
           this.NameTagMap = new Map(Object.entries(invertObjectKeyValue(nametags)));

@@ -41,9 +41,6 @@ export default function transformLoggerInitCall(nodePath, state, funcName) {
   }
 
   if (isTextMode(state.normalizedOpts.forceMode)) {
-    if (nodePath.node.arguments.length === 2) {
-      nodePath.node.arguments.push(types.nullLiteral());
-    }
     nodePath.node.arguments.push(types.stringLiteral(shortenPath2(state.currentFile)));
   } else if (isBinaryMode(state.normalizedOpts.forceMode)) {
     nodePath.node.arguments[0] = types.stringLiteral(moduleID);
@@ -52,9 +49,6 @@ export default function transformLoggerInitCall(nodePath, state, funcName) {
     if (nodePath.node.arguments.length >= 3) {
       nodePath.node.arguments.push(types.stringLiteral(sourcemapID));
     } else {
-      if (nodePath.node.arguments.length === 2) {
-        nodePath.node.arguments.push(types.nullLiteral());
-      }
       nodePath.node.arguments.push(types.stringLiteral(sourcemapID));
     }
   }
