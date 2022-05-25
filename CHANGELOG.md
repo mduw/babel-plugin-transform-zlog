@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.15.0](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.14.19...v1.15.0) (2022-05-25)
+
+
+### Features
+
+* **template name:** allow dynamically configuring template func name ([fc7f062](https://github.com/mduw/babel-plugin-transform-zlog/commit/fc7f0623d1ab42f32d82103a7ff4cb3a3c174d00))
+
 ### [1.14.19](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.14.18...v1.14.19) (2022-05-20)
 
 ### [1.14.18](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.14.17...v1.14.18) (2022-05-19)
