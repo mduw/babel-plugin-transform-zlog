@@ -30,7 +30,7 @@ export default function transformCall(nodePath, state) {
   } else if (
     funcName &&
     types.isCallExpression(nodePath) &&
-    funcName === GLOBAL_IDENTIFIERS.__t
+    funcName === state.normalizedOpts.templateFunc
     && isGlobalIdentifier(nodePath, funcName)
   ) {
     nodePath.replaceWith(state.types.cloneNode(nodePath.get('arguments.0').node));

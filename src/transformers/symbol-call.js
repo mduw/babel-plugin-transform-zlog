@@ -43,9 +43,9 @@ function transformTemplTagExpression(nodePath, state) {
   const currentQuasi = nodePath.get('quasi');
   const params = [];
   if (
-    currentTag.node.name === GLOBAL_IDENTIFIERS.__t &&
+    currentTag.node.name === state.normalizedOpts.templateFunc &&
     types.isTemplateLiteral(currentQuasi) &&
-    isGlobalIdentifier(nodePath, GLOBAL_IDENTIFIERS.__t)
+    isGlobalIdentifier(nodePath, state.normalizedOpts.templateFunc)
   ) {
     const [templateStr, expressionArrNode] = transformTemplateLiteral(currentQuasi, state);
     if (isTextMode(state.normalizedOpts.forceMode)) {

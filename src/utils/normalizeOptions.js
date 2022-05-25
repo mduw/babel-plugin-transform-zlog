@@ -56,6 +56,10 @@ function normalizeLoggerInit(optsInitFuncName) {
   return optsInitFuncName || '';
 }
 
+function normalizeTemplateFunc(optsTemplate) {
+  return optsTemplate;
+}
+
 export default createSelector(
   // The currentFile should have an extension; otherwise it's considered a special value
   currentFile => currentFile,
@@ -63,6 +67,7 @@ export default createSelector(
   (currentFile, opts) => {
     const replaceSymbFunc = normalizeReplaceSymbFunc(opts.replaceSymbFunc);
     const replaceLoggerInitFunc = normalizeLoggerInit(opts.replaceLoggerInitFunc);
+    const templateFunc = normalizeTemplateFunc(opts.templateFunc);
     const excludePathRegex = normalizePathRegex(opts.excludePathRegex);
     const outPath = normalizeOutPath(opts.outDir, currentFile);
     const forceMode = opts.forceMode?.toLowerCase() === 'bin' ? opts.forceMode : 'txt';
@@ -75,6 +80,7 @@ export default createSelector(
       outDir: outPath,
       log,
       forceMode,
+      templateFunc,
     };
   }
 );

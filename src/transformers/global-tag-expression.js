@@ -18,9 +18,9 @@ export function transformGlobalTagExpression(nodePath, state) {
   const currentTag = nodePath.get('tag');
   const currentQuasi = nodePath.get('quasi');
   if (
-    currentTag.node.name === GLOBAL_IDENTIFIERS.__t &&
+    currentTag.node.name === state.normalizedOpts.templateFunc &&
     types.isTemplateLiteral(currentQuasi) &&
-    isGlobalIdentifier(nodePath, GLOBAL_IDENTIFIERS.__t)
+    isGlobalIdentifier(nodePath, state.normalizedOpts.templateFunc)
   ) {
     nodePath.replaceWith(transformTagTemplLiteral2TemplLiteral(currentQuasi, state));
   }
