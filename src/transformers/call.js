@@ -1,6 +1,4 @@
 import { types } from 'babel-core';
-import { GLOBAL_IDENTIFIERS } from '../constant';
-import { colorize, COLORS } from '../utils/log/color';
 import { isGlobalIdentifier } from '../utils/verify-identifier';
 import transformLoggerInitCall from './logger-call';
 import transformLogSymbCall from './symbol-call';

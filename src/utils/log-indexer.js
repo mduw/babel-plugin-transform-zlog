@@ -12,6 +12,7 @@ class LogIndexer {
     this._NewSourceMap = new Map();
     this._NewNameTagMap = new Map();
     this._NewTemplMap = new Map();
+    this._NewAliasMap = new Map();
     this._updateFlag = false;
     return this;
   }
@@ -28,6 +29,10 @@ class LogIndexer {
     return this._NewTemplMap;
   }
 
+  get AliasMap() {
+    return this._NewAliasMap;
+  }
+
   get isUpdateRequied() {
     return this._updateFlag === true;
   }
@@ -38,12 +43,14 @@ class LogIndexer {
     feat: 'feat',
     nametag: 'nametag',
     sourcemap: 'sourcemap',
+    aliasmap: 'aliasmap',
   };
 
   reset() {
     this._NewNameTagMap.clear();
     this._NewSourceMap.clear();
     this._NewTemplMap.clear();
+    this._NewAliasMap.clear();
     this._updateFlag = false;
   }
 
@@ -87,6 +94,21 @@ class LogIndexer {
         } else {
           id = this._uidManager.ID;
           this._NewSourceMap.set(value, id);
+          this._updateFlag = true;
+        }
+        break;
+      }
+
+      case this.keys.aliasmap: {
+        const val = JSON.stringify(value);
+        if (this._NewAliasMap.has(val)) {
+          id = this._NewAliasMap.get(val);
+        } else if (state.AliasMap.has(val)) {
+          id = state._NewAliasMap.get(val);
+          this._NewAliasMap.set(val, id);
+        } else {
+          id = this._uidManager.ID;
+          this._NewAliasMap.set(val, id);
           this._updateFlag = true;
         }
         break;

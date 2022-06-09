@@ -14,6 +14,7 @@ export class OutputHandler {
     this._SourceMap = (props && props.SourceMap) || null;
     this._TemplMap = (props && props.TemplMap) || null;
     this._NameTagMap = (props && props.NameTagMap) || null;
+    this._AliasMap = (props && props._AliasMap) || null;
 
     this.outDir = '';
     this.outputable = false;
@@ -24,10 +25,11 @@ export class OutputHandler {
   setMaps(props) {
     if (!props) throw new Error('OutputHandler received invalid maps');
     try {
-      const { SourceMap, NameTagMap, TemplMap} = props;
+      const { SourceMap, NameTagMap, TemplMap, AliasMap } = props;
       this._SourceMap = SourceMap;
       this._NameTagMap = NameTagMap;
       this._TemplMap = TemplMap;
+      this._AliasMap = AliasMap;
     } catch (err) {
       throw new Error(`OutputHandler received invalid maps input ${err}`);
     }
@@ -45,6 +47,10 @@ export class OutputHandler {
     return invertObjectKeyValueAsArray(Object.fromEntries(this._TemplMap));
   }
 
+  get AliasMap() {
+    return invertObjectKeyValueAsArray(Object.fromEntries(this._AliasMap));
+  }
+
   setOutDir(outDir) {
     if (!outDir) throw new Error('OutputHandler received invalid outDir');
     this.outDir = outDir;
@@ -54,12 +60,28 @@ export class OutputHandler {
     return this.outDir;
   }
 
-  exportData() {
+  doWrite(data) {
+    return new Promise((resolve, reject)=>{
+      const writeStream = fs.createWriteStream(this.outDir);
+      writeStream.write(data);
+      writeStream.end();
+      writeStream.on('finish', () => {
+        resolve();
+      });
+      writeStream.on('error', () => {
+        reject();
+      })
+    })
+  }
+
+  async exportData() {
     if (!this.outDir) return;
     if (isNode) {
       const nametags = invertObjectKeyValue(Object.fromEntries(this._NameTagMap));
       const templates = invertObjectKeyValue(Object.fromEntries(this._TemplMap));
       const sourcemaps = invertObjectKeyValue(Object.fromEntries(this._SourceMap));
+      const aliasmaps = invertObjectKeyValue(Object.fromEntries(this._AliasMap));
+
       let buildDetails;
       try {
         buildDetails = JSON.parse(process.env.ZLOG_BUILD_DETAILS);
@@ -70,12 +92,14 @@ export class OutputHandler {
         };
       }
       const exportData = {
+        build: buildDetails,
         nametags,
         templates,
         sourcemaps,
-        build: buildDetails,
+        aliasmaps,
       };
-      fs.writeFileSync(this.outDir, JSON.stringify(exportData));
+      // fs.writeFileSync(this.outDir, JSON.stringify(exportData));
+      await this.doWrite(JSON.stringify(exportData));
       return;
     }
     throw new Error('Node env NOT found. Exec writeExtractedDataToFile failed');

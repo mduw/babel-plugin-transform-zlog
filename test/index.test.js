@@ -15,41 +15,38 @@ describe('transformer-test', () => {
         {
           rootDir: 'test',
           replaceSymbFunc: {
-            zlg_info: [
-              'logSymbol',
+            zinfo: [
+              'zsymb',
               {
                 variants: ['self', 'R', 'F', 'C', 'RF', 'RC'],
               },
             ],
-            zlg_debug: [
-              'logSymbol',
+            zdebug: [
+              'zsymb',
               {
                 variants: ['self', 'R', 'F', 'C', 'RF', 'RC'],
               },
             ],
-            zlg_warn: [
-              'logSymbol',
+            zwarn: [
+              'zsymb',
               {
                 variants: ['self', 'R', 'F', 'C', 'RF', 'RC'],
               },
             ],
-            zlg_error: [
-              'logSymbol',
+            zerror: [
+              'zsymb',
               {
                 variants: ['self', 'R', 'F', 'C', 'RF', 'RC'],
               },
             ],
           },
-          replaceCreateTemplFunc: ['toTemplate'],
           replaceLoggerInitFunc: ['createZLogger'],
-          loggerPathRegex:
-            "((\\S*['-|'_])([a-zA-Z('-|'_)]+)\\/)*utils\\/logger\\/((\\S*['-|'_])([a-zA-Z('-|'_)]+)\\/)*(logger)$",
-          logDataPathRegex:
-            "((\\S*['-|'_])([a-zA-Z('-|'_)]+)\\/)*utils\\/logger\\/((\\S*['-|'_])([a-zA-Z('-|'_)]+)\\/)*(templates(-\\w+)+|templates)$",
+          templateFunc: 't',
           excludePathRegex: '(src\\/zlogger|src\\/static)',
-          outDir: 'node_modules/zlogger-parse/pc',
+          outDir: 'outlog',
+          forceMode: 'bin',
           log: 'on',
-          process: 'pc'
+          process: 'pc',
         },
       ],
     ],

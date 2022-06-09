@@ -1,5 +1,4 @@
 import { types } from 'babel-core';
-import { GLOBAL_IDENTIFIERS } from '../constant';
 import { isGlobalIdentifier } from '../utils/verify-identifier';
 
 function transformTagTemplLiteral2TemplLiteral(nodePath, state) {

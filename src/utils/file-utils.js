@@ -187,3 +187,18 @@ export function hashStringShake256(str, outputLenInBytes = 16) {
     .update(str)
     .digest('hex');
 }
+
+export function readFileStream(filepath) {
+  return new Promise((resolve, reject) => {
+    const fs = require('fs');
+    const rs = fs.createReadStream(filepath, { flags: 'r' });
+    const chunks = [];
+    rs.on('data', chunk => {
+      chunks.push(chunk);
+    });
+    rs.on('end', () => {
+      resolve(Buffer.concat(chunks));
+      rs.close();
+    });
+  });
+}

@@ -36,3 +36,19 @@ export class TransformSymbolLogError extends ParserError {
       COLORS.magenta
     )}`;
 }
+
+export class TransformTemplateError extends ParserError {
+  constructor(funcName, ...args) {
+    super(args);
+    this.msg = `${funcName} Syntax ERR: `.concat(args.join(' ')).concat(this.details(funcName));
+  }
+
+  details = funcName =>
+    `\n\n\t${colorize(
+      `=> EXPECTED: ${colorize(`${funcName}\`template\``, COLORS.yellow)} OR ${colorize(
+        `${funcName}('template')`,
+        COLORS.yellow
+      )} OR ${colorize(`${funcName}(\`template\`)`, COLORS.yellow)}`,
+      COLORS.magenta
+    )}`;
+}

@@ -10,7 +10,7 @@ const Logger3 = new CoreLoggerFactory().createZLogger('core-mngr', ['feat-funny'
 const Logger2 = ModuleContainer.resolve(ZLoggerFactory).createZLogger('core-mngr', [
   'feat-bording',
 ]);
-const Logger = new CoreLoggerFactory().createZLogger('ui', ['sidebar', 'conv-list'], 'txt');
+const Logger = new CoreLoggerFactory().createZLogger('ui', ['sidebar', 'conv-list']);
 const Logger4 = new CoreLoggerFactory().createZLogger('core-mngr', ['feat-funny2']);
 const Logger5 = new CoreLoggerFactory().createZLogger('ui', ['sidebar', 'conv-list2']);
 const LoggerX = new CoreLoggerFactory().createZLogger('ui', ['sidebar', 'conv-list']);
@@ -41,9 +41,12 @@ class TimeStart {
     //   __t`but parse me`,
     //   __t`parser more ${7}`
     // );
+    Logger.zinfo(t`${x} test log template ${()=>'style 2'} v ${() => vers} {}`, __t`whpt`, ' from convlist');
+    __t('')
 
-    Logger.zlg_info(__t`hello ${name} from world {}`, vers, 6, `template ${vers}`, 7, __raw`dont parse this ${name} string`);
-    Logger.zlg_info(5, __t`hello ${name} from world {}`, vers, 6, `template ${vers}`, 7, __raw`dont parse this string`);
+    Logger.zerror(t(`hello ${kkk} {} ${name} from world {} ${x} {} {} {} {} ${m}`),kk, vers, 6, 8, 7);
+    Logger.zdebug(t('again {}'), t`hello ${name} from world {}`, vers, 6, `template ${vers}`, 7);
+    Logger.zerror(`hello ${kkk} {} ${name} from world {}`,kk, vers, 6, 8, 7);
 
     // Logger.zlg_info('hello', 2, 'tracking start', content);
     // Logger.zlg_infoR(99,12,'whottt', content);

@@ -49,6 +49,7 @@ export default ({ types }) => ({
     this.NameTagMap = new Map();
     this.SourceMap = new Map();
     this.TemplMap = new Map();
+    this.AliasMap = new Map();
 
     this.ROOT = process.env.PWD;
     this.currentFile = getAbsPathFromRoot(this.ROOT, file.opts.filename);
@@ -99,6 +100,7 @@ export default ({ types }) => ({
         SourceMap: Indexer.SourceMap,
         NameTagMap: Indexer.NameTagMap,
         TemplMap: Indexer.TemplMap,
+        AliasMap: Indexer.AliasMap
       });
       outputHandler.exportData();
     }

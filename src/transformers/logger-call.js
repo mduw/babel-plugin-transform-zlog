@@ -34,22 +34,16 @@ export default function transformLoggerInitCall(nodePath, state, funcName) {
   const featureID = [];
   for (let i = 0; i < fid.get('elements').length; i++) {
     featureID.push(
-      types.stringLiteral(
-        Indexer.addOrGetMap(Indexer.keys.nametag, fid.get(`elements.${i}`).node.value, state)
-      )
+      Indexer.addOrGetMap(Indexer.keys.nametag, fid.get(`elements.${i}`).node.value, state)
     );
   }
 
   if (isTextMode(state.normalizedOpts.forceMode)) {
     nodePath.node.arguments.push(types.stringLiteral(shortenPath2(state.currentFile)));
   } else if (isBinaryMode(state.normalizedOpts.forceMode)) {
-    nodePath.node.arguments[0] = types.stringLiteral(moduleID);
-
-    nodePath.node.arguments[1] = types.arrayExpression(featureID);
-    if (nodePath.node.arguments.length >= 3) {
-      nodePath.node.arguments.push(types.stringLiteral(sourcemapID));
-    } else {
-      nodePath.node.arguments.push(types.stringLiteral(sourcemapID));
-    }
+    const AliasArray = [moduleID, featureID, sourcemapID];
+    nodePath.node.arguments = [
+      types.stringLiteral(Indexer.addOrGetMap(Indexer.keys.aliasmap, AliasArray, state)),
+    ];
   }
 }
