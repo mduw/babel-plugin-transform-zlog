@@ -1,4 +1,5 @@
 import { types } from 'babel-core';
+import { EnumeratedLevels } from '../utils/log-levels/enumerator';
 import { isGlobalIdentifier } from '../utils/verify-identifier';
 import transformLoggerInitCall from './logger-call';
 import transformLogSymbCall from './symbol-call';
@@ -14,7 +15,7 @@ export default function transformCall(nodePath, state) {
 
   if (
     funcName &&
-    Object.prototype.hasOwnProperty.call(state.normalizedOpts.replaceSymbFunc, funcName)
+    Object.prototype.hasOwnProperty.call(EnumeratedLevels, funcName)
   ) {
     transformLogSymbCall(nodePath, state, funcName);
   } else if (

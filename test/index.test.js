@@ -14,32 +14,6 @@ describe('transformer-test', () => {
         plugin,
         {
           rootDir: 'test',
-          replaceSymbFunc: {
-            zinfo: [
-              'zsymb',
-              {
-                variants: ['self', 'R', 'F', 'C', 'RF', 'RC'],
-              },
-            ],
-            zdebug: [
-              'zsymb',
-              {
-                variants: ['self', 'R', 'F', 'C', 'RF', 'RC'],
-              },
-            ],
-            zwarn: [
-              'zsymb',
-              {
-                variants: ['self', 'R', 'F', 'C', 'RF', 'RC'],
-              },
-            ],
-            zerror: [
-              'zsymb',
-              {
-                variants: ['self', 'R', 'F', 'C', 'RF', 'RC'],
-              },
-            ],
-          },
           replaceLoggerInitFunc: ['createZLogger'],
           templateFunc: 't',
           excludePathRegex: '(src\\/zlogger|src\\/static)',

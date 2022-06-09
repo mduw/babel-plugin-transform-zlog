@@ -47,6 +47,7 @@ class TimeStart {
     Logger.zerror(t(`hello ${kkk} {} ${name} from world {} ${x} {} {} {} {} ${m}`),kk, vers, 6, 8, 7);
     Logger.zdebug(t('again {}'), t`hello ${name} from world {}`, vers, 6, `template ${vers}`, 7);
     Logger.zerror(`hello ${kkk} {} ${name} from world {}`,kk, vers, 6, 8, 7);
+    Logger.zwarn(t('again {}'), t`hello ${name} from world {}`, vers, 6, `template ${vers}`, 7);
 
     // Logger.zlg_info('hello', 2, 'tracking start', content);
     // Logger.zlg_infoR(99,12,'whottt', content);

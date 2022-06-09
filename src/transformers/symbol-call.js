@@ -2,7 +2,7 @@ import { types } from 'babel-core';
 import { TransformTemplateError } from '../errors/errors';
 import { UIDManager } from '../utils/id-gen';
 import { Indexer } from '../utils/log-indexer';
-import { EnumeratedLevels } from '../utils/log-levels/enumerator';
+import { EnumeratedLevels, EnumeratedLevelsName } from '../utils/log-levels/enumerator';
 import { isBinaryMode, isTextMode } from '../utils/parse-mode';
 import { isGlobalIdentifier } from '../utils/verify-identifier';
 
@@ -82,7 +82,7 @@ export default function transformLogSymbCall(nodePath, state, funcName) {
   if (state.VisitedModules.has(nodePath)) return;
   state.VisitedModules.add(nodePath);
   const x = new UIDManager(12);
-  const targetFuncNames = state.normalizedOpts.replaceSymbFunc;
+  const targetFuncNames = EnumeratedLevelsName;
   const callee = nodePath.node.callee || undefined;
   if (!callee || !funcName || !targetFuncNames) return;
 

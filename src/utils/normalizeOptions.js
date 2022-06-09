@@ -65,7 +65,6 @@ export default createSelector(
   currentFile => currentFile,
   (_, opts) => opts,
   (currentFile, opts) => {
-    const replaceSymbFunc = normalizeReplaceSymbFunc(opts.replaceSymbFunc);
     const replaceLoggerInitFunc = normalizeLoggerInit(opts.replaceLoggerInitFunc);
     const templateFunc = normalizeTemplateFunc(opts.templateFunc);
     const excludePathRegex = normalizePathRegex(opts.excludePathRegex);
@@ -74,7 +73,6 @@ export default createSelector(
 
     const log = normalizeShowLog(opts.log);
     return {
-      replaceSymbFunc,
       replaceLoggerInitFunc,
       excludePathRegex,
       outDir: outPath,

@@ -2,13 +2,13 @@
 import ZCommon from 'utils/common';
 import { ZLogTemplate } from 'zlogger';
 import { CoreLoggerFactory } from 'utils/logger/renderer/core/logger';
-const Logger0 = new CoreLoggerFactory().createZLogger("wQlUuy2J");
-const Logger3 = new CoreLoggerFactory().createZLogger("UGj_-6C-");
-const Logger2 = ModuleContainer.resolve(ZLoggerFactory).createZLogger("2YMi2Rq7");
-const Logger = new CoreLoggerFactory().createZLogger("YJGLxR67");
-const Logger4 = new CoreLoggerFactory().createZLogger("vooAtXf9");
-const Logger5 = new CoreLoggerFactory().createZLogger("QIBUQA8z");
-const LoggerX = new CoreLoggerFactory().createZLogger("YJGLxR67");
+const Logger0 = new CoreLoggerFactory().createZLogger("l6pnqodM");
+const Logger3 = new CoreLoggerFactory().createZLogger("1jr-pjTV");
+const Logger2 = ModuleContainer.resolve(ZLoggerFactory).createZLogger("jVOoe6mp");
+const Logger = new CoreLoggerFactory().createZLogger("KE-bvS8k");
+const Logger4 = new CoreLoggerFactory().createZLogger("WjtPPaSq");
+const Logger5 = new CoreLoggerFactory().createZLogger("U8ov1xrD");
+const LoggerX = new CoreLoggerFactory().createZLogger("KE-bvS8k");
 
 class TimeStart {
   constructor() {
@@ -35,13 +35,14 @@ class TimeStart {
     //   __t`parser more ${7}`
     // );
 
-    Logger.zsymb(3, 44, "zqWg2-S-", x, () => 'style 2', () => vers, __t`whpt`, ' from convlist');
+    Logger.zinfo(3, 44, "nM7gUpr_", x, () => 'style 2', () => vers, __t`whpt`, ' from convlist');
 
     __t('');
 
-    Logger.zsymb(21, 47, "WkzFvut0", kkk, kk, name, vers, x, 6, 8, 7, m);
-    Logger.zsymb(15, 48, "PSfq5KZJ", t`hello ${name} from world {}`, vers, 6, `template ${vers}`, 7);
-    Logger.zsymb(18, 49, `hello ${kkk} {} ${name} from world {}`, kk, vers, 6, 8, 7); // Logger.zlg_info('hello', 2, 'tracking start', content);
+    Logger.zerror(21, 47, "0_zPzecx", kkk, kk, name, vers, x, 6, 8, 7, m);
+    Logger.zdebug(15, 48, "vKUXc5y_", t`hello ${name} from world {}`, vers, 6, `template ${vers}`, 7);
+    Logger.zerror(18, 49, `hello ${kkk} {} ${name} from world {}`, kk, vers, 6, 8, 7);
+    Logger.zwarn(9, 50, "vKUXc5y_", t`hello ${name} from world {}`, vers, 6, `template ${vers}`, 7); // Logger.zlg_info('hello', 2, 'tracking start', content);
     // Logger.zlg_infoR(99,12,'whottt', content);
     // Logger.zlg_infoR(99, 12, 'whottt', content, x, __t`hello ${name}`);
     // // Logger.zlg_info(`whottt ${templ} yeah`, content);
