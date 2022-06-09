@@ -84,7 +84,7 @@ export default ({ types }) => ({
       log(
         `[${new Date().toLocaleTimeString()}]`,
         prefixLog,
-        '==>',
+        '<==',
         this.currentFile,
         colorize('[parsing...]', COLORS.cyan)
       );
