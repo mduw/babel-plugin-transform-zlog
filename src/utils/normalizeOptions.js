@@ -27,8 +27,9 @@ function normalizeReplaceSymbFunc(optsReplace) {
 }
 
 function normalizeOutPath(dirname, rawFilePath) {
-  const hashedFileName = hashStringShake256(rawFilePath).concat('.json')
-  return toPosixPath(findLogPath(dirname, hashedFileName));
+  const hashedFileName = hashStringShake256(rawFilePath).concat('.json');
+  const { hash: incomingHash } = JSON.parse(process.env.ZLOG_BUILD_DETAILS);
+  return toPosixPath(findLogPath(dirname, hashedFileName.concat(`[${incomingHash}]`)));
 }
 
 function normalizePathRegex(optsPathRegex) {

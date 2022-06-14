@@ -59,18 +59,9 @@ export default ({ types }) => ({
       const data = fs.readFileSync(outFilePath);
       const { nametags, templates, sourcemaps, build } = JSON.parse(data.toString());
       try {
-        const { hash: incomingHash } = JSON.parse(process.env.ZLOG_BUILD_DETAILS);
-        if (build && build.hash !== '' && build.hash !== incomingHash) {
-          const [filename, ext] = outFilePath.split('.');
-          // handle archive
-          const newFilePath = filename.concat(`[${(build && build.hash) || ''}].${ext}`);
-          log(colorize('Diff version detected. Archiving '.concat(outFilePath), COLORS.yellow));
-          fs.copyFileSync(outFilePath, newFilePath);
-        } else {
-          this.NameTagMap = new Map(Object.entries(invertObjectKeyValue(nametags)));
-          this.SourceMap = new Map(Object.entries(invertObjectKeyValue(sourcemaps)));
-          this.TemplMap = new Map(Object.entries(invertObjectKeyValue(templates)));
-        }
+        this.NameTagMap = new Map(Object.entries(invertObjectKeyValue(nametags)));
+        this.SourceMap = new Map(Object.entries(invertObjectKeyValue(sourcemaps)));
+        this.TemplMap = new Map(Object.entries(invertObjectKeyValue(templates)));
       } catch {
         const [filename, ext] = outFilePath.split('.');
         const newFilePath = filename.concat(`[invalid_${new Date().getTime()}].${ext}`);
@@ -100,7 +91,7 @@ export default ({ types }) => ({
         SourceMap: Indexer.SourceMap,
         NameTagMap: Indexer.NameTagMap,
         TemplMap: Indexer.TemplMap,
-        AliasMap: Indexer.AliasMap
+        AliasMap: Indexer.AliasMap,
       });
       outputHandler.exportData();
     }
