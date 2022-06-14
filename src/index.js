@@ -64,7 +64,7 @@ export default ({ types }) => ({
         this.TemplMap = new Map(Object.entries(invertObjectKeyValue(templates)));
       } catch {
         const [filename, ext] = outFilePath.split('.');
-        const newFilePath = filename.concat(`[invalid_${new Date().getTime()}].${ext}`);
+        const newFilePath = `[invalid_${new Date().getTime()}]${filename}.${ext}`;
         fs.copyFileSync(outFilePath, newFilePath);
       }
     }
