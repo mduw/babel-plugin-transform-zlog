@@ -60,7 +60,7 @@ function transformTemplTagExpression(nodePath, state, args) {
   if (
     currentTag.node.name === state.normalizedOpts.templateFunc &&
     types.isTemplateLiteral(currentQuasi)
-    && isGlobalIdentifier(nodePath, state.normalizedOpts.templateFunc)
+    && isGlobalIdentifier(state.programPath, state.normalizedOpts.templateFunc)
   ) {
     const [templateStr, expressionArrNode] = transformTemplateLiteral(currentQuasi, state, args);
     if (isTextMode(state.normalizedOpts.forceMode)) {
