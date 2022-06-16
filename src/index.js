@@ -16,7 +16,7 @@ export const outputHandler = new OutputHandler();
 const prefixLog = `[${name}]`;
 const CallVisitors = {
   CallExpression: transformCall,
-  TaggedTemplateExpression: transformGlobalTagExpression,
+  // TaggedTemplateExpression: transformGlobalTagExpression,
 };
 
 const visitor = {

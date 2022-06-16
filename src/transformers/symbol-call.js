@@ -60,7 +60,7 @@ function transformTemplTagExpression(nodePath, state, args) {
   if (
     currentTag.node.name === state.normalizedOpts.templateFunc &&
     types.isTemplateLiteral(currentQuasi)
-    // && isGlobalIdentifier(nodePath, state.normalizedOpts.templateFunc)
+    && isGlobalIdentifier(nodePath, state.normalizedOpts.templateFunc)
   ) {
     const [templateStr, expressionArrNode] = transformTemplateLiteral(currentQuasi, state, args);
     if (isTextMode(state.normalizedOpts.forceMode)) {
@@ -81,18 +81,16 @@ function transformTemplTagExpression(nodePath, state, args) {
 export default function transformLogSymbCall(nodePath, state, funcName) {
   if (state.VisitedModules.has(nodePath)) return;
   state.VisitedModules.add(nodePath);
-  const x = new UIDManager(12);
   const targetFuncNames = EnumeratedLevelsName;
   const callee = nodePath.node.callee || undefined;
   if (!callee || !funcName || !targetFuncNames) return;
 
   const loc = nodePath.get('loc').node;
   const row = loc.start.line;
-
   // convert call func to logSymbol
   nodePath.node.callee = state.types.memberExpression(
     callee.object,
-    state.types.identifier(targetFuncNames[funcName]),
+    state.types.identifier('zsymb'),
     false
   );
 

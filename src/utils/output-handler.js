@@ -82,17 +82,7 @@ export class OutputHandler {
       const sourcemaps = invertObjectKeyValue(Object.fromEntries(this._SourceMap));
       const aliasmaps = invertObjectKeyValue(Object.fromEntries(this._AliasMap));
 
-      let buildDetails;
-      try {
-        buildDetails = JSON.parse(process.env.ZLOG_BUILD_DETAILS);
-      } catch (e) {
-        buildDetails = {
-          branch: '',
-          hash: '',
-        };
-      }
       const exportData = {
-        build: buildDetails,
         nametags,
         templates,
         sourcemaps,
