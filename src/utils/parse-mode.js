@@ -12,7 +12,7 @@ export function isBinaryMode(forceMode = 'unknown') {
       // const ZLOG_BUILD_TYPE = process.env.ZLOG_BUILD_TYPE || 'unknown';
       // if (ZLOG_BUILD_ENV === 'production' && ZLOG_BUILD_TYPE === 'release') return true; // only binary on prod: release
       // return false;
-      return ZLOG_BUILD_ENV === 'production';
+      return ZLOG_BUILD_ENV === 'production' || ZLOG_BUILD_ENV === 'test';
     }
   }
 }
