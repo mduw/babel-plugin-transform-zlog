@@ -70,7 +70,7 @@ export default createSelector(
     const templateFunc = normalizeTemplateFunc(opts.templateFunc);
     const excludePathRegex = normalizePathRegex(opts.excludePathRegex);
     const outPath = normalizeOutPath(opts.outDir, currentFile);
-    const forceMode = opts.forceMode?.toLowerCase() === 'bin' ? opts.forceMode : 'txt';
+    const forceMode = opts.forceMode?.toLowerCase() === 'bin' ? opts.forceMode : '';
 
     const log = normalizeShowLog(opts.log);
     return {
