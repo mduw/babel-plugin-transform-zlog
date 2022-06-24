@@ -7,11 +7,11 @@ export function isBinaryMode(forceMode = 'unknown') {
     default: {
       let ZLOG_BUILD_ENV = null;
       try {
-        ZLOG_BUILD_ENV = process.env.ZLOG_BUILD_ENV;
+        ZLOG_BUILD_ENV = JSON.parse(process.env.ZLOG_BUILD_ENV);
       } catch {
-        ZLOG_BUILD_ENV = 'production';
+        ZLOG_BUILD_ENV = '"production"'
       }
-      return ZLOG_BUILD_ENV === 'production' || ZLOG_BUILD_ENV === 'test';
+      return ZLOG_BUILD_ENV === '"production"' || ZLOG_BUILD_ENV === '"test"';
     }
   }
 }
