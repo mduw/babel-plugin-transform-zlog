@@ -4,14 +4,9 @@ export function isBinaryMode(forceMode = 'unknown') {
       return false;
     case 'bin':
       return true;
+    case 'unknown':
     default: {
-      let ZLOG_BUILD_ENV = null;
-      try {
-        ZLOG_BUILD_ENV = JSON.parse(process.env.ZLOG_BUILD_ENV);
-      } catch {
-        ZLOG_BUILD_ENV = '"production"'
-      }
-      return ZLOG_BUILD_ENV === '"production"' || ZLOG_BUILD_ENV === '"test"';
+      return process.env.NODE_ENV === 'development' ? 'development' : 'production';
     }
   }
 }
