@@ -5,13 +5,12 @@ export function isBinaryMode(forceMode = 'unknown') {
     case 'bin':
       return true;
     default: {
-      // unknown
-      // const NODE_ENV = process.env_NODE_ENV || 'unknown';
-      // if (NODE_ENV === 'development' || NODE_ENV === 'test') return false;
-      const ZLOG_BUILD_ENV = process.env.ZLOG_BUILD_ENV || 'production';
-      // const ZLOG_BUILD_TYPE = process.env.ZLOG_BUILD_TYPE || 'unknown';
-      // if (ZLOG_BUILD_ENV === 'production' && ZLOG_BUILD_TYPE === 'release') return true; // only binary on prod: release
-      // return false;
+      let ZLOG_BUILD_ENV = null;
+      try {
+        ZLOG_BUILD_ENV = JSON.parse(process.env.ZLOG_BUILD_ENV);
+      } catch {
+        ZLOG_BUILD_ENV = 'production';
+      }
       return ZLOG_BUILD_ENV === 'production' || ZLOG_BUILD_ENV === 'test';
     }
   }
