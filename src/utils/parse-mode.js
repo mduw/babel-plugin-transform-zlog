@@ -6,7 +6,7 @@ export function isBinaryMode(forceMode = 'unknown') {
       return true;
     case 'unknown':
     default: {
-      return process.env.NODE_ENV === 'development' ? 'development' : 'production';
+      return process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test';
     }
   }
 }
