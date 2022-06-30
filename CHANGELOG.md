@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.16.1](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.16.0...v1.16.1) (2022-06-30)
+
+
+### Bug Fixes
+
+* invalid copy path ([6cea6b4](https://github.com/mduw/babel-plugin-transform-zlog/commit/6cea6b47e6ad919505bf4cbcc755809827386a34))
+
 ## [1.16.0](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.15.18...v1.16.0) (2022-06-30)
 
 
