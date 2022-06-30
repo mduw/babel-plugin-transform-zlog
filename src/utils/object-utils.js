@@ -1,7 +1,7 @@
 export function invertObjectKeyValue(obj) {
   const invertedObj = {};
   Object.keys(obj).forEach(value => {
-    const key = obj[value];
+    const key = typeof obj[value] === 'object' ? JSON.stringify(obj[value]) : obj[value] ;
     try {
       invertedObj[key] = JSON.parse(value);
     } catch {

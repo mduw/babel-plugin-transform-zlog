@@ -15,6 +15,7 @@ export class OutputHandler {
     this._TemplMap = (props && props.TemplMap) || null;
     this._NameTagMap = (props && props.NameTagMap) || null;
     this._AliasMap = (props && props._AliasMap) || null;
+    this._RowMap = (props && props._RowMap) || null;
 
     this.outDir = '';
     this.outputable = false;
@@ -25,11 +26,12 @@ export class OutputHandler {
   setMaps(props) {
     if (!props) throw new Error('OutputHandler received invalid maps');
     try {
-      const { SourceMap, NameTagMap, TemplMap, AliasMap } = props;
+      const { SourceMap, NameTagMap, TemplMap, AliasMap, RowMap } = props;
       this._SourceMap = SourceMap;
       this._NameTagMap = NameTagMap;
       this._TemplMap = TemplMap;
       this._AliasMap = AliasMap;
+      this._RowMap = RowMap;
     } catch (err) {
       throw new Error(`OutputHandler received invalid maps input ${err}`);
     }
@@ -61,7 +63,7 @@ export class OutputHandler {
   }
 
   doWrite(data) {
-    return new Promise((resolve, reject)=>{
+    return new Promise((resolve, reject) => {
       const writeStream = fs.createWriteStream(this.outDir);
       writeStream.write(data);
       writeStream.end();
@@ -70,8 +72,8 @@ export class OutputHandler {
       });
       writeStream.on('error', () => {
         reject();
-      })
-    })
+      });
+    });
   }
 
   async exportData() {
@@ -81,12 +83,14 @@ export class OutputHandler {
       const templates = invertObjectKeyValue(Object.fromEntries(this._TemplMap));
       const sourcemaps = invertObjectKeyValue(Object.fromEntries(this._SourceMap));
       const aliasmaps = invertObjectKeyValue(Object.fromEntries(this._AliasMap));
+      const rowmaps = invertObjectKeyValue(Object.fromEntries(this._RowMap));
 
       const exportData = {
         nametags,
         templates,
         sourcemaps,
         aliasmaps,
+        rowmaps,
       };
       // fs.writeFileSync(this.outDir, JSON.stringify(exportData));
       await this.doWrite(JSON.stringify(exportData));

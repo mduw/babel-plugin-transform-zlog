@@ -13,6 +13,7 @@ class LogIndexer {
     this._NewNameTagMap = new Map();
     this._NewTemplMap = new Map();
     this._NewAliasMap = new Map();
+    this._NewRowMap = new Map();
     this._updateFlag = false;
     return this;
   }
@@ -33,6 +34,10 @@ class LogIndexer {
     return this._NewAliasMap;
   }
 
+  get RowMap() {
+    return this._NewRowMap;
+  }
+
   get isUpdateRequied() {
     return this._updateFlag === true;
   }
@@ -44,6 +49,7 @@ class LogIndexer {
     nametag: 'nametag',
     sourcemap: 'sourcemap',
     aliasmap: 'aliasmap',
+    rowmap: 'rowmap',
   };
 
   reset() {
@@ -51,6 +57,7 @@ class LogIndexer {
     this._NewSourceMap.clear();
     this._NewTemplMap.clear();
     this._NewAliasMap.clear();
+    this._NewRowMap.clear();
     this._updateFlag = false;
   }
 
@@ -100,15 +107,30 @@ class LogIndexer {
       }
 
       case this.keys.aliasmap: {
-        const val = JSON.stringify(value);
+        const val = JSON.stringify(value).toString();
         if (this._NewAliasMap.has(val)) {
           id = this._NewAliasMap.get(val);
         } else if (state.AliasMap.has(val)) {
-          id = state._NewAliasMap.get(val);
+          id = state.AliasMap.get(val);
           this._NewAliasMap.set(val, id);
         } else {
           id = this._uidManager.ID;
           this._NewAliasMap.set(val, id);
+          this._updateFlag = true;
+        }
+        break;
+      }
+
+      case this.keys.rowmap: {
+        const val = JSON.stringify(value).toString();
+        if (this._NewRowMap.has(val)) {
+          id = this._NewRowMap.get(val);
+        } else if (state.RowMap.has(val)) {
+          id = state.RowMap.get(val);
+          this._NewRowMap.set(val, id);
+        } else {
+          id = this._uidManager.ID;
+          this._NewRowMap.set(val, id);
           this._updateFlag = true;
         }
         break;

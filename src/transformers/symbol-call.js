@@ -50,7 +50,7 @@ export function transformTemplateLiteral(nodePath, state, args) {
   return [templateStr, NewExp];
 }
 
-function transformTemplTagExpression(nodePath, state, args) {
+function transformTemplTagExpression(nodePath, state, row, args) {
   if (state.VisitedModules.has(nodePath)) return;
   state.VisitedModules.add(nodePath);
   const currentTag = nodePath.get('tag');
@@ -67,7 +67,7 @@ function transformTemplTagExpression(nodePath, state, args) {
       Indexer.addOrGetMap(Indexer.keys.templ, templateStr, state);
       params.push(types.stringLiteral(templateStr));
     } else if (isBinaryMode(state.normalizedOpts.forceMode)) {
-      const lid = Indexer.addOrGetMap(Indexer.keys.templ, templateStr, state);
+      const lid = Indexer.addOrGetMap(Indexer.keys.rowmap, [Indexer.addOrGetMap(Indexer.keys.templ, templateStr, state), row], state);
       params.push(types.stringLiteral(lid));
     }
 
@@ -97,13 +97,7 @@ export default function transformLogSymbCall(nodePath, state, funcName) {
   const CallExpArgs = nodePath.get('arguments');
   const FirstExpArg = CallExpArgs[0];
   if (types.isTaggedTemplateExpression(FirstExpArg)) {
-    const params = transformTemplTagExpression(FirstExpArg, state, nodePath.get('arguments').slice(1,));
-    // if (params.length) {
-    //   nodePath.node.arguments.shift();
-    //   for (let i = params.length - 1; i >= 0; i--) {
-    //     nodePath.node.arguments.unshift(params[i]);
-    //   }
-    // }
+    const params = transformTemplTagExpression(FirstExpArg, state, row, nodePath.get('arguments').slice(1,));
     nodePath.node.arguments = params;
     nodePath.node.arguments.unshift(types.numericLiteral(row));
     nodePath.node.arguments.unshift(types.numericLiteral(EnumeratedLevels[funcName.concat('T')]));
@@ -128,7 +122,7 @@ export default function transformLogSymbCall(nodePath, state, funcName) {
         Indexer.addOrGetMap(Indexer.keys.templ, templateStr, state);
         params.push(types.stringLiteral(templateStr));
       } else if (isBinaryMode(state.normalizedOpts.forceMode)) {
-        const lid = Indexer.addOrGetMap(Indexer.keys.templ, templateStr, state);
+        const lid = Indexer.addOrGetMap(Indexer.keys.rowmap, [Indexer.addOrGetMap(Indexer.keys.templ, templateStr, state), row], state);
         params.push(types.stringLiteral(lid));
       }
   
