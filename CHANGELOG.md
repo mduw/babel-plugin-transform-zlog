@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.16.0](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.15.18...v1.16.0) (2022-06-30)
+
+
+### Features
+
+* **rowmap:** bundle row and template map into rowmap ([7617be4](https://github.com/mduw/babel-plugin-transform-zlog/commit/7617be444badccdc0633a080759298b5717ccf06))
+
 ### [1.15.18](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.15.17...v1.15.18) (2022-06-25)
 
 ### [1.15.17](https://github.com/mduw/babel-plugin-transform-zlog/compare/v1.15.16...v1.15.17) (2022-06-24)
