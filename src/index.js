@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import normalizeOptions from './utils/normalizeOptions';
 import transformCall from './transformers/call';
 import { name } from '../package.json';
@@ -66,7 +67,7 @@ export default ({ types }) => ({
         this.RowMap = new Map(Object.entries(invertObjectKeyValue(rowmaps)));
       } catch {
         const [filename, ext] = outFilePath.split('.');
-        const newFilePath = `[invalid_${new Date().getTime()}]${filename}.${ext}`;
+        const newFilePath = path.join(path.dirname(outFilePath, `[invalid_${new Date().getTime()}]${filename}.${ext}`));
         fs.copyFileSync(outFilePath, newFilePath);
       }
     }
