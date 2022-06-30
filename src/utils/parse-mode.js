@@ -6,7 +6,9 @@ export function isBinaryMode(forceMode = 'unknown') {
       return true;
     case 'unknown':
     default: {
-      return process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test';
+      return (
+        process.env.ZLOG_BUILD_ENV === '"production"' || process.env.ZLOG_BUILD_ENV === '"test"'
+      );
     }
   }
 }
