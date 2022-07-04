@@ -59,11 +59,12 @@ export default ({ types }) => ({
     const outFilePath = this.normalizedOpts.outDir;
     if (fs.existsSync(outFilePath)) {
       const data = fs.readFileSync(outFilePath);
-      const { nametags, templates, sourcemaps, rowmaps } = JSON.parse(data.toString());
+      const { nametags, templates, sourcemaps, aliasmaps, rowmaps } = JSON.parse(data.toString());
       try {
         this.NameTagMap = new Map(Object.entries(invertObjectKeyValue(nametags)));
         this.SourceMap = new Map(Object.entries(invertObjectKeyValue(sourcemaps)));
         this.TemplMap = new Map(Object.entries(invertObjectKeyValue(templates)));
+        this.AliasMap = new Map(Object.entries(invertObjectKeyValue(aliasmaps)));
         this.RowMap = new Map(Object.entries(invertObjectKeyValue(rowmaps)));
       } catch {
         const [filename, ext] = outFilePath.split('.');
@@ -89,13 +90,14 @@ export default ({ types }) => ({
 
   post() {
     /* CLEANUP */
+
     if (Indexer.isUpdateRequied) {
       outputHandler.setMaps({
-        SourceMap: Indexer.SourceMap,
-        NameTagMap: Indexer.NameTagMap,
-        TemplMap: Indexer.TemplMap,
-        AliasMap: Indexer.AliasMap,
-        RowMap: Indexer.RowMap,
+        SourceMap: this.SourceMap,
+        NameTagMap: this.NameTagMap,
+        TemplMap: this.TemplMap,
+        AliasMap: this.AliasMap,
+        RowMap: this.RowMap,
       });
       outputHandler.exportData();
     }
@@ -105,7 +107,6 @@ export default ({ types }) => ({
     this.TemplMap.clear();
     this.NameTagMap.clear();
     this.RowMap.clear();
-    Indexer.reset();
 
     if (this.normalizedOpts.log === 'on') {
       log(
