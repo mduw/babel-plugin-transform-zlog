@@ -27,6 +27,10 @@ class LogIndexer {
     rowmap: 'rowmap',
   };
 
+  reset() {
+    this._updateFlag = false;
+  }
+
   addOrGetMap(key, value, state) {
     let id;
     switch (key) {

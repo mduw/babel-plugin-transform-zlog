@@ -102,6 +102,8 @@ export default ({ types }) => ({
       outputHandler.exportData();
     }
 
+    Indexer.reset();
+
     this.VisitedModules.clear();
     this.SourceMap.clear();
     this.TemplMap.clear();
