@@ -1,5 +1,5 @@
 const prefix = 'z';
-const loglevels = ['info', 'warn', 'debug', 'error'];
+const loglevels = ['info', 'warn', 'debug', 'error', 'critical'];
 const variants = ['', 'F', 'C', 'T', 'FT', 'CT'];
 
 function enumerateLevels() {
