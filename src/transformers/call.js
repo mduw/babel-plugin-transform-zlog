@@ -26,12 +26,5 @@ export default function transformCall(nodePath, state) {
     types.isCallExpression(nodePath)
   ) {
     transformLoggerInitCall(nodePath, state, funcName);
-  } else if (
-    funcName &&
-    types.isCallExpression(nodePath) &&
-    funcName === state.normalizedOpts.templateFunc
-    && isGlobalIdentifier(state.programPath, funcName)
-  ) {
-    nodePath.replaceWith(state.types.cloneNode(nodePath.get('arguments.0').node));
   }
 }
