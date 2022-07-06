@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-zlog",
-  "version": "1.16.8",
+  "version": "1.16.9",
   "main": "lib/index.js",
   "description": "Module transform log template and log method to log symbol",
   "repository": {
