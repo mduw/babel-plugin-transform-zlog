@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { ZCipher } from './cipher';
 import { findLogPath } from './file-helper';
 import { hashStringShake256, toPosixPath } from './file-utils';
 import { isUsrReleaseMode } from './parse-mode';
@@ -71,7 +72,17 @@ export default createSelector(
     const excludePathRegex = normalizePathRegex(opts.excludePathRegex);
     const outPath = normalizeOutPath(opts.outDir, currentFile);
     const forceMode = opts.forceMode?.toLowerCase() === 'bin' ? opts.forceMode : '';
-
+    let secrets = {
+      secretKey: 'default_key_818_1dxsjx9129bjx+21',
+      iv: '008d41f204be33a7aceb31986fa94552',
+    };
+    try {
+      secrets = JSON.parse(process.env.ZLOG_BUILD_DETAILS).secrets;
+      console.log('using secrekey', secrets);
+    } catch (err) {
+      console.log('fail to parse build details', err);
+    }
+    ZCipher.setSecrets(secrets);
     const log = normalizeShowLog(opts.log);
     return {
       replaceLoggerInitFunc,
@@ -80,6 +91,7 @@ export default createSelector(
       log,
       forceMode,
       templateFunc,
+      secrets,
     };
   }
 );

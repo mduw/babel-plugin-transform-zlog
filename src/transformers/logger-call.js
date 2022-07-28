@@ -1,5 +1,6 @@
 import { types } from 'babel-core';
 import { TransformInitLoggerError } from '../errors/errors';
+import { ZCipher } from '../utils/cipher';
 import { shortenPath2, toPosixPath } from '../utils/file-utils';
 import { Indexer } from '../utils/log-indexer';
 import { isBinaryMode, isTextMode } from '../utils/parse-mode';
@@ -28,8 +29,7 @@ export default function transformLoggerInitCall(nodePath, state, funcName) {
     throw new TransformInitLoggerError('params[1] must be a type of string[]', sourcemap).error;
 
   // ========================================================================================= //
-
-  const sourcemapID = Indexer.addOrGetMap(Indexer.keys.sourcemap, state.currentFile, state);
+  const sourcemapID = Indexer.addOrGetMap(Indexer.keys.sourcemap, ZCipher.encrypt(state.currentFile), state);
   const moduleID = Indexer.addOrGetMap(Indexer.keys.nametag, mid.node.value, state);
   const featureID = [];
   for (let i = 0; i < fid.get('elements').length; i++) {
@@ -39,7 +39,7 @@ export default function transformLoggerInitCall(nodePath, state, funcName) {
   }
 
   if (isTextMode(state.normalizedOpts.forceMode)) {
-    nodePath.node.arguments.push(types.stringLiteral(shortenPath2(state.currentFile)));
+    nodePath.node.arguments.push(types.stringLiteral(shortenPath2(`${state.currentFile}:${row}`)));
   } else if (isBinaryMode(state.normalizedOpts.forceMode)) {
     const AliasArray = [moduleID, featureID, sourcemapID];
     nodePath.node.arguments = [

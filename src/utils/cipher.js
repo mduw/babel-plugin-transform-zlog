@@ -1,31 +1,18 @@
-const crypto = require('crypto');
-const path = require('path');
-const fs = require('fs');
+import crypto from 'crypto';
 
-function encrypt(toEncrypt, relativeOrAbsolutePathToPublicKey) {
-  const absolutePath = path.resolve(relativeOrAbsolutePathToPublicKey);
-  const publicKey = fs.readFileSync(absolutePath, 'utf8');
-  const buffer = Buffer.from(toEncrypt, 'utf8');
-  const encrypted = crypto.publicEncrypt(publicKey, buffer);
-  return encrypted.toString('base64');
+class Cipher {
+  algorithm = 'aes-256-ctr';
+
+  setSecrets(secrets) {
+    this.secrets = secrets;
+  }
+
+  encrypt = text => {
+    const iv = Buffer.from(this.secrets.iv, 'hex');
+    const cipher = crypto.createCipheriv(this.algorithm, this.secrets.secretKey, iv);
+    const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
+    return encrypted.toString('hex');
+  };
 }
 
-function decrypt(toDecrypt, relativeOrAbsolutePathtoPrivateKey) {
-  const absolutePath = path.resolve(relativeOrAbsolutePathtoPrivateKey);
-  const privateKey = fs.readFileSync(absolutePath, 'utf8');
-  const buffer = Buffer.from(toDecrypt, 'base64');
-  const decrypted = crypto.privateDecrypt(
-    {
-      key: privateKey.toString(),
-      passphrase: '',
-    },
-    buffer
-  );
-  return decrypted.toString('utf8');
-}
-
-// const enc = encrypt('hello', `public.pem`);
-// console.log('enc', enc);
-
-// const dec = decrypt(enc, `private.pem`);
-// console.log('dec', dec);
+export const ZCipher = new Cipher();
