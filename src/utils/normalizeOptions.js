@@ -78,7 +78,6 @@ export default createSelector(
     };
     try {
       secrets = JSON.parse(process.env.ZLOG_BUILD_DETAILS).cryptoKeys;
-      console.log('using secrekey', secrets);
     } catch (err) {
       console.log('fail to parse build details', err);
     }
